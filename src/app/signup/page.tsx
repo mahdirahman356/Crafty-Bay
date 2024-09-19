@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client"
 import React from "react";
 import Link from "next/link";
-
+import useAxiosCommon from "../Hooks/useAxiosCommon"
 const page = () => {
-    
-    const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
+    const axiosCommon = useAxiosCommon()
+    const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
            e.preventDefault()
            const form = e.target as HTMLFormElement
            const name = (form.elements.namedItem("name") as HTMLInputElement).value;
@@ -17,6 +18,15 @@ const page = () => {
                 password: password,
            }
            console.log(newUser)
+
+          try {
+            const res = await axiosCommon.post("/signup/api", newUser)
+            console.log(res.data)
+          } catch (error) {
+            console.log(error)
+          }
+
+
     }
 
     return (
