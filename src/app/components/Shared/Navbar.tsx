@@ -1,6 +1,12 @@
+"use client"
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 const Navbar = () => {
+    
+    const session = useSession()
+    console.log(session)
+
     const navItem:{title:string; path:string}[]  = [
         {
             title: "Home",
@@ -58,7 +64,7 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">Button</a>
+                <a className="btn">Log In</a>
             </div>
         </div>
     );

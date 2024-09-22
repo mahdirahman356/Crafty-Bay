@@ -18,9 +18,12 @@ export const connectDB = async():Promise<Db | undefined> => {
                 deprecationErrors: true
             }
         })
-
+          
+        await client.connect();
         db = client.db("crafty-bay")
+        return db;
     } catch (error) {
         console.log(error)
+        return undefined;
     }
 }

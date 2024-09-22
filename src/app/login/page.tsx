@@ -16,7 +16,7 @@ const page = () => {
         }
         console.log(user)
 
-        const res = signIn("credentials", {
+        const res = await signIn("credentials", {
             email,
             password,
             redirect: false
