@@ -1,13 +1,13 @@
 "use client"
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
 const Navbar = () => {
-    
+
     const session = useSession()
     console.log(session)
 
-    const navItem:{title:string; path:string}[]  = [
+    const navItem: { title: string; path: string }[] = [
         {
             title: "Home",
             path: "/"
@@ -18,8 +18,8 @@ const Navbar = () => {
         },
         {
             title: "Login",
-            path: "/login" 
-         }
+            path: "/login"
+        }
     ]
     return (
         <div className="navbar bg-base-100 text-slate-800">
@@ -57,14 +57,17 @@ const Navbar = () => {
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                    
-                    {navItem.map((item, index) =>  
-                    <li key={index}><Link href={item.path}>{item.title}</Link></li>)}
-                    
+
+                    {navItem.map((item, index) =>
+                        <li key={index}><Link href={item.path}>{item.title}</Link></li>)}
+
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">Log In</a>
+                {!session.data ?
+                    <Link className="btn" href={"/login"}>Log In</Link>
+                    : <button className="btn" onClick={() => signOut()}>Log Out</button>
+                }
             </div>
         </div>
     );
