@@ -1,12 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SocialSignIn from "../components/Shared/SocialSignIn";
+import Swal from "sweetalert2";
 
 const page = () => {
     const router = useRouter()
+    const session = useSession()
+    console.log(session)
     const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const form = e.target as HTMLFormElement
@@ -27,7 +30,31 @@ const page = () => {
         console.log(res)
         if(res?.status === 200){
              router.push("/")
+             Swal.fire({
+                title: 'Welcome to CraftyBay!',
+                text: 'You have successfully logged in. Enjoy exploring the world of crafts!',
+                icon: 'success',
+                confirmButtonText: 'Ok',
+                allowOutsideClick: false,
+                customClass: {
+                    confirmButton: 'btn btn-primary rounded-sm text-white ', 
+                  },
+              });
         }
+
+        if(res?.status === 401){
+            Swal.fire({
+                title: 'User Not Found!',
+                text: 'It looks like there is no account with this email. Please check your details or sign up.',
+                icon: 'error',
+                confirmButtonText: 'Try Again',
+                allowOutsideClick: false,
+                customClass: {
+                    confirmButton: 'btn btn-primary rounded-sm text-white ', 
+                  },
+              })
+       }
+
 
  }
 
