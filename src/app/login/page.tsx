@@ -5,13 +5,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SocialSignIn from "../components/Shared/SocialSignIn";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 const page = () => {
+    const [loading, setLoading] = useState(false);
     const router = useRouter()
     const session = useSession()
     console.log(session)
     const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setLoading(true);
         const form = e.target as HTMLFormElement
         const email = (form.elements.namedItem("email") as HTMLInputElement).value;
         const password = (form.elements.namedItem("password") as HTMLInputElement).value;
@@ -27,6 +30,7 @@ const page = () => {
             password,
             redirect: false
         })
+        setLoading(false);
         console.log(res)
         if(res?.status === 200){
              router.push("/")
@@ -84,7 +88,9 @@ const page = () => {
                     </label>
 
                     <button type="submit" className="btn w-full text-white btn-primary rounded-3xl">
-                        Continue
+                    {loading ?
+                            <span className="loading loading-spinner loading-sm"></span> :
+                            "Continue"}
                     </button>
                 </form>
                <div className="space-y-6 mt-4">

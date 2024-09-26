@@ -1,16 +1,18 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import useAxiosCommon from "../Hooks/useAxiosCommon"
 import { useRouter } from "next/navigation";
 import SocialSignIn from "../components/Shared/SocialSignIn";
 import Swal from "sweetalert2";
 const page = () => {
+    const [loading, setLoading] = useState(false);
     const axiosCommon = useAxiosCommon()
     const router = useRouter()
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setLoading(true);
         const form = e.target as HTMLFormElement
         const name = (form.elements.namedItem("name") as HTMLInputElement).value;
         const email = (form.elements.namedItem("email") as HTMLInputElement).value;
@@ -26,19 +28,20 @@ const page = () => {
         try {
             const res = await axiosCommon.post("/signup/api", newUser)
             console.log(res.data)
+            setLoading(false);
             if (res.data.message === "User Exists") {
                 Swal.fire({
                     title: 'Account Already Exists!',
                     text: 'It looks like you already have an account with this email. Please log in instead.',
                     icon: 'warning',
-                    showCancelButton: true, 
+                    showCancelButton: true,
                     confirmButtonText: 'Go to Login',
                     cancelButtonText: 'Close',
                     allowOutsideClick: false,
                     customClass: {
-                        confirmButton: 'btn btn-primary rounded-sm text-white ', 
-                        cancelButton: 'btn btn-secondary rounded-sm text-white ' 
-                      },
+                        confirmButton: 'btn btn-primary rounded-sm text-white ',
+                        cancelButton: 'btn btn-secondary rounded-sm text-white '
+                    },
                 }).then((result) => {
                     if (result.isConfirmed) {
                         router.push("/login")
@@ -53,8 +56,8 @@ const page = () => {
                     confirmButtonText: 'Go to Login',
                     allowOutsideClick: false,
                     customClass: {
-                        confirmButton: 'btn btn-primary rounded-sm text-white ', 
-                      },
+                        confirmButton: 'btn btn-primary rounded-sm text-white ',
+                    },
                 }).then((result) => {
                     if (result.isConfirmed) {
                         router.push("/login")
@@ -63,6 +66,7 @@ const page = () => {
             }
 
         } catch (error) {
+            setLoading(false);
             console.log(error)
             if (error) {
                 Swal.fire({
@@ -70,8 +74,8 @@ const page = () => {
                     title: "Oops...",
                     text: "Something went wrong!",
                     customClass: {
-                        confirmButton: 'btn btn-primary rounded-sm text-white ', 
-                      },
+                        confirmButton: 'btn btn-primary rounded-sm text-white ',
+                    },
                 });
             }
         }
@@ -115,7 +119,9 @@ const page = () => {
                     </label>
 
                     <button type="submit" className="btn w-full text-white btn-primary rounded-3xl">
-                        Continue
+                        {loading ?
+                            <span className="loading loading-spinner loading-sm"></span> :
+                            "Continue"}
                     </button>
                 </form>
                 <div className="space-y-6 mt-4">
