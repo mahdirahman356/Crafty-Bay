@@ -3,6 +3,8 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { Db } from "mongodb";
+import GoogleProvider from "next-auth/providers/google";
+import { Account, User } from "next-auth";
 
 const handler = NextAuth({
     session: {
@@ -41,10 +43,39 @@ const handler = NextAuth({
                     name: currentUser.name
                 };
             }
-        })
+        }),
+        GoogleProvider({
+            clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
+            clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET || ""
+          })
     ],
     pages: {
         signIn: "/login"
+    },
+    callbacks: {
+        async signIn ({ user, account }: { user: User; account: Account | null }) {
+          if(account?.provider === "google"){
+             const {email} = user
+             try {
+                const db: Db | undefined = await connectDB();
+                if (!db) {
+                    throw new Error("Database connection failed");
+                }
+                const usersCollection = db.collection("users")
+                const exist = await usersCollection.findOne({email: email})
+                if (!exist) {
+                    await usersCollection.insertOne(user);
+                  }
+        
+                  return true;
+            } catch (error) {
+                console.log(error)
+                return false;
+             }
+          }else{
+            return true
+          }
+        },
     }
 });
 

@@ -16,13 +16,10 @@ const Navbar = () => {
             title: "About",
             path: "/about"
         },
-        {
-            title: "Login",
-            path: "/login"
-        }
     ]
     return (
-        <div className="navbar bg-base-100 text-slate-800">
+        <div className="relative z-10 w-full bg-transparent text-black">
+            <div className="navbar absolute	w-[95%] md:w-[85%] mx-auto py-4" style={{ left: "50%", transform: "translateX(-50%)" }} >
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -53,7 +50,7 @@ const Navbar = () => {
                         <li><a>Item 3</a></li>
                     </ul>
                 </div>
-                <a className="btn btn-ghost text-xl">daisyUI</a>
+                <a className="btn btn-ghost text-2xl md:text-4xl">Crafty Bay.</a>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
@@ -65,10 +62,11 @@ const Navbar = () => {
             </div>
             <div className="navbar-end">
                 {!session.data ?
-                    <Link className="btn" href={"/login"}>Log In</Link>
-                    : <button className="btn" onClick={() => signOut()}>Log Out</button>
+                    <Link className="btn rounded-sm bg-primary text-white" href={"/login"}>Sign In</Link>
+                    : <button className="btn rounded-sm bg-primary text-white" onClick={() => signOut()}>Log Out</button>
                 }
             </div>
+        </div>
         </div>
     );
 };
