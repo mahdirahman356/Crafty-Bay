@@ -1,10 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from 'next/image';
+import {Arvo} from "next/font/google";
+const header = Arvo({ weight:["400", "700"], subsets:["latin"]})
 
 const HomePage = () => {
     return (
         <div>
-            <div className="hero bg-base-200 min-h-screen text-black">
+            <div className="hero min-h-screen text-black">
   <div className="hero-content flex-col lg:flex-row mt-24">
       <Image
         src="https://i.ibb.co/qs876MS/estee-janssens-MUf7-Ly04s-OI-unsplash.jpg"
@@ -15,7 +17,7 @@ const HomePage = () => {
       />
       
     <div className=''>
-      <h1 className="text-5xl md:text-7xl font-bold mb-4">Creative <span className='text-secondary'>Crafts</span></h1>
+      <h1 className={`${header.className} text-5xl md:text-7xl font-semibold mb-4`}>Creative <span className='text-secondary'>Crafts</span></h1>
       <div className="hero lg:-ml-28">
   <div className="hero-content flex-col md:flex-row gap-10">
   <Image

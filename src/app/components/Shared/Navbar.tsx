@@ -50,7 +50,7 @@ const Navbar = () => {
                         <li><a>Item 3</a></li>
                     </ul>
                 </div>
-                <a className="btn btn-ghost text-2xl md:text-4xl">Crafty Bay.</a>
+                <a className="btn btn-ghost text-2xl md:text-4xl">Crafty Bay<span className="text-primary">.</span></a>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import {Outfit} from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Shared/Navbar";
 import AuthProvider from "./services/AuthProvider";
+
+const outfit = Outfit({weight:["300", "400", "500", "700"], subsets:["latin"]})
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="craftyBayTheme">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased b g-white`}
+        className={`${geistSans.variable} ${geistMono.variable} ${outfit.className} antialiased bg-white`}
       >
         <AuthProvider>
           <Navbar />
