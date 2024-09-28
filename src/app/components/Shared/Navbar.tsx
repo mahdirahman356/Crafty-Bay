@@ -1,9 +1,10 @@
 "use client"
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
-
+    const pathName = usePathname()
     const session = useSession()
     console.log(session)
 
@@ -16,9 +17,13 @@ const Navbar = () => {
             title: "About",
             path: "/about"
         },
+        {
+            title:"Deshbord",
+            path: "/deshboard/profile"
+        },
     ]
     return (
-        <div className="relative z-10 w-full bg-transparent text-black">
+        <div className={`${pathName.includes('deshboard') ||  pathName.includes('/login') || pathName.includes('/signup') ? 'hidden' : ""} relative z-10 w-full bg-transparent text-black`}>
             <div className="navbar absolute	w-[95%] md:w-[85%] mx-auto py-4" style={{ left: "50%", transform: "translateX(-50%)" }} >
             <div className="navbar-start">
                 <div className="dropdown">

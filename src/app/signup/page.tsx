@@ -85,7 +85,7 @@ const page = () => {
 
     return (
         <div className="min-h-screen bg-white text-slate-800 flex justify-center items-center">
-            <div className="md:w-[50%] lg:w-[40%] p-10 border-[#b4b3b3] rounded-sm mt-28">
+            <div className="md:w-[50%] lg:w-[40%] p-10 border-[#b4b3b3] rounded-sm">
                 <form onSubmit={handleSignUp} className="space-y-6">
                     <h3 className="text-3xl md:text-4xl font-bold text-center">Sign Up</h3>
 
