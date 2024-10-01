@@ -6,12 +6,13 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { FiEdit3 } from "react-icons/fi";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
+import UpdateProfile from '@/app/UpdateProfile/UpdateProfile';
 
 const profilePage = () => {
     const session = useSession()
     console.log(session.data?.user)
 
-    const { data: userProfile = [], isLoading } = useQuery({
+    const { data: userProfile = [], isLoading, refetch } = useQuery({
         queryKey: ["userProfile"],
         queryFn: async () => {
             const { data } = await axios.get(`http://localhost:3000/deshboard/profile/api/users?email=${session.data?.user?.email}`)
@@ -20,7 +21,7 @@ const profilePage = () => {
         }
     })
 
-    const { name, email, location, contactNumber, image } = userProfile || {}
+    const {_id, name, email, location, contactNumber, image } = userProfile || {}
 
     return (
         <div className="">
@@ -34,7 +35,7 @@ const profilePage = () => {
                <div className="w-28 h-28 md:w-36 md:h-36 mb-3">
                    <Image
                        src={image || session.data?.user?.image ? image || session.data?.user?.image : "/image/user.avif"}
-                       alt="A description of the image"
+                       alt="profile"
                        width={400}
                        height={300}
                        className="object-cover object-center w-full h-full border rounded-full dark:bg-gray-500"
@@ -51,10 +52,9 @@ const profilePage = () => {
                        <dialog id="my_modal_3" className="modal">
                            <div className="modal-box">
                                <form method="dialog">
-                                   {/* if there is a button in form, it will close the modal */}
                                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
                                </form>
-                               {/* <UpdateProfile id={userProfile._id} location={userProfile.location} contactNumber={userProfile.contactNumber} image={userProfile.image} refetch={refetch}></UpdateProfile> */}
+                               <UpdateProfile id={_id} location={location} contactNumber={contactNumber} image={image} refetch={refetch} ></UpdateProfile>
                            </div>
                        </dialog>
                    </div>
