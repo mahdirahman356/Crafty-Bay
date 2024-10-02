@@ -21,7 +21,7 @@ const profilePage = () => {
         }
     })
 
-    const {_id, name, email, location, contactNumber, image } = userProfile || {}
+    const { _id, name, email, location, contactNumber, image } = userProfile || {}
 
     return (
         <div className="">

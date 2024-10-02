@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { imageUplode } from "../../app/imageAPI";
 import { useEffect, useRef, useState } from "react";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+import axios from "axios";
 
 interface UpdateProfileProps {
     id: string; 
@@ -16,14 +17,13 @@ interface UpdateProfileProps {
     refetch: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>;
   }
 
-const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber, image}) => {
+const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber, image, refetch}) => {
 
     const session = useSession()
     const inputRef = useRef(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
-
-    console.log(session?.data?.user?.image)
     
     const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -56,6 +56,7 @@ const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber,
      
     
     const handleUpdateProfile = async(e: React.FormEvent<HTMLFormElement>) => {
+        setLoading(true);
         e.preventDefault()
         const form = e.target as HTMLFormElement
         const name = (form.elements.namedItem("name") as HTMLInputElement).value;
@@ -68,10 +69,22 @@ const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber,
                 url = uploadResult;
             }
 
-        console.log(name, location, contactNumber, image, url, selectedImage)
+        const userData = {
+            email: session?.data?.user?.email,
+            updatedData: {
+                   name: name,
+                   image: url,
+                   location: location,
+                   contactNumber: contactNumber
+            }
+        } 
 
+        console.log(userData)
+        const res = await axios.put('http://localhost:3000/deshboard/profile/api/userUpdate', userData)
+        console.log(res.data)
+        refetch()
+        setLoading(false)
     }
-
    
 
     return (
@@ -151,11 +164,11 @@ const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber,
                 </div>
               <div className="md:w-[80%] mx-auto">
               <button
-                    className="btn text-white bg-[#1A2130] w-full my-6 rounded-sm"
+                    className="btn text-white bg-primary w-full my-6 rounded-sm"
                     type="submit"
                 >
-                Continue
-                </button>
+                    {loading ? <span className="loading loading-spinner text-white"></span> : "Save"}
+                    </button>
               </div>
             </form>
         </div>
