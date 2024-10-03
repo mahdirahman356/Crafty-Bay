@@ -8,37 +8,38 @@ import { imageUplode } from "../../app/imageAPI";
 import { useEffect, useRef, useState } from "react";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import axios from "axios";
+import { reloadSession } from "../lib/funcs";
 
 interface UpdateProfileProps {
-    id: string; 
-    location: string; 
-    contactNumber: string; 
-    image: string; 
+    id: string;
+    location: string;
+    contactNumber: string;
+    image: string;
     refetch: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>;
-  }
+}
 
-const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber, image, refetch}) => {
+const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, image, refetch }) => {
 
-    const session = useSession()
+    const { data: session, update } = useSession()
     const inputRef = useRef(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    
+
     const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         const fileInput = inputRef.current as HTMLInputElement | null;
-        const file = fileInput?.files?.[0] as File | undefined;        
+        const file = fileInput?.files?.[0] as File | undefined;
         if (file) {
             setSelectedImage(URL.createObjectURL(file));
-        }else {
+        } else {
             console.error('No file selected');
-          }
+        }
     };
 
 
     const [formData, setFormData] = useState({
-        name: session?.data?.user?.name || "",
+        name: session?.user?.name || "",
         location: location || "",
         contactNumber: contactNumber || "",
         image: image
@@ -46,16 +47,16 @@ const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber,
 
     useEffect(() => {
         setFormData({
-            name: session?.data?.user?.name || "",
+            name: session?.user?.name || "",
             location: location || "",
             contactNumber: contactNumber || "",
             image: image
         });
-    }, [ location, contactNumber, image]);
+    }, [location, contactNumber, image]);
 
-     
-    
-    const handleUpdateProfile = async(e: React.FormEvent<HTMLFormElement>) => {
+
+
+    const handleUpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
         setLoading(true);
         e.preventDefault()
         const form = e.target as HTMLFormElement
@@ -63,33 +64,52 @@ const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber,
         const location = (form.elements.namedItem("location") as HTMLInputElement).value;
         const contactNumber = (form.elements.namedItem("contactNumber") as HTMLInputElement).value;
         const image = (form.elements.namedItem("image") as HTMLInputElement)?.files?.[0];
-        let url = session?.data?.user?.image;
-            if (image) {
-                const uploadResult = await imageUplode(image);
-                url = uploadResult;
-            }
+        let url = session?.user?.image;
+        if (image) {
+            const uploadResult = await imageUplode(image);
+            url = uploadResult;
+        }
 
         const userData = {
-            email: session?.data?.user?.email,
+            email: session?.user?.email,
             updatedData: {
-                   name: name,
-                   image: url,
-                   location: location,
-                   contactNumber: contactNumber
+                name: name,
+                image: url,
+                location: location,
+                contactNumber: contactNumber
             }
-        } 
+        }
 
         console.log(userData)
-        const res = await axios.put('http://localhost:3000/deshboard/profile/api/userUpdate', userData)
-        console.log(res.data)
-        refetch()
-        setLoading(false)
+        try {
+            const res = await axios.put('http://localhost:3000/deshboard/profile/api/userUpdate', userData);
+            console.log(res.data)
+            if (res.data) {
+                await update({
+                  ...session,
+                  user: {
+                    ...session?.user,
+                    name: name,
+                    image: url,
+                    location: location,
+                    contactNumber: contactNumber,
+                  },
+                });
+                reloadSession()
+                refetch();
+            }
+        }
+        catch (error) {
+            console.error('Error updating profile', error);
+        } finally {
+            setLoading(false);
+        }
     }
-   
+
 
     return (
         <div>
-           <form onSubmit={handleUpdateProfile} className="w-full max-w-md text-gray-500">
+            <form onSubmit={handleUpdateProfile} className="w-full max-w-md text-gray-500">
                 <div className="flex items-center justify-center mt-6 mb-7">
                     <a className="w-1/3 pb-4 font-medium text-center border-b-2 dark:border-[#1A2130]">
                         Edit Profile
@@ -99,12 +119,12 @@ const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber,
 
                     <label htmlFor="dropzone-file" className="mb-12 flex flex-col w-36 h-36 items-center max-w-lg mx-auto mt-2 text-center bg-white  cursor-pointer rounded-full">
                         <Image
-                       src={selectedImage  ? selectedImage : session?.data?.user?.image || formData.image || "/image/user.avif"}
-                       alt="profile"
-                       width={400}
-                       height={300}
-                       className='w-36 h-36 object-cover rounded-full border'                   
-                       />
+                            src={selectedImage ? selectedImage : session?.user?.image || formData.image || "/image/user.avif"}
+                            alt="profile"
+                            width={400}
+                            height={300}
+                            className='w-36 h-36 object-cover rounded-full border'
+                        />
 
                         <input
                             id="dropzone-file"
@@ -113,9 +133,9 @@ const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber,
                             name="image"
                             accept="image/*"
                             ref={inputRef}
-                            onChange={handleImageSelect} 
-                            />
-                            </label>
+                            onChange={handleImageSelect}
+                        />
+                    </label>
                 </div>
 
                 <div className="space-y-7 mb-11 md:w-[80%] mx-auto">
@@ -162,14 +182,14 @@ const UpdateProfile: React.FC<UpdateProfileProps>  = ({ location, contactNumber,
                         />
                     </div>
                 </div>
-              <div className="md:w-[80%] mx-auto">
-              <button
-                    className="btn text-white bg-primary w-full my-6 rounded-sm"
-                    type="submit"
-                >
-                    {loading ? <span className="loading loading-spinner text-white"></span> : "Save"}
+                <div className="md:w-[80%] mx-auto">
+                    <button
+                        className="btn text-white bg-primary w-full my-6 rounded-sm"
+                        type="submit"
+                    >
+                        {loading ? <span className="loading loading-spinner text-white"></span> : "Save"}
                     </button>
-              </div>
+                </div>
             </form>
         </div>
     );

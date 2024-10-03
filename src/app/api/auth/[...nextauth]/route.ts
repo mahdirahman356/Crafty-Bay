@@ -77,6 +77,14 @@ export const authOptions: AuthOptions = {
                 return true
             }
         },
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        async jwt({user, token, trigger, session}) {
+            if(trigger === "update"){
+                return {...token, ...session.user}
+            }
+            return {...token, ...user};
+        }
     }
 }
 
