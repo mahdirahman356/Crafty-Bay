@@ -41,7 +41,8 @@ export const authOptions: AuthOptions = {
                 return {
                     id: currentUser._id.toString(),
                     email: currentUser.email,
-                    name: currentUser.name
+                    name: currentUser.name,
+                    role: currentUser.role
                 };
             }
         }),
@@ -78,12 +79,26 @@ export const authOptions: AuthOptions = {
             }
         },
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        async jwt({user, token, trigger, session}) {
+
+        async jwt({account, user, token, trigger, session}) {
+            if(account){
+                token.role = (user as { role?: string }).role;
+                return token
+            }
             if(trigger === "update"){
                 return {...token, ...session.user}
             }
             return {...token, ...user};
+        },
+
+        async session({session, token}){
+            const userWithRole = {
+                ...session.user,
+                role: token.role as string | undefined
+            };
+        
+            session.user = userWithRole; 
+            return session
         }
     }
 }

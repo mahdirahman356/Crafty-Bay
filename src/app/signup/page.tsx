@@ -17,9 +17,12 @@ const page = () => {
         const name = (form.elements.namedItem("name") as HTMLInputElement).value;
         const email = (form.elements.namedItem("email") as HTMLInputElement).value;
         const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+        const role = (form.elements.namedItem("role") as HTMLInputElement).value;
+        
 
         const newUser: object = {
             name: name,
+            role: role,
             email: email,
             password: password,
         }
@@ -96,6 +99,17 @@ const page = () => {
                             name="name"
                             className="grow"
                             required />
+                    </label>
+
+                    <label className="form-control w-full relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70 absolute left-4 top-4"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
+                        <select name="role" className="select border-gray-300 rounded-3xl pl-10 text-gray-400 text-[17px]">
+                            <option disabled selected value=''>
+                                Seller or Buyer
+                            </option>
+                            <option value="seller">Seller</option>
+                            <option value="buyer">Buyer</option>
+                        </select>
                     </label>
 
                     <label className="input rounded-3xl input-bordered flex items-center gap-2">

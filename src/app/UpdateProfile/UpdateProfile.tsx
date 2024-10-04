@@ -97,6 +97,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, 
                 });
                 reloadSession()
                 refetch();
+                window.location.reload()
             }
         }
         catch (error) {

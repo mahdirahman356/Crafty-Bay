@@ -28,7 +28,7 @@ const page = () => {
         const res = await signIn("credentials", {
             email,
             password,
-            redirect: false
+            redirect: false 
         })
         setLoading(false);
         console.log(res)

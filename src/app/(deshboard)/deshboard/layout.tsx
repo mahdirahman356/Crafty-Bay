@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { LayoutProps } from "../../../../.next/types/app/layout";
 import { LuUser2 } from "react-icons/lu";
+import AddPost from "@/app/AddPost/AddPost";
 
 const layout: React.FC<LayoutProps> = ({ children }) => {
     return (
@@ -15,9 +16,9 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className="drawer-side">
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul className="menu min-h-full w-72 p-7 fixed bg-primary text-white">
-                    <li>
+                        <li>
                             <Link
-                                className={`text-xl rounded-3xl font-semibold mb-3`}  
+                                className={`text-xl rounded-3xl font-semibold mb-3`}
                                 href={"/deshboard/profile"}>
                                 <LuUser2 className="text-xl" />
                                 Profile
@@ -25,12 +26,28 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                         </li>
                         <li>
                             <Link
-                                className={`text-xl rounded-3xl font-semibold mb-3`} 
+                                className={`text-xl rounded-3xl font-semibold mb-3`}
                                 href={"/deshboard/allUsers"}>
                                 <LuUser2 className="text-xl" />
                                 All Users
                             </Link>
                         </li>
+
+                        {/* post button  */}
+                        {/* You can open the modal using document.getElementById('ID').showModal() method */}
+                        <button className="btn rounded-3xl" onClick={() => {
+                                        const modal = document.getElementById('my_modal_3') as HTMLDialogElement;
+                                        modal?.showModal();
+                                    }}><span className="text-xl text-primary">Post</span></button>
+                        <dialog id="my_modal_3" className="modal">
+                            <div className="modal-box">
+                                <form method="dialog">
+                                    {/* if there is a button in form, it will close the modal */}
+                                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
+                                </form>
+                               <AddPost></AddPost>
+                            </div>
+                        </dialog>
                     </ul>
 
                 </div>
