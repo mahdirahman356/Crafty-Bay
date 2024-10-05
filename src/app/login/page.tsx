@@ -2,14 +2,12 @@
 "use client"
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import SocialSignIn from "../components/Shared/SocialSignIn";
+import SocialSignIn from "../SocialSignIn/SocialSignIn";
 import Swal from "sweetalert2";
 import { useState } from "react";
 
 const page = () => {
     const [loading, setLoading] = useState(false);
-    const router = useRouter()
     const session = useSession()
     console.log(session)
     const handlelogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,19 +30,6 @@ const page = () => {
         })
         setLoading(false);
         console.log(res)
-        if(res?.status === 200){
-             router.push("/")
-             Swal.fire({
-                title: 'Welcome to CraftyBay!',
-                text: 'You have successfully logged in. Enjoy exploring the world of crafts!',
-                icon: 'success',
-                confirmButtonText: 'Ok',
-                allowOutsideClick: false,
-                customClass: {
-                    confirmButton: 'btn btn-primary rounded-sm text-white ', 
-                  },
-              });
-        }
 
         if(res?.status === 401){
             Swal.fire({

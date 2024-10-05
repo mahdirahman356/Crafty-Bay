@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import useAxiosCommon from "../Hooks/useAxiosCommon"
 import { useRouter } from "next/navigation";
-import SocialSignIn from "../components/Shared/SocialSignIn";
+import SocialSignIn from "../SocialSignIn/SocialSignIn";
 import Swal from "sweetalert2";
 const page = () => {
     const [loading, setLoading] = useState(false);

@@ -67,6 +67,9 @@ export const authOptions: AuthOptions = {
                     const exist = await usersCollection.findOne({ email: email })
                     if (!exist) {
                         await usersCollection.insertOne(user);
+                    } else {
+                        (user as { role?: string }).role = exist.role;
+
                     }
 
                     return true;
@@ -81,7 +84,7 @@ export const authOptions: AuthOptions = {
 
 
         async jwt({account, user, token, trigger, session}) {
-            if(account){
+            if(account && user){
                 token.role = (user as { role?: string }).role;
                 return token
             }
