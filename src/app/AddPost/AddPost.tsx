@@ -12,6 +12,8 @@ const AddPost = () => {
     const { data: session } = useSession()
     const [selectedImg, setSelectedImg] = useState<string | null>(null)
     const imgRef = useRef<HTMLInputElement | null>(null);
+    const [loading, setLoading] = useState(false);
+
 
     const { data: userData = [] } = useQuery({
         queryKey: ["userData"],
@@ -26,21 +28,51 @@ const AddPost = () => {
 
 
     const handleAddPost = async (e: React.FormEvent<HTMLFormElement>) => {
+        setLoading(true);
         e.preventDefault()
         const form = e.target as HTMLFormElement
         const title = (form.elements.namedItem("title") as HTMLInputElement).value;
         const description = (form.elements.namedItem("description") as HTMLInputElement).value;
         const price = (form.elements.namedItem("price") as HTMLInputElement).value;
-        const image = (form.elements.namedItem("img") as HTMLInputElement)?.files?.[0];
+        const img = (form.elements.namedItem("img") as HTMLInputElement)?.files?.[0];
         const location = (form.elements.namedItem("location") as HTMLInputElement).value;
         let url;
-        if (image) {
-            const uploadResult = await imageUplode(image);
+        if (img) {
+            const uploadResult = await imageUplode(img);
             url = uploadResult;
         }
 
-        console.log(title, description, price, location, url)
+        const post = {
+            email: session?.user?.email,  
+            userData: {
+              name: session?.user?.name,
+              userImage: image,
+            },
+            postData: {
+                title: title,
+                description: description,
+                price: price,
+                location: location,
+                image: url,
+                date: new Date()
+            }
+        }
 
+        try {
+
+            const res = await axios.post("http://localhost:3000/AddPost/api/post", post)
+            console.log(res.data)
+            if(res.data.acknowledged === true){
+                window.location.reload()
+            }
+            
+        } catch (error) {
+            console.error('Error', error);
+        } finally {
+            setLoading(false);
+        }
+
+      
 
     }
 
@@ -143,7 +175,9 @@ const AddPost = () => {
                         />
                     </div>
 
-                    <button type='submit' className='btn btn-primary text-white w-full rounded-sm'>Post</button>
+                    <button type='submit' className='btn btn-primary text-white w-full rounded-sm'>
+                    {loading ? <span className="loading loading-spinner text-white"></span> : "Post"}
+                    </button>
 
                 </div>
             </form >

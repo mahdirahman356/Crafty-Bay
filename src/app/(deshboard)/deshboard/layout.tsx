@@ -4,19 +4,21 @@ import Link from "next/link";
 import { LuUser2 } from "react-icons/lu";
 import { LayoutProps } from "../../../../.next/types/app/api/auth/[...nextauth]/route";
 import AddPost from "@/app/AddPost/AddPost";
+import { RiMenu2Fill } from "react-icons/ri";
 
 const layout: React.FC<LayoutProps> = ({ children }) => {
     return (
         <div className={`lg:flex`}>
-            <div className="drawer lg:drawer-open w-[25%]">
+            <div className="drawer lg:drawer-open w-72 z-30">
                 <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-                <div className="drawer-content flex flex-col items-center justify-center">
-                    <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">Open drawer</label>
-
+                <div className="drawer-content flex flex-col">
+                    <label htmlFor="my-drawer-2" className="p-4 drawer-button lg:hidden">
+                    <RiMenu2Fill className="text-xl text-black"/>
+                    </label>
                 </div>
                 <div className="drawer-side">
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
-                    <ul className="menu min-h-full w-72 p-7 fixed bg-primary text-white">
+                    <ul className="menu min-h-full w-60 p-7 fixed bg-primary text-white">
                         <li>
                             <Link
                                 className={`text-xl rounded-3xl font-semibold mb-3`}

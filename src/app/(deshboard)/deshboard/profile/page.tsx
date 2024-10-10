@@ -9,6 +9,7 @@ import { FiEdit3 } from "react-icons/fi";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
 import UpdateProfile from '@/app/UpdateProfile/UpdateProfile';
 import { LiaBorderAllSolid } from 'react-icons/lia';
+import MyPost from '@/app/MyPost/MyPost';
 
 const profilePage = () => {
     const { data: session } = useSession()
@@ -26,14 +27,14 @@ const profilePage = () => {
     const { _id, name, email, location, contactNumber, image } = userProfile || {}
 
     return (
-        <div className="">
+        <div className="w-[98%] md:w-[90%] mx-auto">
             {isLoading ?
                 <div className=" min-h-screen flex justify-center items-center">
                     <progress className="progress w-56"></progress>
                 </div>
-                : <div className='w-[95%] mx-auto md:py-12 lg:py-0 lg:my-28 text-gray-800'>
+                : <div className='md:py-12 lg:py-0 lg:my-28 text-gray-800'>
                     < div className="flex">
-                        <div className="p-8 sm:flex flex-wrap sm:space-x-6">
+                        <div className="p-8 flex flex-col md:flex-row sm:space-x-6">
                             <div className="w-28 h-28 md:w-36 md:h-36 mb-3">
                                 <Image
                                     src={image || session?.user?.image ? image || session?.user?.image : "/image/user.avif"}
@@ -43,10 +44,12 @@ const profilePage = () => {
                                     className="object-cover object-center w-full h-full border rounded-full dark:bg-gray-500"
                                 />
                             </div>
-                            <div className=" sm:flex sm:space-x-6">
-                                <div className="mb-6">
+                            <div className="sm:flex sm:space-x-6">
+                                <div className="mb-6 flex flex-row md:flex-col gap-5 md:gap-0 items-center md:items-start">
+                                    <div>
                                     <h2 className="text-2xl font-semibold">{name ? name : "No name available"}</h2>
                                     <span className="text-sm dark:text-gray-600">Role {(session?.user as { role?: string }).role || "Not Assigned"}</span>
+                                    </div>
                                     <button className="btn rounded-full bg-primary text-white mt-3 flex" onClick={() => {
                                         (window as any)[`my_modal_update_profile`].showModal();
                                     }}><FiEdit3 className="text-[17px]" /></button>
@@ -67,9 +70,10 @@ const profilePage = () => {
                             </div>
                         </div>
                     </div>
-
+ 
                     <div className='border-t-2'>
                         <p className='flex justify-center items-center mt-3'><LiaBorderAllSolid className='text-xl' />Posts</p>
+                        <MyPost />
                     </div>
                 </div>}
 
