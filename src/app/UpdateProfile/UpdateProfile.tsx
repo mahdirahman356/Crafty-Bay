@@ -21,22 +21,21 @@ interface UpdateProfileProps {
 const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, image, refetch }) => {
 
     const { data: session, update } = useSession()
-    const inputRef = useRef(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
 
     const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-        const fileInput = inputRef.current as HTMLInputElement | null;
-        const file = fileInput?.files?.[0] as File | undefined;
+        const fileInput = inputRef.current 
+        const file = fileInput?.files?.[0] 
         if (file) {
             setSelectedImage(URL.createObjectURL(file));
         } else {
             console.error('No file selected');
         }
     };
-
 
     const [formData, setFormData] = useState({
         name: session?.user?.name || "",
@@ -86,14 +85,14 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, 
             console.log(res.data)
             if (res.data) {
                 await update({
-                  ...session,
-                  user: {
-                    ...session?.user,
-                    name: name,
-                    image: url,
-                    location: location,
-                    contactNumber: contactNumber,
-                  },
+                    ...session,
+                    user: {
+                        ...session?.user,
+                        name: name,
+                        image: url,
+                        location: location,
+                        contactNumber: contactNumber,
+                    },
                 });
                 reloadSession()
                 refetch();
@@ -106,6 +105,9 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, 
             setLoading(false);
         }
     }
+
+    console.log(selectedImage)
+
 
 
     return (

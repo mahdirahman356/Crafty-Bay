@@ -97,7 +97,7 @@ export const authOptions: AuthOptions = {
         async session({session, token}){
             const userWithRole = {
                 ...session.user,
-                role: token.role as string | undefined
+                role: token.role as string | undefined,
             };
         
             session.user = userWithRole; 

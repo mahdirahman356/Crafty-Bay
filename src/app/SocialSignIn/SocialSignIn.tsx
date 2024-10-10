@@ -7,7 +7,6 @@ import { FcGoogle } from "react-icons/fc";
 import Swal from "sweetalert2";
 
 const SocialSignIn = () => {
-    // const session = useSession();
     const { data: session, status, update } = useSession()
     const router = useRouter();
     const [loading, setLoading] = useState(false); 

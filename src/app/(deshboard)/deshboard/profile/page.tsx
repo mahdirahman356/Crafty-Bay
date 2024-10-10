@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
 import Image from 'next/image';
@@ -10,13 +11,13 @@ import UpdateProfile from '@/app/UpdateProfile/UpdateProfile';
 import { LiaBorderAllSolid } from 'react-icons/lia';
 
 const profilePage = () => {
-    const session = useSession()
-    console.log(session.data?.user)
+    const { data: session } = useSession()
+    console.log(session?.user)
 
     const { data: userProfile = [], isLoading, refetch } = useQuery({
         queryKey: ["userProfile"],
         queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/deshboard/profile/api/users?email=${session.data?.user?.email}`)
+            const { data } = await axios.get(`http://localhost:3000/deshboard/profile/api/users?email=${session?.user?.email}`)
             console.log(data)
             return data
         }
@@ -35,7 +36,7 @@ const profilePage = () => {
                         <div className="p-8 sm:flex flex-wrap sm:space-x-6">
                             <div className="w-28 h-28 md:w-36 md:h-36 mb-3">
                                 <Image
-                                    src={image || session.data?.user?.image ? image || session.data?.user?.image : "/image/user.avif"}
+                                    src={image || session?.user?.image ? image || session?.user?.image : "/image/user.avif"}
                                     alt="profile"
                                     width={400}
                                     height={300}
@@ -45,12 +46,11 @@ const profilePage = () => {
                             <div className=" sm:flex sm:space-x-6">
                                 <div className="mb-6">
                                     <h2 className="text-2xl font-semibold">{name ? name : "No name available"}</h2>
-                                    <span className="text-sm dark:text-gray-600">General manager</span>
+                                    <span className="text-sm dark:text-gray-600">Role {(session?.user as { role?: string }).role || "Not Assigned"}</span>
                                     <button className="btn rounded-full bg-primary text-white mt-3 flex" onClick={() => {
-                                        const modal = document.getElementById('my_modal_3') as HTMLDialogElement;
-                                        modal?.showModal();
+                                        (window as any)[`my_modal_update_profile`].showModal();
                                     }}><FiEdit3 className="text-[17px]" /></button>
-                                    <dialog id="my_modal_3" className="modal">
+                                    <dialog id="my_modal_update_profile" className="modal">
                                         <div className="modal-box">
                                             <form method="dialog">
                                                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
@@ -67,9 +67,9 @@ const profilePage = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     <div className='border-t-2'>
-                          <p className='flex justify-center items-center mt-3'><LiaBorderAllSolid className='text-xl'/>Posts</p>
+                        <p className='flex justify-center items-center mt-3'><LiaBorderAllSolid className='text-xl' />Posts</p>
                     </div>
                 </div>}
 

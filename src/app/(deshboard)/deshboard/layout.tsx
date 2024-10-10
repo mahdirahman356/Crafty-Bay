@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import Link from "next/link";
-import { LayoutProps } from "../../../../.next/types/app/layout";
 import { LuUser2 } from "react-icons/lu";
+import { LayoutProps } from "../../../../.next/types/app/api/auth/[...nextauth]/route";
 import AddPost from "@/app/AddPost/AddPost";
 
 const layout: React.FC<LayoutProps> = ({ children }) => {
@@ -35,11 +36,10 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
 
                         {/* post button  */}
                         <button className="btn rounded-3xl" onClick={() => {
-                                        const modal = document.getElementById('my_modal_2') as HTMLDialogElement;
-                                        modal?.showModal();
-                                    }}><span className="text-xl text-primary">Post</span></button>
-                        <dialog id="my_modal_2" className="modal">
-                            <div className="modal-box">
+                            (window as any)[`my_modal_add_posts`].showModal();
+                        }}><span className="text-xl text-primary">Post</span></button>
+                        <dialog id="my_modal_add_posts" className="modal">
+                            <div className="modal-box w-full max-w-3xl">
                                 <form method="dialog">
                                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
                                 </form>
