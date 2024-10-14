@@ -18,7 +18,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ id }) => {
         }
     })
 
-    const { title, description, price, location, date } = postDetails.postData || {}
+    const { craftName, title, description, price, location, date } = postDetails.postData || {}
     const { userImage, name } = postDetails.userData || {}
 
     return (
@@ -58,7 +58,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ id }) => {
                         className="rounded-lg shadow-2xl" />
                    </div>
                     <div className="md:w-1/2">
-                
+                        <p className="uppercase text-secondary mb-2 text-sm">{craftName}</p>
                         <h1 className="text-3xl md:text-4xl font-bold mb-3">{title}</h1>
                         <p className="flex items-center gap-3">
                             <p className="bg-gray-300 p-2 rounded-full">

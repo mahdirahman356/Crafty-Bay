@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { IoLocationOutline, IoPricetagsOutline } from 'react-icons/io5';
 import { LiaCommentSolid } from 'react-icons/lia';
+import { TbBrandCraft } from 'react-icons/tb';
 
 const AddPost = () => {
     const { data: session } = useSession()
@@ -31,6 +32,7 @@ const AddPost = () => {
         setLoading(true);
         e.preventDefault()
         const form = e.target as HTMLFormElement
+        const craftName = (form.elements.namedItem("craftName") as HTMLInputElement).value;
         const title = (form.elements.namedItem("title") as HTMLInputElement).value;
         const description = (form.elements.namedItem("description") as HTMLInputElement).value;
         const price = (form.elements.namedItem("price") as HTMLInputElement).value;
@@ -43,12 +45,13 @@ const AddPost = () => {
         }
 
         const post = {
-            email: session?.user?.email,  
+            email: session?.user?.email,
             userData: {
-              name: session?.user?.name,
-              userImage: image,
+                name: session?.user?.name,
+                userImage: image,
             },
             postData: {
+                craftName: craftName,
                 title: title,
                 description: description,
                 price: price,
@@ -62,24 +65,24 @@ const AddPost = () => {
 
             const res = await axios.post("http://localhost:3000/AddPost/api/post", post)
             console.log(res.data)
-            if(res.data.acknowledged === true){
+            if (res.data.acknowledged === true) {
                 window.location.reload()
             }
-            
+
         } catch (error) {
             console.error('Error', error);
         } finally {
             setLoading(false);
         }
 
-      
+
 
     }
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-        const fileInput = imgRef.current 
-        const file = fileInput?.files?.[0] 
+        const fileInput = imgRef.current
+        const file = fileInput?.files?.[0]
         if (file) {
             setSelectedImg(URL.createObjectURL(file));
         } else {
@@ -129,6 +132,7 @@ const AddPost = () => {
                         <p className='text-[16px] text-gray-500 font-semibold'>{session?.user?.name}</p>
                     </div>
 
+                    {/* description */}
                     <textarea
                         name="description"
                         rows={4}
@@ -136,7 +140,20 @@ const AddPost = () => {
                         className="grow w-full text-[16px]  bg-gray-100 p-3 mb-6 rounded-md text-black border-gray-300 pb-2 focus:border-blue-500 outline-none"
                         placeholder="Write Something About Your Post"
                     />
+                    {/* Craft Name */}
+                    <div className="flex items-center mb-4 w-full text-gray-700 ">
+                        <span className="pb-2 border-gray-300 border-b-2 ">
+                            <TbBrandCraft className="text-gray-500 text-xl  mr-3" />
+                        </span>
+                        <input
+                            type="text"
+                            name="craftName"
+                            className="grow border-b-2 bg-white text-black border-gray-300 pb-2 focus:border-blue-500 outline-none rounded-none"
+                            placeholder="Craft Name"
+                        />
+                    </div>
 
+                    {/* title */}
                     <div className="flex items-center mb-4 w-full text-gray-700 ">
                         <span className="pb-2 border-gray-300 border-b-2 ">
                             <LiaCommentSolid className="text-gray-500 text-xl  mr-3" />
@@ -149,7 +166,7 @@ const AddPost = () => {
                         />
                     </div>
 
-
+                    {/* price */}
                     <div className="flex items-center mb-4 w-full text-gray-700 ">
                         <span className="pb-2 border-gray-300 border-b-2 ">
                             <IoPricetagsOutline className="text-gray-500 text-xl  mr-3" />
@@ -161,7 +178,7 @@ const AddPost = () => {
                             placeholder="Add Price"
                         />
                     </div>
-
+                    {/* location */}
                     <div className="flex items-center mb-6 w-full text-gray-700 ">
                         <span className="pb-2 border-gray-300 border-b-2 ">
                             <IoLocationOutline className="text-gray-500 text-xl  mr-3" />
@@ -176,7 +193,7 @@ const AddPost = () => {
                     </div>
 
                     <button type='submit' className='btn btn-primary text-white w-full rounded-sm'>
-                    {loading ? <span className="loading loading-spinner text-white"></span> : "Post"}
+                        {loading ? <span className="loading loading-spinner text-white"></span> : "Post"}
                     </button>
 
                 </div>
