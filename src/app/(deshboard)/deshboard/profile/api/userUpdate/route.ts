@@ -9,7 +9,7 @@ interface UpdateRequestBody {
     email: string;
     updatedData: {
       name?: string;
-      image?: string;
+      img?: string;
     };
   }
   

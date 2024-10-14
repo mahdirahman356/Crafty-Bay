@@ -1,14 +1,13 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Image from 'next/image';
 import { useRef, useState } from 'react';
-import { imageUplode } from '../imageAPI';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { IoLocationOutline, IoPricetagsOutline } from 'react-icons/io5';
 import { LiaCommentSolid } from 'react-icons/lia';
 import { TbBrandCraft } from 'react-icons/tb';
-
+import {imageUplode} from "../imageAPI/index"
 const AddPost = () => {
     const { data: session } = useSession()
     const [selectedImg, setSelectedImg] = useState<string | null>(null)
@@ -79,7 +78,7 @@ const AddPost = () => {
 
     }
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleimageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         const fileInput = imgRef.current
         const file = fileInput?.files?.[0]
@@ -100,7 +99,7 @@ const AddPost = () => {
                 <div className='md:w-1/2 flex justify-center items-center'>
                     <label htmlFor="dropzone-file" className="flex flex-col items-center text-center bg-white">
                         <div>
-                            <Image
+                            <img
                                 src={selectedImg ? selectedImg : "/image/add-image.png"} alt="profile"
                                 width={400}
                                 height={300}
@@ -114,7 +113,7 @@ const AddPost = () => {
                             name="img"
                             accept="image/*"
                             ref={imgRef}
-                            onChange={handleImageChange}
+                            onChange={handleimageChange}
                         />
                     </label>
                 </div>
@@ -123,7 +122,7 @@ const AddPost = () => {
                 <div className='md:w-1/2 md:p-6 p-3'>
 
                     <div className='flex items-center gap-2 mb-4'>
-                        <Image
+                        <img
                             src={session?.user?.image || image ? session?.user?.image || image : "/image/user.avif"} alt="profile"
                             width={400}
                             height={300}

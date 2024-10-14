@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Image from 'next/image';
 import { IoLocationOutline } from "react-icons/io5";
 
 
@@ -18,7 +18,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ id }) => {
         }
     })
 
-    const { craftName, title, description, price, location, date } = postDetails.postData || {}
+    const { craftName, title, description, price, location, date, image } = postDetails.postData || {}
     const { userImage, name } = postDetails.userData || {}
 
     return (
@@ -29,8 +29,8 @@ const PostDetails: React.FC<PostDetailsProps> = ({ id }) => {
                    <div className="rounded-sm">
                         <div className="flex items-center gap-4 mt-2 mb-6">
                             
-                            <Image className="w-10 h-10 rounded-full"
-                                alt="user-image"
+                            <img className="w-10 h-10 rounded-full"
+                                alt="user-img"
                                 width={400}
                                 height={300}
                                 src={userImage ? userImage : "/image/user.avif"} />
@@ -50,8 +50,8 @@ const PostDetails: React.FC<PostDetailsProps> = ({ id }) => {
                            
                         </div>
                     </div>
-                   <Image
-                        src={"https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"}
+                   <img
+                        src={image}
                         alt="post"
                         width={400}
                         height={300}

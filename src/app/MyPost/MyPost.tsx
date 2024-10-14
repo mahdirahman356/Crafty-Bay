@@ -1,10 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { Key } from "react";
-import Image from 'next/image';
 import PostDetails from "../postDetails/PostDetails";
 import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -73,25 +73,23 @@ const MyPost = () => {
     return (
         <div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-3">
-                {myPost.map((post: Post, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-lg shadow-xl">
-                    <div className="flex justify-between items-center">
+                {myPost.map((post: Post, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-sm shadow-xl">
+                    <div className="flex justify-between items-start">
                         <div className="flex items-center gap-4 mt-2 mb-6 pl-3">
                             {/* user profile image */}
-                            <Image className="w-10 h-10 rounded-full"
+                            <img className="w-10 h-10 rounded-full"
                                 alt="user-image"
-                                width={400}
-                                height={300}
                                 src={post.userData.userImage ? post.userData.userImage : "/image/user.avif"} />
                             <div>
                                 <p className="font-semibold text-start">{post.userData.name}</p>
-                                <div className="flex gap-3">
-                                    <p className="text-sm text-gray-500">{post.postData.date.split('T')[0]}</p>
-                                    <p className="text-sm text-gray-500">{post.postData.date.split('T')[1].split('.')[0]}</p>
+                                <div className="flex gap-2 text-nowrap">
+                                    <p className="text-sm text-gray-500 text-nowrap">{post.postData.date.split('T')[0]}</p>
+                                    <p className="text-sm text-gray-500 text-nowrap">{post.postData.date.split('T')[1].split('.')[0]}</p>
                                 </div>
                             </div>
                         </div>
                         {/* dropdown-menu */}
-                        <div className="dropdown dropdown-bottom dropdown-end">
+                        <div className="dropdown dropdown-bottom dropdown-end mt-1">
                             <div tabIndex={0} role="button" className="m-1 pr-3">
                                 <BsThreeDots className="text-xl" />
                             </div>
@@ -108,11 +106,10 @@ const MyPost = () => {
                     }}><span className="">
 
                             <figure>
-                                <Image
-                                    src={"https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"}
+                                <img
+                                    src={post.postData.image}
                                     alt="post"
-                                    width={400}
-                                    height={300}
+                                    className="w-full h-full object-cover"
                                 />
                             </figure>
                         </span></button>

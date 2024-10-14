@@ -1,10 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { IoCallOutline, IoLocationOutline } from "react-icons/io5";
 import { LuUser2 } from "react-icons/lu";
-import Image from 'next/image';
 import { useSession } from "next-auth/react";
-import { imageUplode } from "../../app/imageAPI";
+import { imageUplode } from "../imageAPI/index";
 import { useEffect, useRef, useState } from "react";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import axios from "axios";
@@ -22,16 +22,16 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, 
 
     const { data: session, update } = useSession()
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedimg, setSelectedimg] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
 
-    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleimgSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         const fileInput = inputRef.current 
         const file = fileInput?.files?.[0] 
         if (file) {
-            setSelectedImage(URL.createObjectURL(file));
+            setSelectedimg(URL.createObjectURL(file));
         } else {
             console.error('No file selected');
         }
@@ -62,10 +62,10 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, 
         const name = (form.elements.namedItem("name") as HTMLInputElement).value;
         const location = (form.elements.namedItem("location") as HTMLInputElement).value;
         const contactNumber = (form.elements.namedItem("contactNumber") as HTMLInputElement).value;
-        const image = (form.elements.namedItem("image") as HTMLInputElement)?.files?.[0];
-        let url = session?.user?.image;
-        if (image) {
-            const uploadResult = await imageUplode(image);
+        const img = (form.elements.namedItem("img") as HTMLInputElement)?.files?.[0];
+        let url = session?.user?.image
+        if (img) {
+            const uploadResult = await imageUplode(img);
             url = uploadResult;
         }
 
@@ -89,7 +89,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, 
                     user: {
                         ...session?.user,
                         name: name,
-                        image: url,
+                        img: url,
                         location: location,
                         contactNumber: contactNumber,
                     },
@@ -106,7 +106,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, 
         }
     }
 
-    console.log(selectedImage)
+    console.log(selectedimg)
 
 
 
@@ -121,8 +121,8 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, 
                 <div>
 
                     <label htmlFor="dropzone-file" className="mb-12 flex flex-col w-36 h-36 items-center max-w-lg mx-auto mt-2 text-center bg-white  cursor-pointer rounded-full">
-                        <Image
-                            src={selectedImage ? selectedImage : session?.user?.image || formData.image || "/image/user.avif"}
+                        <img
+                            src={selectedimg ? selectedimg : session?.user?.image || formData.image || "/image/user.avif"}
                             alt="profile"
                             width={400}
                             height={300}
@@ -133,10 +133,10 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ location, contactNumber, 
                             id="dropzone-file"
                             type="file"
                             className="hidden"
-                            name="image"
-                            accept="image/*"
+                            name="img"
+                            accept="img/*"
                             ref={inputRef}
-                            onChange={handleImageSelect}
+                            onChange={handleimgSelect}
                         />
                     </label>
                 </div>

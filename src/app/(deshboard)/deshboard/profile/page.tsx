@@ -1,7 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
-import Image from 'next/image';
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -36,7 +36,7 @@ const profilePage = () => {
                     < div className="flex">
                         <div className="p-8 flex flex-col md:flex-row sm:space-x-6">
                             <div className="w-28 h-28 md:w-36 md:h-36 mb-3">
-                                <Image
+                                <img
                                     src={image || session?.user?.image ? image || session?.user?.image : "/image/user.avif"}
                                     alt="profile"
                                     width={400}
