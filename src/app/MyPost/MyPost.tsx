@@ -10,6 +10,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbPencilMinus } from "react-icons/tb";
 import Swal from "sweetalert2";
+import UpdatePosts from "../updatePosts/UpdatePosts";
 
 type Post = {
     _id: string,
@@ -40,34 +41,34 @@ const MyPost = () => {
     })
 
     const handlePostDelete = async (_id: string, craftName: string) => {
-        
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, delete it!",
-                customClass: {
-                    confirmButton: 'btn btn-primary rounded-sm text-white ',
-                    cancelButton: 'btn btn-secondary rounded-sm text-white '
-                },
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.delete(`http://localhost:3000/deshboard/profile/api/deletePost/${_id}`)
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            customClass: {
+                confirmButton: 'btn btn-primary rounded-sm text-white ',
+                cancelButton: 'btn btn-secondary rounded-sm text-white '
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:3000/deshboard/profile/api/deletePost/${_id}`)
                     .then(res => {
                         console.log(res.data)
-                        if(res.status === 200){
+                        if (res.status === 200) {
                             refetch()
                             Swal.fire({
                                 title: "Deleted!",
                                 text: `${craftName} has been deleted.`,
                                 icon: "success"
-                              });
+                            });
                         }
                     })
-                     
-                }
-            });
+
+            }
+        });
     }
 
     return (
@@ -95,7 +96,23 @@ const MyPost = () => {
                             </div>
                             <ul tabIndex={0} className="dropdown-content menu shadow-xl bg-base-200 rounded-md z-[1] w-52 p-2">
                                 <li><a onClick={() => handlePostDelete(post._id, post.postData.craftName)} className="text-gray-500"><RiDeleteBin6Line className="text-xl" />Delete</a></li>
-                                <li><a className="text-gray-500"><TbPencilMinus className="text-xl" />Update Your Post</a></li>
+                                <li>
+                                    {/* update post modal */}
+                                    <button className="" onClick={() => {
+                                        const dialogElement = document.getElementById(`update_posts_${post._id}`) as HTMLDialogElement;
+                                        dialogElement.showModal();
+                                    }}><span className="">
+                                            <a className="text-gray-500 flex gap-2"><TbPencilMinus className="text-xl" />Update Your Post</a>
+                                        </span></button>
+                                    <dialog id={`update_posts_${post._id}`} className="modal flex justify-center items-center">
+                                        <div className="modal-box w-full max-w-3xl">
+                                            <form method="dialog">
+                                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
+                                            </form>
+                                            <UpdatePosts id={post._id} />
+                                        </div>
+                                    </dialog>
+                                </li>
                             </ul>
                         </div>
 
