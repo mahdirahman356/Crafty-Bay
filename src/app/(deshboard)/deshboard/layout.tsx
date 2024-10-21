@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import Link from "next/link";
@@ -5,8 +6,19 @@ import { LuUser2 } from "react-icons/lu";
 import { LayoutProps } from "../../../../.next/types/app/api/auth/[...nextauth]/route";
 import AddPost from "@/app/AddPost/AddPost";
 import { RiMenu2Fill } from "react-icons/ri";
+import { useSession } from "next-auth/react";
+
+interface UserWithRole {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    role?: string | null; 
+  }
 
 const layout: React.FC<LayoutProps> = ({ children }) => {
+    
+    const { data: session } = useSession()
+    const userWithRole = session?.user as UserWithRole | undefined;
     return (
         <div className={`lg:flex`}>
             <div className="drawer lg:drawer-open w-72 z-30">
@@ -41,7 +53,7 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                             (window as any)[`my_modal_add_posts`].showModal();
                         }}><span className="text-xl text-primary">Post</span></button>
                         <dialog id="my_modal_add_posts" className="modal">
-                            <div className="modal-box w-full max-w-3xl">
+                            <div className={`modal-box w-full ${userWithRole?.role === "seller" && "max-w-3xl"}`}>
                                 <form method="dialog">
                                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
                                 </form>

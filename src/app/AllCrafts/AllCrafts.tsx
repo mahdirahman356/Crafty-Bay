@@ -21,7 +21,11 @@ type Crafts = {
     };
 };
 
-const AllCrafts = ({ crafts }) => {
+type AllCraftsProps = {
+    crafts: Crafts[];
+};
+
+const AllCrafts = ({ crafts }:AllCraftsProps) => {
 
     console.log(crafts)
 

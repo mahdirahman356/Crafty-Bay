@@ -41,6 +41,15 @@ const MyPost = () => {
         }
     })
 
+    const { data: craftRequestsPost = [] } = useQuery({
+        queryKey: ["craftRequestsPost"],
+        queryFn: async () => {
+            const { data } = await axios.get(`http://localhost:3000/deshboard/profile/api/myCraftRequestsPost?email=${session?.user?.email}`)
+            console.log(data)
+            return data
+        }
+    })
+
     const handlePostDelete = async (_id: string, craftName: string) => {
 
         Swal.fire({

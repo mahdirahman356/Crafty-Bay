@@ -8,8 +8,17 @@ import { IoLocationOutline, IoPricetagsOutline } from 'react-icons/io5';
 import { LiaCommentSolid } from 'react-icons/lia';
 import { TbBrandCraft } from 'react-icons/tb';
 import {imageUplode} from "../imageAPI/index"
+
+interface UserWithRole {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    role?: string | null; 
+  }
+
 const AddPost = () => {
     const { data: session } = useSession()
+    const userWithRole = session?.user as UserWithRole;
     const [selectedImg, setSelectedImg] = useState<string | null>(null)
     const imgRef = useRef<HTMLInputElement | null>(null);
     const [loading, setLoading] = useState(false);
@@ -43,36 +52,71 @@ const AddPost = () => {
             url = uploadResult;
         }
 
-        const post = {
-            email: session?.user?.email,
-            userData: {
-                name: session?.user?.name,
-                userImage: image,
-            },
-            postData: {
-                craftName: craftName,
-                title: title,
-                description: description,
-                price: price,
-                location: location,
-                image: url,
-                date: new Date()
+        if(userWithRole.role === "seller"){
+            const post = {
+                email: session?.user?.email,
+                userData: {
+                    name: session?.user?.name,
+                    userImage: image,
+                },
+                postData: {
+                    craftName: craftName,
+                    title: title,
+                    description: description,
+                    price: price,
+                    location: location,
+                    image: url,
+                    date: new Date()
+                }
+            }
+    
+            try {
+    
+                const res = await axios.post("http://localhost:3000/AddPost/api/post", post)
+                console.log(res.data)
+                if (res.data.acknowledged === true) {
+                    window.location.reload()
+                }
+    
+            } catch (error) {
+                console.error('Error', error);
+            } finally {
+                setLoading(false);
             }
         }
 
-        try {
-
-            const res = await axios.post("http://localhost:3000/AddPost/api/post", post)
-            console.log(res.data)
-            if (res.data.acknowledged === true) {
-                window.location.reload()
+        if(userWithRole.role === "buyer"){
+            const craftRequestsPost = {
+                email: session?.user?.email,
+                userData: {
+                    name: session?.user?.name,
+                    userImage: image,
+                },
+                postData: {
+                    craftName: craftName,
+                    title: title,
+                    description: description,
+                    location: location,
+                    date: new Date()
+                }
             }
-
-        } catch (error) {
-            console.error('Error', error);
-        } finally {
-            setLoading(false);
+    
+            try {
+    
+                const res = await axios.post("http://localhost:3000/AddPost/api/craftRequestsPost", craftRequestsPost)
+                console.log(res.data)
+                if (res.data.acknowledged === true) {
+                    window.location.reload()
+                }
+    
+            } catch (error) {
+                console.error('Error', error);
+            } finally {
+                setLoading(false);
+            }
         }
+
+        
 
 
 
@@ -96,7 +140,7 @@ const AddPost = () => {
         <div className="text-black">
             <h2 className='text-2xl font-bold text-center text-primary mb-5'>Create new post</h2>
             <form onSubmit={handleAddPost} className="flex flex-col md:flex-row gap-7">
-                <div className='md:w-1/2 flex justify-center items-center'>
+                <div className={`${userWithRole?.role === "buyer" && "hidden"} md:w-1/2 flex justify-center items-center`}>
                     <label htmlFor="dropzone-file" className="flex flex-col items-center text-center bg-white">
                         <div>
                             <img
@@ -119,7 +163,7 @@ const AddPost = () => {
                 </div>
 
 
-                <div className='md:w-1/2 md:p-6 p-3'>
+                <div className={`${userWithRole?.role === "buyer" ? "md:w-full" : "md:w-1/2"} md:p-6 p-3`}>
 
                     <div className='flex items-center gap-2 mb-4'>
                         <img
@@ -166,7 +210,7 @@ const AddPost = () => {
                     </div>
 
                     {/* price */}
-                    <div className="flex items-center mb-4 w-full text-gray-700 ">
+                    <div className={`${userWithRole?.role === "buyer" && "hidden"} flex items-center mb-4 w-full text-gray-700`}>
                         <span className="pb-2 border-gray-300 border-b-2 ">
                             <IoPricetagsOutline className="text-gray-500 text-xl  mr-3" />
                         </span>
