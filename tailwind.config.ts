@@ -21,7 +21,7 @@ const config: Config = {
     themes: [
       {
         craftyBayTheme: {
-          "primary": "#B17457",
+          "primary": "#798645",
           "secondary": "#3a698d",
           "accent": "#37cdbe",
           "neutral": "#3d4451",

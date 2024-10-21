@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-unescaped-entities */
-import img from 'next/img';
 import {Arvo} from "next/font/google";
 const header = Arvo({ weight:["400", "700"], subsets:["latin"]})
 

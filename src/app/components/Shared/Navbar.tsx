@@ -21,6 +21,10 @@ const Navbar = () => {
             title:"Deshbord",
             path: "/deshboard/profile"
         },
+        {
+            title:"Crafts",
+            path: "/crafts"
+        },
     ]
     return (
         <div className={`${pathName.includes('deshboard') ||  pathName.includes('/login') || pathName.includes('/signup') ? 'hidden' : ""} relative z-10 w-full bg-transparent text-black`}>
@@ -55,7 +59,7 @@ const Navbar = () => {
                         <li><a>Item 3</a></li>
                     </ul>
                 </div>
-                <a className="btn btn-ghost text-2xl md:text-4xl">Crafty Bay<span className="text-primary">.</span></a>
+                <a className="font-bold text-nowrap ml-3 text-2xl md:text-4xl">Crafty Bay<span className="text-primary">.</span></a>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">

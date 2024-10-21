@@ -2,13 +2,12 @@
 "use client"
 import React, { useState } from "react";
 import Link from "next/link";
-import useAxiosCommon from "../Hooks/useAxiosCommon"
 import { useRouter } from "next/navigation";
 import SocialSignIn from "../SocialSignIn/SocialSignIn";
 import Swal from "sweetalert2";
+import axios from "axios";
 const page = () => {
     const [loading, setLoading] = useState(false);
-    const axiosCommon = useAxiosCommon()
     const router = useRouter()
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -29,7 +28,7 @@ const page = () => {
         console.log(newUser)
 
         try {
-            const res = await axiosCommon.post("/signup/api", newUser)
+            const res = await axios.post("/signup/api", newUser)
             console.log(res.data)
             setLoading(false);
             if (res.data.message === "User Exists") {
