@@ -4,7 +4,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { Key } from "react";
+import { Key, SetStateAction, useState } from "react";
 import PostDetails from "../postDetails/PostDetails";
 import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -12,7 +12,9 @@ import { TbPencilMinus } from "react-icons/tb";
 import Swal from "sweetalert2";
 import UpdatePosts from "../updatePosts/UpdatePosts";
 import { GoDuplicate } from "react-icons/go";
-
+import { Arvo } from "next/font/google";
+import CraftRequestsPostDetails from "../craftRequestsPostDetails/CraftRequestsPostDetails";
+const header = Arvo({ weight: ["400", "700"], subsets: ["latin"] })
 type Post = {
     _id: string,
     userData: {
@@ -30,8 +32,17 @@ type Post = {
     };
 };
 
+interface UserWithRole {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    role?: string | null;
+}
+
+
 const MyPost = () => {
     const { data: session } = useSession()
+    const userWithRole = session?.user as UserWithRole | undefined;
     const { data: myPost = [], refetch } = useQuery({
         queryKey: ["myPost"],
         queryFn: async () => {
@@ -83,7 +94,7 @@ const MyPost = () => {
 
     return (
         <div>
-            {myPost.length === 0 ?
+            {myPost.length || craftRequestsPost.length === 0 ?
                 <div className="flex flex-col gap-4 mt-16 mb-10 justify-center items-center">
                     <GoDuplicate className='text-8xl' />
                     <div className="text-center">
@@ -94,73 +105,145 @@ const MyPost = () => {
                         <p>You do not add any post yet</p>
                     </div>
                 </div> :
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-3">
-                    {myPost.map((post: Post, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-sm shadow-xl">
-                        <div className="flex justify-between items-start">
-                            <div className="flex items-center gap-4 mt-2 mb-6 pl-3">
-                                {/* user profile image */}
-                                <img className="w-10 h-10 rounded-full"
-                                    alt="user-image"
-                                    src={post.userData.userImage ? post.userData.userImage : "/image/user.avif"} />
-                                <div>
-                                    <p className="font-semibold text-start">{post.userData.name}</p>
-                                    <div className="flex gap-2 text-nowrap">
-                                        <p className="text-sm text-gray-500 text-nowrap">{post.postData.date.split('T')[0]}</p>
-                                        <p className="text-sm text-gray-500 text-nowrap">{post.postData.date.split('T')[1].split('.')[0]}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            {/* dropdown-menu */}
-                            <div className="dropdown dropdown-bottom dropdown-end mt-1">
-                                <div tabIndex={0} role="button" className="m-1 pr-3">
-                                    <BsThreeDots className="text-xl" />
-                                </div>
-                                <ul tabIndex={0} className="dropdown-content menu shadow-xl bg-base-200 rounded-md z-[1] w-52 p-2">
-                                    <li><a onClick={() => handlePostDelete(post._id, post.postData.craftName)} className="text-gray-500"><RiDeleteBin6Line className="text-xl" />Delete</a></li>
-                                    <li>
-                                        {/* update post modal */}
-                                        <button className="" onClick={() => {
-                                            const dialogElement = document.getElementById(`update_posts_${post._id}`) as HTMLDialogElement;
-                                            dialogElement.showModal();
-                                        }}><span className="">
-                                                <a className="text-gray-500 flex gap-2"><TbPencilMinus className="text-xl" />Update Your Post</a>
-                                            </span></button>
-                                        <dialog id={`update_posts_${post._id}`} className="modal flex justify-center items-center">
-                                            <div className="modal-box w-full max-w-3xl">
-                                                <form method="dialog">
-                                                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
-                                                </form>
-                                                <UpdatePosts id={post._id} />
+                <div>
+                    {userWithRole?.role === "seller" ?
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-3">
+                            {myPost.map((post: Post, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-sm shadow-xl">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex items-center gap-4 mt-2 mb-6 pl-3">
+                                        {/* user profile image */}
+                                        <img className="w-10 h-10 rounded-full"
+                                            alt="user-image"
+                                            src={post.userData.userImage ? post.userData.userImage : "/image/user.avif"} />
+                                        <div>
+                                            <p className="font-semibold text-start">{post.userData.name}</p>
+                                            <div className="flex gap-2 text-nowrap">
+                                                <p className="text-sm text-gray-500 text-nowrap">{post.postData.date.split('T')[0]}</p>
+                                                <p className="text-sm text-gray-500 text-nowrap">{post.postData.date.split('T')[1].split('.')[0]}</p>
                                             </div>
-                                        </dialog>
-                                    </li>
-                                </ul>
-                            </div>
+                                        </div>
+                                    </div>
+                                    {/* dropdown-menu */}
+                                    <div className="dropdown dropdown-bottom dropdown-end mt-1">
+                                        <div tabIndex={0} role="button" className="m-1 pr-3">
+                                            <BsThreeDots className="text-xl" />
+                                        </div>
+                                        <ul tabIndex={0} className="dropdown-content menu shadow-xl bg-base-200 rounded-md z-[1] w-52 p-2">
+                                            <li><a onClick={() => handlePostDelete(post._id, post.postData.craftName)} className="text-gray-500"><RiDeleteBin6Line className="text-xl" />Delete</a></li>
+                                            <li>
+                                                {/* update post modal */}
+                                                <button className="" onClick={() => {
+                                                    const dialogElement = document.getElementById(`update_posts_${post._id}`) as HTMLDialogElement;
+                                                    dialogElement.showModal();
+                                                }}><span className="">
+                                                        <a className="text-gray-500 flex gap-2"><TbPencilMinus className="text-xl" />Update Your Post</a>
+                                                    </span></button>
+                                                <dialog id={`update_posts_${post._id}`} className="modal flex justify-center items-center">
+                                                    <div className="modal-box w-full max-w-3xl">
+                                                        <form method="dialog">
+                                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
+                                                        </form>
+                                                        <UpdatePosts id={post._id} />
+                                                    </div>
+                                                </dialog>
+                                            </li>
+                                        </ul>
+                                    </div>
 
+                                </div>
+                                <button className="" onClick={() => {
+                                    const dialogElement = document.getElementById(`my_modal_my_post_${post._id}`) as HTMLDialogElement;
+                                    dialogElement.showModal();
+                                }}><span className="">
+
+                                        <figure>
+                                            <img
+                                                src={post.postData.image}
+                                                alt="post"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </figure>
+                                    </span></button>
+                                <dialog id={`my_modal_my_post_${post._id}`} className="modal">
+                                    <div className="modal-box w-full max-w-3xl">
+                                        <form method="dialog">
+                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
+                                        </form>
+                                        <PostDetails id={post._id} />
+                                    </div>
+                                </dialog>
+                            </div>)}
                         </div>
-                        <button className="" onClick={() => {
-                            const dialogElement = document.getElementById(`my_modal_my_post_${post._id}`) as HTMLDialogElement;
-                            dialogElement.showModal();
-                        }}><span className="">
+                        : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-3">
+                            {craftRequestsPost.map((post: Post, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-sm shadow-xl">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex items-center gap-4 mt-2 mb-6 pl-4">
+                                        {/* user profile image */}
+                                        <img className="w-10 h-10 rounded-full object-cover"
+                                            alt="user-image"
+                                            src={post.userData.userImage ? post.userData.userImage : "/image/user.avif"} />
+                                        <div>
+                                            <p className="font-semibold text-start">{post.userData.name}</p>
+                                            <div className="flex gap-2 text-nowrap">
+                                                <p className="text-sm text-gray-500 text-nowrap">{post.postData.date.split('T')[0]}</p>
+                                                <p className="text-sm text-gray-500 text-nowrap">{post.postData.date.split('T')[1].split('.')[0]}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* dropdown-menu */}
+                                    <div className="dropdown dropdown-bottom dropdown-end mt-1">
+                                        <div tabIndex={0} role="button" className="m-1 pr-3">
+                                            <BsThreeDots className="text-xl" />
+                                        </div>
+                                        <ul tabIndex={0} className="dropdown-content menu shadow-xl bg-base-200 rounded-md z-[1] w-52 p-2">
+                                            <li><a className="text-gray-500"><RiDeleteBin6Line className="text-xl" />Delete</a></li>
+                                            <li>
+                                                <button className="" onClick={() => {
+                                                    const dialogElement = document.getElementById(`update_posts_${post._id}`) as HTMLDialogElement;
+                                                    dialogElement.showModal();
+                                                }}><span className="">
+                                                        <a className="text-gray-500 flex gap-2"><TbPencilMinus className="text-xl" />Update Your Post</a>
+                                                    </span></button>
+                                                <dialog id={`update_posts_${post._id}`} className="modal flex justify-center items-center">
+                                                    <div className="modal-box w-full max-w-3xl">
+                                                        <form method="dialog">
+                                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
+                                                        </form>
+                                                        {/* <UpdatePosts id={post._id} /> */}
+                                                    </div>
+                                                </dialog>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                                <figure>
-                                    <img
-                                        src={post.postData.image}
-                                        alt="post"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </figure>
-                            </span></button>
-                        <dialog id={`my_modal_my_post_${post._id}`} className="modal">
-                            <div className="modal-box w-full max-w-3xl">
-                                <form method="dialog">
-                                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
-                                </form>
-                                <PostDetails id={post._id} />
-                            </div>
-                        </dialog>
-                    </div>)}
-                </div>}
+                                </div>
+                                <div className="px-6">
+                                    <h3 className={`${header.className} text-gray-600 text-2xl font-semibold mb-3 text-start`}>{post.postData.title}</h3>
+                                    <p className="mt-2 text-start text-gray-600 text-sm md:text-base">
+                                        {`${post.postData.description.slice(0, 200)}...`}
+                                    </p>
+                                </div>
+                                <button className="" onClick={() => {
+                                    const dialogElement = document.getElementById(`my_modal_my_CraftRequestsPostDetails_${post._id}`) as HTMLDialogElement;
+                                    dialogElement.showModal();
+                                }}> <div className="my-4 ml-6 flex justify-start">
+                                        <button className="text-start text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline" >
+                                            Read more
+                                        </button>
+                                    </div>
+                                </button>
+                                <dialog id={`my_modal_my_CraftRequestsPostDetails_${post._id}`} className="modal">
+                                    <div className="modal-box w-full max-w-3xl">
+                                        <form method="dialog">
+                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
+                                        </form>
+                                        <CraftRequestsPostDetails id={post._id} />
+                                    </div>
+                                </dialog>
+                            </div>)}
+                        </div>}
+                </div>
+            }
         </div>
     );
 };
