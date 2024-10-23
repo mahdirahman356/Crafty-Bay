@@ -23,7 +23,7 @@ const CraftRequestsPostDetails: React.FC<CraftRequestsPostProps> = ({id}) => {
 
 
     return (
-        <div className="hero">
+        <div className="hero flex flex-col items-start">
                 <div className="hero-content flex-col items-start gap-7">
                    <div className="">
                         <div className="flex items-center gap-4 mt-2 mb-6">
