@@ -25,6 +25,10 @@ const Navbar = () => {
             title:"Crafts",
             path: "/crafts"
         },
+        {
+            title:"Crafts Requests",
+            path: "/craftRequests"
+        },
     ]
     return (
         <div className={`${pathName.includes('deshboard') ||  pathName.includes('/login') || pathName.includes('/signup') ? 'hidden' : ""} relative z-10 w-full bg-transparent text-black`}>
