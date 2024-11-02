@@ -25,14 +25,14 @@ type AllCraftsProps = {
     crafts: Crafts[];
 };
 
-const AllCrafts = ({ crafts }:AllCraftsProps) => {
+const AllCrafts = ({ crafts }: AllCraftsProps) => {
 
     console.log(crafts)
 
     return (
         <div>
             <div className="w-[95%] md:w-[80%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-20">
-                {crafts.map((crafts: Crafts, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-sm shadow-xl">
+                {crafts.map((crafts: Crafts, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-xl">
                     <div className="flex justify-between items-start">
                         <div className="flex items-center gap-4 mt-2 mb-6 pl-3">
                             {/* user profile image */}
@@ -58,7 +58,7 @@ const AllCrafts = ({ crafts }:AllCraftsProps) => {
                                 <img
                                     src={crafts.postData.image}
                                     alt="post"
-                                    className="w-full object-cover h-56"
+                                    className="w-full object-cover h-56 rounded-xl"
                                 />
                             </figure>
                         </span></button>
@@ -70,12 +70,18 @@ const AllCrafts = ({ crafts }:AllCraftsProps) => {
                             <PostDetails id={crafts._id} />
                         </div>
                     </dialog>
-                    <div className="flex justify-between items-center w-full px-5 py-3 bg-primary text-white">
-                        <p>{crafts.postData.price} TK</p>
-                        <button className="btn rounded-sm text-gray-600">
-                        <HiOutlineShoppingCart className="text-xl text-gray-600" />
-                            ADD TO CART
-                        </button>
+                    <div className="flex justify-center">
+                    <div className="w-56 -mt-10 overflow-hidden bg-white rounded-lg shadow-lg md:w-64">
+                        <h3 className="py-2 font-bold tracking-wide text-center text-gray-800 uppercase">{crafts.postData.craftName}</h3>
+
+                        <div className="flex items-center justify-between px-3 py-2 bg-gray-200">
+                            <span className="font-bold text-gray-800">{crafts.postData.price} TK</span>
+                            <button className="btn btn-sm rounded-sm border-none text-xs font-semibold text-white uppercase bg-primary">
+                                <HiOutlineShoppingCart className="text-xl"/>
+                                Add to cart
+                            </button>
+                        </div>
+                    </div>
                     </div>
                 </div>)}
             </div>
