@@ -5,7 +5,7 @@ import Link from "next/link";
 import { LuUser2 } from "react-icons/lu";
 import { LayoutProps } from "../../../../.next/types/app/api/auth/[...nextauth]/route";
 import AddPost from "@/app/AddPost/AddPost";
-import { RiMenu2Fill } from "react-icons/ri";
+import { RiMenu2Fill, RiShoppingCartLine } from "react-icons/ri";
 import { useSession } from "next-auth/react";
 
 interface UserWithRole {
@@ -45,6 +45,14 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                                 href={"/deshboard/allUsers"}>
                                 <LuUser2 className="text-xl" />
                                 All Users
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                className={`text-xl rounded-3xl font-semibold mb-3`}
+                                href={"/deshboard/myCart"}>
+                                <RiShoppingCartLine className="text-xl" />
+                                My Cart
                             </Link>
                         </li>
 

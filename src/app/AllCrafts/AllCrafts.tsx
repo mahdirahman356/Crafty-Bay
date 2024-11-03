@@ -3,9 +3,13 @@
 import { Key } from "react";
 import PostDetails from "../postDetails/PostDetails";
 import { HiOutlineShoppingCart } from "react-icons/hi";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
 
 type Crafts = {
     _id: string,
+    email: string,
     userData: {
         userImage: string;
         name: string;
@@ -28,6 +32,47 @@ type AllCraftsProps = {
 const AllCrafts = ({ crafts }: AllCraftsProps) => {
 
     console.log(crafts)
+
+    const { data: session } = useSession()
+    
+    const handleAddToCart = async (orderId: string, craftName: string, craftImage: string, price: string, location: string, sellerEmail: string, sellerName: string, sellerImage: string) => {
+        const order = {
+            userEmail: session?.user?.email,
+            sellerData: {
+                email: sellerEmail,
+                name: sellerName,
+                image: sellerImage
+            },
+            orderData: {
+                orderId: orderId,
+                craftName: craftName,
+                craftImage: craftImage,
+                price: price,
+                location: location
+            }
+        }
+        console.log(order)
+
+        try {
+
+            const res = await axios.post("http://localhost:3000/crafts/api/addToCart", order)
+            console.log(res.data)
+            if(res.data.acknowledged === true){
+                Swal.fire({
+                    text: `${craftName} added to your cart`,
+                    icon: 'success',
+                    confirmButtonText: 'Ok',
+                    allowOutsideClick: false,
+                    customClass: {
+                        confirmButton: 'btn btn-primary rounded-sm text-white ', 
+                      },
+                  });
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div>
@@ -71,17 +116,18 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
                         </div>
                     </dialog>
                     <div className="flex justify-center">
-                    <div className="w-56 -mt-10 overflow-hidden bg-white rounded-lg shadow-lg md:w-64">
-                        <h3 className="py-2 font-bold tracking-wide text-center text-gray-800 uppercase">{crafts.postData.craftName}</h3>
+                        <div className="w-56 -mt-10 overflow-hidden bg-white rounded-lg shadow-lg md:w-64">
+                            <h3 className="py-2 font-bold tracking-wide text-center text-gray-800 uppercase">{crafts.postData.craftName}</h3>
 
-                        <div className="flex items-center justify-between px-3 py-2 bg-gray-200">
-                            <span className="font-bold text-gray-800">{crafts.postData.price} TK</span>
-                            <button className="btn btn-sm rounded-sm border-none text-xs font-semibold text-white uppercase bg-primary">
-                                <HiOutlineShoppingCart className="text-xl"/>
-                                Add to cart
-                            </button>
+                            <div className="flex items-center justify-between px-3 py-2 bg-gray-200">
+                                <span className="font-bold text-gray-800">{crafts.postData.price} TK</span>
+                                <button onClick={() => handleAddToCart(crafts._id, crafts.postData.craftName, crafts.postData.image, crafts.postData.price, crafts.postData.location, crafts.email, crafts.userData.name, crafts.userData.userImage)}
+                                    className="btn btn-sm rounded-sm border-none text-xs font-semibold text-white uppercase bg-primary">
+                                    <HiOutlineShoppingCart className="text-xl" />
+                                    Add to cart
+                                </button>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>)}
             </div>
