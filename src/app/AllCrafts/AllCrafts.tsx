@@ -48,6 +48,7 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
                 craftName: craftName,
                 craftImage: craftImage,
                 price: price,
+                quantity: 1,
                 location: location
             }
         }
