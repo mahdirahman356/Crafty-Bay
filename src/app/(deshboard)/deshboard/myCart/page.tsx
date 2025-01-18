@@ -40,6 +40,17 @@ const page = () => {
         }
     })
 
+    const { data: userProfile = [] } = useQuery({
+        queryKey: ["userProfile"],
+        queryFn: async () => {
+            const { data } = await axios.get(`http://localhost:3000/deshboard/profile/api/users?email=${session?.user?.email}`)
+            console.log(data)
+            return data
+        }
+    })
+
+    const { name, email, location, contactNumber } = userProfile || {}
+
     const handleQuantityAddition = async (_id: string, quantity: number) => {
         console.log(_id, quantity)
         const res = await axios.patch('http://localhost:3000/deshboard/myCart/api/updateQuantity', { orderId: _id, UpdateQuantity: quantity + 1 })
@@ -88,6 +99,26 @@ const page = () => {
         });
     }
 
+
+    const handlePaymentSystem = async(price: string, craftName: string) => {
+        const res = await axios.post('http://localhost:3000/deshboard/myCart/api/createPayment', {
+            amount: price,
+            currency: "USD",
+            cus_name: name,
+            cus_email: email,
+            cus_add: location,
+            cus_phone: contactNumber,
+            product_name: craftName,
+
+        })
+        console.log(res.data)
+        const redirectUrl = res.data
+        if(redirectUrl){
+            window.location.replace(redirectUrl)
+        }
+        
+    }
+
     if (isLoading) {
         return <div className="h-screen flex justify-center items-center">
             <progress className="progress w-56"></progress>
@@ -112,6 +143,7 @@ const page = () => {
                             <th>Quantity</th>
                             <th>Location</th>
                             <th>Details</th>
+                            <th>Payment</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
@@ -161,6 +193,9 @@ const page = () => {
                                     </div>
                                 </dialog>
                             </th>
+                            <td>
+                                <button onClick={() => handlePaymentSystem(cartData.orderData.price, cartData.orderData.craftName)} className="btn btn-xs font-sans text-primary">Payment</button>
+                            </td>
                             <td>
                                 <button className="btn btn-sm btn-ghost">
                                     <RiDeleteBin6Line onClick={() => handleDeleteItem(cartData._id)} className="text-xl text-red-500" />
