@@ -1,18 +1,21 @@
-// import { connectDB } from "@/app/lib/connectDB";
+import { connectDB } from "@/app/lib/connectDB";
 import axios from "axios";
-// import { Db } from "mongodb";
+import { randomUUID } from "crypto";
+import { Db } from "mongodb";
 import { NextRequest } from "next/server";
 
 export const POST = async (request: NextRequest) => {
 
     const paymentInfo = await request.json()
 
+    const trxId = randomUUID()
+
     const initiateData = {
         store_id: "mahdi6762a96b29d33",
         store_passwd: "mahdi6762a96b29d33@ssl",
         total_amount: paymentInfo.amount,
         currency: "BDT",
-        tran_id: "REF123",
+        tran_id: trxId,
         success_url: "http://localhost:3000/deshboard/myCart/api/successPayment",
         fail_url: "http://yoursite.com/fail.php&",
         cancel_url: "http://yoursite.com/cancel.php&",
@@ -34,13 +37,9 @@ export const POST = async (request: NextRequest) => {
         value_c: "ref003_C&",
         value_d: "ref004_D"
     };
-     console.log(paymentInfo.amount)
+    console.log(paymentInfo.amount)
 
     try {
-        // const db: Db | undefined = await connectDB()
-        // if (!db) {
-        //     throw new Error("Database connection failed");
-        // }
 
         const response = await axios({
             method: "POST",
@@ -53,16 +52,33 @@ export const POST = async (request: NextRequest) => {
 
         console.log("SSLCommerz Response:", response.data)
 
-        return Response.json(response.data.GatewayPageURL)
+        const db: Db | undefined = await connectDB()
+        if (!db) {
+            throw new Error("Database connection failed");
+        }
 
-        // const paymentsCollection = db.collection("payments")
-        // const res = await paymentsCollection.insertOne()
+        const saveData = {
+            paymentId: trxId,
+            amount: paymentInfo.amount,
+            status: "panding",
+            cus_name: paymentInfo.cus_name,
+            cus_email: paymentInfo.cus_email,
+            cus_address: paymentInfo.cus_add,
+            cus_phone: paymentInfo.cus_phone,
+            product_name: paymentInfo.product_name,
+            date: new Date()
+        }
 
+        const paymentsCollection = db.collection("payments")
+        const res = await paymentsCollection.insertOne(saveData)
 
+        if(res){
+            return Response.json(response.data.GatewayPageURL)
+        }
 
     } catch (error) {
         return Response.json({
             message: "something is wrong"
-         })
+        })
     }
 }

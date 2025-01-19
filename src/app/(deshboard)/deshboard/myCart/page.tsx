@@ -103,7 +103,6 @@ const page = () => {
     const handlePaymentSystem = async(price: string, craftName: string) => {
         const res = await axios.post('http://localhost:3000/deshboard/myCart/api/createPayment', {
             amount: price,
-            currency: "USD",
             cus_name: name,
             cus_email: email,
             cus_add: location,
