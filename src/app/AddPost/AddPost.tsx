@@ -63,7 +63,7 @@ const AddPost = () => {
                     craftName: craftName,
                     title: title,
                     description: description,
-                    price: price,
+                    price: parseInt(price),
                     location: location,
                     image: url,
                     date: new Date()
@@ -215,7 +215,7 @@ const AddPost = () => {
                             <IoPricetagsOutline className="text-gray-500 text-xl  mr-3" />
                         </span>
                         <input
-                            type="text"
+                            type="number"
                             name="price"
                             className="grow border-b-2 bg-white text-black border-gray-300 pb-2 focus:border-blue-500 outline-none rounded-none"
                             placeholder="Add Price"

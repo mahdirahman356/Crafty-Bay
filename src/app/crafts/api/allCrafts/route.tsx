@@ -9,8 +9,8 @@ export const GET = async (request: NextRequest) => {
 
         const { searchParams } = new URL(request.url)
         const search = searchParams.get("search")
-
-        console.log(search)
+        const sort = searchParams.get("sort")
+        console.log(search, sort)
 
         const db: Db | undefined = await connectDB()
         if (!db) {
@@ -19,16 +19,24 @@ export const GET = async (request: NextRequest) => {
         const postsCollection = db.collection("posts")
 
         const query = search
-        ? {
-              $or: [
-                  { "postData.craftName": { $regex: search, $options: "i" } },
-                  { "postData.title": { $regex: search, $options: "i" } },
-                  { "postData.location": { $regex: search, $options: "i" } },
-              ],
-          }
-        : {};
-    
-        const result = await postsCollection.find(query).toArray()
+            ? {
+                $or: [
+                    { "postData.craftName": { $regex: search, $options: "i" } },
+                    { "postData.title": { $regex: search, $options: "i" } },
+                    { "postData.location": { $regex: search, $options: "i" } },
+                    { "userData.name": { $regex: search, $options: "i" } },
+                ],
+            }
+            : {};
+
+            let sortOption = {}
+            if(sort === "priceLowHigh"){
+                sortOption = {"postData.price": 1}
+            }else if (sort === "priceHighLow") {
+                sortOption = {"postData.price": -1}
+            }
+
+        const result = await postsCollection.find(query).sort(sortOption).toArray()
 
         if (!result.length) {
             return NextResponse.json({ message: "No posts found" }, { status: 404 });

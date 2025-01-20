@@ -66,7 +66,7 @@ const UpdatePosts: React.FC<UpdatePostsProps> = ({ id }) => {
                 craftName: craftName,
                 title: title,
                 description: description,
-                price: price,
+                price: parseInt(price),
                 image: url,
                 location: location,
                 date: date

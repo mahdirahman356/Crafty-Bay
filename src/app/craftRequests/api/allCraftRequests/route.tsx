@@ -20,7 +20,8 @@ export const GET = async(request: NextRequest) => {
         ? {
             $or: [
                 {"postData.title" : {$regex: search, $options: "i"}},
-                {"postData.craftName": {$regex: search, $options: "i"}}
+                {"postData.craftName": {$regex: search, $options: "i"}},
+                {"userData.name": { $regex: search, $options: "i" } },
             ]
         }
         : {}

@@ -14,13 +14,14 @@ const header = Arvo({ weight: ["400", "700"], subsets: ["latin"] })
 const page = () => {
 
     const [searchTerm, setSearchTerm,] = useState("")
+    const [sortOrder,  setSortOrder] = useState("")
 
     console.log(searchTerm,)
 
     const { data: crafts = [], refetch, isLoading } = useQuery({
-        queryKey: ["crafts", searchTerm],
+        queryKey: ["crafts", searchTerm, sortOrder],
         queryFn: async () => {
-            const res = await axios.get(`http://localhost:3000/crafts/api/allCrafts?search=${searchTerm}`)
+            const res = await axios.get(`http://localhost:3000/crafts/api/allCrafts?search=${searchTerm}&sort=${sortOrder}`)
             console.log(res.data)
             return res.data
         },
@@ -28,6 +29,12 @@ const page = () => {
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        refetch()
+    }
+
+    const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        e.preventDefault() 
+        setSortOrder(e.target.value)
         refetch()
     }
 
@@ -52,7 +59,10 @@ const page = () => {
 
                     {/* sort */}
                     <div className="flex gap-5 w-full">
-                        <select className="select rounded-sm select-bordered w-full max-w-xs bg-primary text-white">
+                        <select 
+                        className="select rounded-sm select-bordered w-full max-w-xs bg-primary text-white"
+                        value={sortOrder}
+                        onChange={handleSortChange}>
                             <option value="" disabled selected>Sort By Price</option>
                             <option value="priceLowHigh">Product Price: Low to High</option>
                             <option value="priceHighLow">Product Price: High to Low</option>
@@ -65,7 +75,7 @@ const page = () => {
             </div>
 
             {/* banner */}
-            {searchTerm === "" && (
+            {searchTerm === "" && sortOrder === "" && (
                 <div className="hero">
                     <div className="hero-content flex-col lg:flex-row">
                         <img
