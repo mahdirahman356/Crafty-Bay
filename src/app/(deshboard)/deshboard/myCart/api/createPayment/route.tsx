@@ -13,7 +13,7 @@ export const POST = async (request: NextRequest) => {
     const initiateData = {
         store_id: "mahdi6762a96b29d33",
         store_passwd: "mahdi6762a96b29d33@ssl",
-        total_amount: paymentInfo.amount,
+        total_amount: paymentInfo.amount * paymentInfo.quantity,
         currency: "BDT",
         tran_id: trxId,
         success_url: "http://localhost:3000/deshboard/myCart/api/successPayment",
@@ -60,6 +60,7 @@ export const POST = async (request: NextRequest) => {
         const saveData = {
             paymentId: trxId,
             amount: paymentInfo.amount,
+            quantity: paymentInfo.quantity,
             status: "panding",
             cus_name: paymentInfo.cus_name,
             cus_email: paymentInfo.cus_email,

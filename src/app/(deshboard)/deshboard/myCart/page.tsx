@@ -100,13 +100,14 @@ const page = () => {
     }
 
 
-    const handlePaymentSystem = async(price: string, craftName: string) => {
+    const handlePaymentSystem = async(price: string, craftName: string, quantity: number) => {
         const res = await axios.post('http://localhost:3000/deshboard/myCart/api/createPayment', {
             amount: price,
             cus_name: name,
             cus_email: email,
             cus_add: location,
             cus_phone: contactNumber,
+            quantity: quantity,
             product_name: craftName,
 
         })
@@ -193,7 +194,7 @@ const page = () => {
                                 </dialog>
                             </th>
                             <td>
-                                <button onClick={() => handlePaymentSystem(cartData.orderData.price, cartData.orderData.craftName)} className="btn btn-xs font-sans text-primary">Payment</button>
+                                <button onClick={() => handlePaymentSystem(cartData.orderData.price, cartData.orderData.craftName, cartData.orderData.quantity)} className="btn btn-xs font-sans text-primary">Payment</button>
                             </td>
                             <td>
                                 <button className="btn btn-sm btn-ghost">

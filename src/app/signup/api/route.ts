@@ -9,7 +9,7 @@ export const POST = async(request: NextRequest) => {
       const newUser = await request.json();
       console.log(newUser)
       try {
-        const db: Db | undefined = await connectDB()
+        const db: Db | undefined  = await connectDB()
         if (!db) {
             throw new Error("Database connection failed");
           }

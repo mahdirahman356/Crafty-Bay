@@ -17,7 +17,7 @@ export const PUT = async (request: NextRequest) => {
         const db: Db | undefined = await connectDB()
         if (!db) {
             throw new Error("Database connection failed");
-        }
+        }   
         const postsCollection = db.collection('posts')
 
 
