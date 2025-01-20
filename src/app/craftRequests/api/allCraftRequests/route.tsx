@@ -11,8 +11,22 @@ export const GET = async(request: NextRequest) => {
             throw new Error("Database connection failed");
         }
 
+        const {searchParams} = new URL(request.url)
+        const search = searchParams.get("search")
+
+        console.log(search)
+
+        const query = search
+        ? {
+            $or: [
+                {"postData.title" : {$regex: search, $options: "i"}},
+                {"postData.craftName": {$regex: search, $options: "i"}}
+            ]
+        }
+        : {}
+
         const craftRequestCollection = db.collection("craftRequests")  
-        const result = await craftRequestCollection.find().toArray()
+        const result = await craftRequestCollection.find(query).toArray()
 
         if(!result){
             return  NextResponse.json({message: "No post"}, { status: 404 })
