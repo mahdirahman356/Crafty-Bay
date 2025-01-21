@@ -1,35 +1,34 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client"
+import UsersPosts from "@/app/UsersPosts/UsersPosts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useSession } from "next-auth/react";
-import { FiEdit3 } from "react-icons/fi";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
-import UpdateProfile from '@/app/UpdateProfile/UpdateProfile';
-import { LiaBorderAllSolid } from 'react-icons/lia';
-import MyPost from '@/app/MyPost/MyPost';
+import { LiaBorderAllSolid } from "react-icons/lia";
+/* eslint-disable react-hooks/rules-of-hooks */
 
-const profilePage = () => {
-    const { data: session } = useSession()
-    console.log(session?.user)
+interface Params {
+    email: string
+}
 
-    const { data: profile = [], isLoading, refetch } = useQuery({
-        queryKey: ["userProfile", session?.user?.email],
+const page = ({ params }: { params: Params }) => {
+
+
+    const { data: userProfile = [], isLoading } = useQuery({
+        queryKey: ["userProfile", params.email],
         queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/deshboard/profile/api/users?email=${session?.user?.email}`)
+            const { data } = await axios.get(`http://localhost:3000/deshboard/profile/api/users?email=${params.email}`)
             console.log(data)
             return data
         }
     })
 
-    const { _id, name, email, location, contactNumber, image } = profile || {}
+    const { name, email, role, location, contactNumber, image } = userProfile || {}
 
     return (
-        <div className="w-[98%] md:w-[90%] mx-auto">
+        <div className="w-[95%] md:w-[80%] mx-auto pt-10">
             {isLoading
-                ? <div className=" min-h-screen flex justify-center items-center">
+                ? <div className="min-h-screen flex justify-center items-center">
                     <progress className="progress w-56"></progress>
                 </div>
                 : <div className='md:py-12 lg:py-0 lg:my-10 text-gray-800'>
@@ -37,7 +36,7 @@ const profilePage = () => {
                         <div className="p-8 flex flex-col md:flex-row sm:space-x-6">
                             <div className="w-28 h-28 md:w-36 md:h-36 mb-3">
                                 <img
-                                    src={image || session?.user?.image ? image || session?.user?.image : "/image/user.avif"}
+                                    src={image ? image : "/image/user.avif"}
                                     alt="profile"
                                     width={400}
                                     height={300}
@@ -47,20 +46,9 @@ const profilePage = () => {
                             <div className="sm:flex sm:space-x-6">
                                 <div className="mb-6 flex flex-row md:flex-col gap-5 md:gap-0 items-center md:items-start">
                                     <div>
-                                        <h2 className="text-2xl font-semibold">{name ? name : "No name available"}</h2>
-                                        <span className="text-sm dark:text-gray-600">Role {(session?.user as { role?: string }).role || "Not Assigned"}</span>
+                                        <h2 className="text-2xl font-semibold">{name}</h2>
+                                        <span className="text-sm dark:text-gray-600">Role {role}</span>
                                     </div>
-                                    <button className="btn rounded-full bg-primary text-white mt-3 flex" onClick={() => {
-                                        (window as any)[`my_modal_update_profile`].showModal();
-                                    }}><FiEdit3 className="text-[17px]" /></button>
-                                    <dialog id="my_modal_update_profile" className="modal">
-                                        <div className="modal-box">
-                                            <form method="dialog">
-                                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
-                                            </form>
-                                            <UpdateProfile id={_id} location={location} contactNumber={contactNumber} image={image} refetch={refetch} ></UpdateProfile>
-                                        </div>
-                                    </dialog>
                                 </div>
                                 <div className="">
                                     <p className="mb-2 text-sm flex items-center gap-2"><IoMailOutline className="text-xl" />{email ? email : "No email available"}</p>
@@ -73,12 +61,13 @@ const profilePage = () => {
 
                     <div className='border-t-2'>
                         <p className='flex justify-center items-center mt-3'><LiaBorderAllSolid className='text-xl' />Posts</p>
-                        <MyPost />
+                        <UsersPosts userEmail={params.email || ""} />
                     </div>
+
                 </div>}
 
         </div>
     );
 };
 
-export default profilePage;
+export default page;
