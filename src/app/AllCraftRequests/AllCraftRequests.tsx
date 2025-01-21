@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { Key } from "react";
 import CraftRequestsPostDetails from "../craftRequestsPostDetails/CraftRequestsPostDetails";
+import Link from "next/link";   
 
 type Posts = {
     _id: string,
+    email: string,
     userData: {
         userImage: string;
         name: string;
@@ -27,8 +29,9 @@ const AllCraftRequests = ({ craftsRequests }: AllCraftsRequestsProps) => {
             <div className="w-[95%] md:w-[80%] mx-auto text-gray-800 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 my-20">
                 {craftsRequests.map((post: Posts, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-sm shadow-xl">
                     <div className="flex justify-between items-start">
+                        {/* user profile image */}
+                        <Link href={`/craftRequests/buyerUserProfile/${post.email}`}>
                         <div className="flex items-center gap-4 mt-2 mb-6 pl-4">
-                            {/* user profile image */}
                             <img className="w-10 h-10 rounded-full object-cover"
                                 alt="user-image"
                                 src={post.userData.userImage ? post.userData.userImage : "/image/user.avif"} />
@@ -40,6 +43,9 @@ const AllCraftRequests = ({ craftsRequests }: AllCraftsRequestsProps) => {
                                 </div>
                             </div>
                         </div>
+
+                        </Link>
+
                     </div>
                     <div className="px-6">
                         <h3 className={`text-gray-600 text-2xl font-semibold mb-3 text-start`}>{post.postData.title}</h3>
