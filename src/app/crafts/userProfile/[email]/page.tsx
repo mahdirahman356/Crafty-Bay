@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
+import BuyerUsersPosts from "@/app/BuyerUsersPosts/BuyerUsersPosts";
 import UsersPosts from "@/app/UsersPosts/UsersPosts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -61,7 +62,10 @@ const page = ({ params }: { params: Params }) => {
 
                     <div className='border-t-2'>
                         <p className='flex justify-center items-center mt-3'><LiaBorderAllSolid className='text-xl' />Posts</p>
-                        <UsersPosts userEmail={params.email || ""} />
+                        {role === "buyer"
+                            ? <BuyerUsersPosts buyerUsersEmail={params.email}/>
+                            : <UsersPosts userEmail={params.email || ""} />
+                        }
                     </div>
 
                 </div>}
