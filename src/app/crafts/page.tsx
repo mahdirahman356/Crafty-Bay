@@ -44,7 +44,7 @@ const page = () => {
     return (
         <div className="text-black">
             <div className="pt-20">
-                <div className="w-[95%] md:w-[85%] flex flex-col md:flex-row gap-5 mx-auto my-6">
+                <div className="w-[95%] md:w-[82%] flex flex-col md:flex-row gap-5 mx-auto my-6">
                     {/* search bar */}
                     <form onSubmit={handleSearch} className="flex w-full">
                         <input

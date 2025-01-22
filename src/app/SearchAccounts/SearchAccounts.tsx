@@ -37,14 +37,14 @@ const SearchAccounts = () => {
                 <label className="input input-bordered flex items-center gap-2">
                     <input
                         type="text"
-                        className="grow"
+                        className="grow text-black"
                         placeholder="Search"
                         onChange={(e) => setAccountSearch(e.target.value)} />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
                         fill="currentColor"
-                        className="h-4 w-4 opacity-70">
+                        className="h-4 w-4 opacity-70 text-gray-600">
                         <path
                             fillRule="evenodd"
                             d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
@@ -74,11 +74,11 @@ const SearchAccounts = () => {
                         {usersToShow.map((users: any, index: Key | null | undefined) => <div key={index}>
                             <Link href={`/crafts/userProfile/${users.email}`}>
                                 <div className="flex items-center gap-4 p-3 hover:bg-gray-100">
-                                    <img className="object-cover w-10 h-10 rounded-full"
+                                    <img className="object-cover border w-10 h-10 rounded-full"
                                         alt="user-image"
                                         src={users.image ? users.image : "/image/user.avif"} />
                                     <div>
-                                        <p className="font-semibold text-start">{users.name}</p>
+                                        <p className="font-semibold text-gray-800 text-start">{users.name}</p>
                                         <p className="text-sm text-gray-500 text-nowrap">{users.role}</p>
                                     </div>
                                 </div>
