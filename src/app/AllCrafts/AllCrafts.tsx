@@ -7,7 +7,7 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
-import Link from "next/link";   
+import Link from "next/link";
 
 type Crafts = {
     _id: string,
@@ -87,7 +87,8 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
 
                         <Link href={`/crafts/userProfile/${crafts.email}`}>
                             <div className="flex items-center gap-4 mt-2 mb-6 pl-3">
-                                <img className="w-10 h-10 rounded-full"
+                                <img
+                                    className="object-cover w-10 h-10 rounded-full"
                                     alt="user-image"
                                     src={crafts.userData.userImage ? crafts.userData.userImage : "/image/user.avif"} />
                                 <div>

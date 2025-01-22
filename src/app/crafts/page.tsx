@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/no-unescaped-entities */
@@ -10,11 +11,12 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AllCrafts from "../AllCrafts/AllCrafts";
 import { useState } from "react";
+import SearchAccounts from "../SearchAccounts/SearchAccounts";
 const header = Arvo({ weight: ["400", "700"], subsets: ["latin"] })
 const page = () => {
 
     const [searchTerm, setSearchTerm,] = useState("")
-    const [sortOrder,  setSortOrder] = useState("")
+    const [sortOrder, setSortOrder] = useState("")
 
     console.log(searchTerm,)
 
@@ -29,11 +31,11 @@ const page = () => {
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        refetch()
+        refetch() 
     }
 
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        e.preventDefault() 
+        e.preventDefault()
         setSortOrder(e.target.value)
         refetch()
     }
@@ -47,22 +49,39 @@ const page = () => {
                     <form onSubmit={handleSearch} className="flex w-full">
                         <input
                             type="text"
-                            name="search" 
-                            placeholder="Search here" 
-                            className="input rounded-sm input-bordered w-full" 
-                            onChange={(e) => setSearchTerm(e.target.value)}/>
+                            name="search"
+                            placeholder="Search here"
+                            className="input rounded-sm input-bordered w-full"
+                            onChange={(e) => setSearchTerm(e.target.value)} />
                         <button className="btn bg-primary text-white rounded-sm">
                             <MdSearch className="text-xl" />
                             Search
                         </button>
                     </form>
 
+                    {/* account search bar */}
+
+                    <button className="btn bg-primary text-white rounded-sm" onClick={() => {
+                        (window as any)[`account_search_modal`].showModal();
+                    }}>
+                        <MdSearch className="text-xl" />
+                        <span className="font-thin	text-sm">Search Accounts</span>
+                    </button>
+                    <dialog id="account_search_modal" className="modal modal-top mt-20 w-[98%] md:w-[70%] lg:w-[40%] mx-auto rounded-xl">
+                        <div className="modal-box">
+                            <form method="dialog">
+                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            </form>
+                            <SearchAccounts />
+                        </div>
+                    </dialog>
+
                     {/* sort */}
                     <div className="flex gap-5 w-full">
-                        <select 
-                        className="select rounded-sm select-bordered w-full max-w-xs bg-primary text-white"
-                        value={sortOrder}
-                        onChange={handleSortChange}>
+                        <select
+                            className="select font-thin	text-sm rounded-sm select-bordered w-full max-w-xs bg-primary text-white"
+                            value={sortOrder}
+                            onChange={handleSortChange}>
                             <option value="" disabled selected>Sort By Price</option>
                             <option value="priceLowHigh">Product Price: Low to High</option>
                             <option value="priceHighLow">Product Price: High to Low</option>
