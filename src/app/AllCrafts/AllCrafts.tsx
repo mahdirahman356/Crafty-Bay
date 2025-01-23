@@ -8,6 +8,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import useCartData from "../Hooks/useCartData";
 
 type Crafts = {
     _id: string,
@@ -36,6 +37,7 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
     console.log(crafts)
 
     const { data: session } = useSession()
+    const [, refetch] = useCartData()
 
     const handleAddToCart = async (orderId: string, craftName: string, craftImage: string, price: string, location: string, sellerEmail: string, sellerName: string, sellerImage: string) => {
         const order = {
@@ -70,7 +72,9 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
                         confirmButton: 'btn btn-primary rounded-sm text-white ',
                     },
                 });
+                refetch()
             }
+
 
         } catch (error) {
             console.log(error)

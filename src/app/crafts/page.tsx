@@ -4,7 +4,6 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
-import { HiOutlineShoppingBag } from "react-icons/hi";
 import { MdSearch } from "react-icons/md";
 import { Arvo } from "next/font/google";
 import { useQuery } from "@tanstack/react-query";
@@ -12,15 +11,19 @@ import axios from "axios";
 import AllCrafts from "../AllCrafts/AllCrafts";
 import { useState } from "react";
 import SearchAccounts from "../SearchAccounts/SearchAccounts";
+import useCartData from "../Hooks/useCartData";
+import Link from "next/link";
 const header = Arvo({ weight: ["400", "700"], subsets: ["latin"] })
 const page = () => {
 
     const [searchTerm, setSearchTerm,] = useState("")
     const [sortOrder, setSortOrder] = useState("")
+    const [cartData] = useCartData()
+
 
     console.log(searchTerm,)
 
-    const { data: crafts = [], refetch, isLoading } = useQuery({
+    const { data: crafts = [], refetch: craftsRefetch, isLoading } = useQuery({
         queryKey: ["crafts", searchTerm, sortOrder],
         queryFn: async () => {
             const res = await axios.get(`http://localhost:3000/crafts/api/allCrafts?search=${searchTerm}&sort=${sortOrder}`)
@@ -31,13 +34,13 @@ const page = () => {
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        refetch() 
+        craftsRefetch()
     }
 
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault()
         setSortOrder(e.target.value)
-        refetch()
+        craftsRefetch()
     }
 
 
@@ -86,9 +89,43 @@ const page = () => {
                             <option value="priceLowHigh">Product Price: Low to High</option>
                             <option value="priceHighLow">Product Price: High to Low</option>
                         </select>
-                        <p className="bg-gray-200 p-4 rounded-full">
-                            <HiOutlineShoppingBag className="text-2xl text-primary" />
-                        </p>
+                        <div className="flex justify-center items-start">
+                            <div className="flex-none">
+                                <div className="dropdown dropdown-end">
+                                    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle bg-gray-200">
+                                        <div className="indicator text-primary">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="h-5 w-5"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                            <span className="badge badge-sm bg-gray-200 indicator-item text-primary">{cartData.length}</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        tabIndex={0}
+                                        className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow">
+                                        <div className="card-body">
+                                            <span className="text-lg font-bold">{cartData.length} Items</span>
+                                            <div className="card-actions">
+                                                <Link href={"/deshboard/myCart"} className="w-full">
+                                                    <button className="btn btn-primary btn-block font-thin text-sm text-white rounded-sm">View cart</button>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

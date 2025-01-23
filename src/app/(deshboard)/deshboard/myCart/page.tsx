@@ -1,11 +1,14 @@
 "use client"
+import useCartData from "@/app/Hooks/useCartData";
 import PostDetails from "@/app/postDetails/PostDetails";
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-img-element */
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { Key } from "react";
+import { MdOutlineShoppingBag } from "react-icons/md";
 import { RiDeleteBin6Line, RiShoppingCartLine } from "react-icons/ri";
 import Swal from "sweetalert2";
 
@@ -30,15 +33,7 @@ const page = () => {
 
     const { data: session } = useSession()
 
-
-    const { data: cartData, isLoading, refetch } = useQuery({
-        queryKey: ["cartData", session?.user?.email],
-        queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/deshboard/myCart/api/cartData?email=${session?.user?.email}`)
-            console.log(data)
-            return data
-        }
-    })
+    const [cartData, refetch, isLoading] = useCartData()
 
     const { data: userProfile = [] } = useQuery({
         queryKey: ["userProfile"],
@@ -100,7 +95,7 @@ const page = () => {
     }
 
 
-    const handlePaymentSystem = async(price: string, craftName: string, quantity: number) => {
+    const handlePaymentSystem = async (price: string, craftName: string, quantity: number) => {
         const res = await axios.post('http://localhost:3000/deshboard/myCart/api/createPayment', {
             amount: price,
             cus_name: name,
@@ -113,10 +108,10 @@ const page = () => {
         })
         console.log(res.data)
         const redirectUrl = res.data
-        if(redirectUrl){
+        if (redirectUrl) {
             window.location.replace(redirectUrl)
         }
-        
+
     }
 
     if (isLoading) {
@@ -126,86 +121,101 @@ const page = () => {
     }
 
     return (
-        <div className="text-black w-[95%] mx-auto">
-            <div className="text-3xl flex justify-center items-center gap-2 font-bold text-center mt-10 lg:mt-24 mb-10">
-                <RiShoppingCartLine className="text-3xl" />
-                <h3>My Cart</h3>
-            </div>
-            {/* table */}
-            <div className="overflow-x-auto rounded-t-xl mb-8">
-                <table className="table">
-                    {/* head */}
-                    <thead className="bg-primary text-white">
-                        <tr>
-                            <th></th>
-                            <th>Craft Name</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Location</th>
-                            <th>Details</th>
-                            <th>Payment</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {/* row 1 */}
+        <div className="text-black">
+            {cartData.length === 0
+                ? <div className="flex h-screen flex-col gap-4 justify-center items-center">
+                    <MdOutlineShoppingBag className='text-8xl text-gray-800' />
+                    <div className="text-center">
+                        <Link href={"/crafts"}>
+                        <button className="text-blue-500">
+                            Start Shopping
+                        </button>
+                        </Link>
+                        <p className="text-gray-600">You have not placed an order yet</p>
+                    </div>
+                </div>
+                : <div className="w-[95%] mx-auto">
+                    <div className="text-3xl flex justify-center items-center gap-2 font-bold text-center mt-10 lg:mt-24 mb-10">
+                        <RiShoppingCartLine className="text-3xl" />
+                        <h3>My Cart</h3>
+                    </div>
+                    {/* table */}
+                    <div className="overflow-x-auto rounded-t-xl mb-8">
+                        <table className="table">
+                            {/* head */}
+                            <thead className="bg-primary text-white">
+                                <tr>
+                                    <th></th>
+                                    <th>Craft Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Location</th>
+                                    <th>Details</th>
+                                    <th>Payment</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {/* row 1 */}
 
-                        {cartData.map((cartData: CartData, index: Key | null | undefined) => <tr key={index}>
-                            <td>
-                                <div className="avatar">
-                                    <div className="mask mask-squircle h-12 w-12">
-                                        <img
-                                            src={cartData.orderData.craftImage}
-                                            alt="Avatar Tailwind CSS Component" />
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {cartData.orderData.craftName}
-                            </td>
-                            <td>{cartData.orderData.price} TK</td>
-                            <td>
-                                <div className="flex items-center gap-2">
-                                    {cartData.orderData.quantity === 1 ?
-                                        <button className="text-xl">-</button> :
-                                        <button onClick={() => handleQuantitySubtraction(cartData._id, cartData.orderData.quantity)} className="text-xl">-</button>}
-                                    <div className="">
-                                        {cartData.orderData.quantity}
-                                    </div>
-                                    <button onClick={() => handleQuantityAddition(cartData._id, cartData.orderData.quantity)} className="text-xl">+</button>
-                                </div>
-                            </td>
-                            <td>{cartData.orderData.location}</td>
-                            <th>
-                                <button className="btn btn-ghost btn-xs font-sans"
-                                    onClick={() => {
-                                        const dialogElement = document.getElementById(`my_modal_my_post_${cartData.orderData.orderId}`) as HTMLDialogElement;
-                                        dialogElement.showModal();
-                                    }}>
-                                    details
-                                </button>
-                                <dialog id={`my_modal_my_post_${cartData.orderData.orderId}`} className="modal">
-                                    <div className="modal-box w-full max-w-3xl">
-                                        <form method="dialog">
-                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
-                                        </form>
-                                        <PostDetails id={cartData.orderData.orderId} />
-                                    </div>
-                                </dialog>
-                            </th>
-                            <td>
-                                <button onClick={() => handlePaymentSystem(cartData.orderData.price, cartData.orderData.craftName, cartData.orderData.quantity)} className="btn btn-xs font-sans text-primary">Payment</button>
-                            </td>
-                            <td>
-                                <button className="btn btn-sm btn-ghost">
-                                    <RiDeleteBin6Line onClick={() => handleDeleteItem(cartData._id)} className="text-xl text-red-500" />
-                                </button>
-                            </td>
-                        </tr>)}
-                    </tbody>
-                </table>
-            </div>
+                                {cartData.map((cartData: CartData, index: Key | null | undefined) => <tr key={index}>
+                                    <td>
+                                        <div className="avatar">
+                                            <div className="mask mask-squircle h-12 w-12">
+                                                <img
+                                                    src={cartData.orderData.craftImage}
+                                                    alt="Avatar Tailwind CSS Component" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {cartData.orderData.craftName}
+                                    </td>
+                                    <td>{cartData.orderData.price} TK</td>
+                                    <td>
+                                        <div className="flex items-center gap-2">
+                                            {cartData.orderData.quantity === 1 ?
+                                                <button className="text-xl">-</button> :
+                                                <button onClick={() => handleQuantitySubtraction(cartData._id, cartData.orderData.quantity)} className="text-xl">-</button>}
+                                            <div className="">
+                                                {cartData.orderData.quantity}
+                                            </div>
+                                            <button onClick={() => handleQuantityAddition(cartData._id, cartData.orderData.quantity)} className="text-xl">+</button>
+                                        </div>
+                                    </td>
+                                    <td>{cartData.orderData.location}</td>
+                                    <th>
+                                        <button className="btn btn-ghost btn-xs font-sans"
+                                            onClick={() => {
+                                                const dialogElement = document.getElementById(`my_modal_my_post_${cartData.orderData.orderId}`) as HTMLDialogElement;
+                                                dialogElement.showModal();
+                                            }}>
+                                            details
+                                        </button>
+                                        <dialog id={`my_modal_my_post_${cartData.orderData.orderId}`} className="modal">
+                                            <div className="modal-box w-full max-w-3xl">
+                                                <form method="dialog">
+                                                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
+                                                </form>
+                                                <PostDetails id={cartData.orderData.orderId} />
+                                            </div>
+                                        </dialog>
+                                    </th>
+                                    <td>
+                                        <button onClick={() => handlePaymentSystem(cartData.orderData.price, cartData.orderData.craftName, cartData.orderData.quantity)} className="btn btn-xs font-sans text-primary">Payment</button>
+                                    </td>
+                                    <td>
+                                        <button className="btn btn-sm btn-ghost">
+                                            <RiDeleteBin6Line onClick={() => handleDeleteItem(cartData._id)} className="text-xl text-red-500" />
+                                        </button>
+                                    </td>
+                                </tr>)}
+                            </tbody>
+                        </table>
+                    </div>
 
+
+                </div>}
 
         </div>
     );

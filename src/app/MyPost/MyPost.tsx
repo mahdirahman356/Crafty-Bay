@@ -133,8 +133,8 @@ const MyPost = () => {
                         {userWithRole?.role === "seller" ?
                             <div>
                                 {/* craft posts */}
-                                {myPost.length === 0 ?
-                                    <div className="flex flex-col gap-4 mt-16 mb-10 justify-center items-center">
+                                {myPost.length === 0
+                                    ? <div className="flex flex-col gap-4 mt-16 mb-10 justify-center items-center">
                                         <GoDuplicate className='text-8xl' />
                                         <div className="text-center">
                                             <button className="text-blue-500" onClick={() => {
@@ -143,8 +143,8 @@ const MyPost = () => {
                                             }}>Add post</button>
                                             <p>You do not add any post yet</p>
                                         </div>
-                                    </div> :
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-3">
+                                    </div>
+                                    : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-3">
                                         {myPost.map((post: Post, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-sm shadow-xl">
                                             <div className="flex justify-between items-start">
                                                 <div className="flex items-center gap-4 mt-2 mb-6 pl-3">
