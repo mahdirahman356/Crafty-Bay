@@ -14,14 +14,6 @@ const Navbar = () => {
             path: "/"
         },
         {
-            title: "About",
-            path: "/about"
-        },
-        {
-            title:"Deshbord",
-            path: "/deshboard/profile"
-        },
-        {
             title:"Crafts",
             path: "/crafts"
         },
@@ -29,9 +21,17 @@ const Navbar = () => {
             title:"Crafts Requests",
             path: "/craftRequests"
         },
+        {
+            title:"Profile",
+            path: "/deshboard/profile"
+        },
+        {
+            title:"Messages",
+            path: "/messages/messagePage"
+        },
     ]
     return (
-        <div className={`${pathName.includes('deshboard') ||  pathName.includes('/login') || pathName.includes('/signup') ? 'hidden' : ""} relative z-10 w-full bg-transparent text-black`}>
+        <div className={`${pathName.includes('deshboard') ||  pathName.includes('/login') || pathName.includes('/signup') || pathName.includes('/messages') ? 'hidden' : ""} relative z-10 w-full bg-transparent text-black`}>
             <div className="navbar absolute	w-[95%] md:w-[85%] mx-auto py-4" style={{ left: "50%", transform: "translateX(-50%)" }} >
             <div className="navbar-start">
                 <div className="dropdown">

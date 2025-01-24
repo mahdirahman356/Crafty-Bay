@@ -123,15 +123,15 @@ const page = () => {
     return (
         <div className="text-black">
             {cartData.length === 0
-                ? <div className="flex h-screen flex-col gap-4 justify-center items-center">
-                    <MdOutlineShoppingBag className='text-8xl text-gray-800' />
+                ? <div className="h-[80vh] md:h-screen text-gray-800 flex flex-col gap-4 justify-center items-center">
+                    <MdOutlineShoppingBag className='text-8xl' />
                     <div className="text-center">
                         <Link href={"/crafts"}>
                         <button className="text-blue-500">
                             Start Shopping
                         </button>
                         </Link>
-                        <p className="text-gray-600">You have not placed an order yet</p>
+                        <p className="text-gray-600 text-sm md:text-base">You have not placed an order yet</p>
                     </div>
                 </div>
                 : <div className="w-[95%] mx-auto">
@@ -158,7 +158,7 @@ const page = () => {
                             <tbody>
                                 {/* row 1 */}
 
-                                {cartData.map((cartData: CartData, index: Key | null | undefined) => <tr key={index}>
+                                {cartData.map((cartData: CartData, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
                                     <td>
                                         <div className="avatar">
                                             <div className="mask mask-squircle h-12 w-12">

@@ -39,7 +39,7 @@ interface UserWithRole {
 }
 
 
-const MyPost = () => {
+const   MyPost = () => {
     const { data: session } = useSession()
     const userWithRole = session?.user as UserWithRole | undefined;
     const { data: myPost = [], refetch, isLoading: craftPostLoading } = useQuery({
@@ -134,16 +134,17 @@ const MyPost = () => {
                             <div>
                                 {/* craft posts */}
                                 {myPost.length === 0
-                                    ? <div className="flex flex-col gap-4 mt-16 mb-10 justify-center items-center">
+                                    ? <div className="text-gray-800 flex flex-col gap-4 mt-16 mb-10 justify-center items-center">
                                         <GoDuplicate className='text-8xl' />
                                         <div className="text-center">
                                             <button className="text-blue-500" onClick={() => {
                                                 const dialogElement = document.getElementById(`my_modal_add_posts`) as HTMLDialogElement;
                                                 dialogElement.showModal();
                                             }}>Add post</button>
-                                            <p>You do not add any post yet</p>
+                                            <p className="text-gray-600 text-sm md:text-base">You do not add any post yet</p>
                                         </div>
                                     </div>
+
                                     : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-3">
                                         {myPost.map((post: Post, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-sm shadow-xl">
                                             <div className="flex justify-between items-start">

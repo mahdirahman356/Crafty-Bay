@@ -45,12 +45,20 @@ const page = ({ params }: { params: Params }) => {
                                 />
                             </div>
                             <div className="sm:flex sm:space-x-6">
-                                <div className="mb-6 flex flex-row md:flex-col gap-5 md:gap-0 items-center md:items-start">
+                                <div className="mb-6 flex flex-col gap-5 md:gap-0">
                                     <div>
                                         <h2 className="text-2xl font-semibold">{name}</h2>
                                         <span className="text-sm dark:text-gray-600">Role {role}</span>
                                     </div>
+                                    <div className="flex items-center gap-2 mt-3">
+                                        <button className="btn">
+                                            Add Friend
+                                        </button>
+                                        <button className="btn">Message</button>
+                                    </div>
                                 </div>
+
+
                                 <div className="">
                                     <p className="mb-2 text-sm flex items-center gap-2"><IoMailOutline className="text-xl" />{email ? email : "No email available"}</p>
                                     <p className="mb-2 text-sm flex items-center gap-2"><IoLocationOutline className="text-xl" />{location ? location : "Add your location"}</p>
@@ -63,7 +71,7 @@ const page = ({ params }: { params: Params }) => {
                     <div className='border-t-2'>
                         <p className='flex justify-center items-center mt-3'><LiaBorderAllSolid className='text-xl' />Posts</p>
                         {role === "buyer"
-                            ? <BuyerUsersPosts buyerUsersEmail={params.email}/>
+                            ? <BuyerUsersPosts buyerUsersEmail={params.email} />
                             : <UsersPosts userEmail={params.email || ""} />
                         }
                     </div>

@@ -1,3 +1,4 @@
+"use client"
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 
@@ -79,7 +80,7 @@ const SearchAccounts = () => {
                                         src={users.image ? users.image : "/image/user.avif"} />
                                     <div>
                                         <p className="font-semibold text-gray-800 text-start">{users.name}</p>
-                                        <p className="text-sm text-gray-500 text-nowrap">{users.role}</p>
+                                        <p className="text-sm text-start text-gray-500">{users.role}</p>
                                     </div>
                                 </div>
                             </Link>

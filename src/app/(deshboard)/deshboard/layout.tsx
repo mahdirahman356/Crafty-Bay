@@ -7,16 +7,18 @@ import { LayoutProps } from "../../../../.next/types/app/api/auth/[...nextauth]/
 import AddPost from "@/app/AddPost/AddPost";
 import { RiHome2Line, RiMenu2Fill, RiShoppingCartLine } from "react-icons/ri";
 import { useSession } from "next-auth/react";
+import { BiMessageRounded } from "react-icons/bi";
+import { PiUsers } from "react-icons/pi";
 
 interface UserWithRole {
     name?: string | null;
     email?: string | null;
     image?: string | null;
-    role?: string | null; 
-  }
+    role?: string | null;
+}
 
 const layout: React.FC<LayoutProps> = ({ children }) => {
-    
+
     const { data: session } = useSession()
     const userWithRole = session?.user as UserWithRole | undefined;
     return (
@@ -24,8 +26,8 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="drawer lg:drawer-open w-72 z-30">
                 <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content flex flex-col">
-                    <label htmlFor="my-drawer-2" className="p-4 drawer-button lg:hidden">
-                    <RiMenu2Fill className="text-xl text-black"/>
+                    <label htmlFor="my-drawer-2" className="p-4 pb-0 drawer-button lg:hidden">
+                        <RiMenu2Fill className="text-xl text-black" />
                     </label>
                 </div>
                 <div className="drawer-side">
@@ -42,17 +44,27 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                         <li>
                             <Link
                                 className={`text-xl rounded-3xl font-semibold mb-3`}
-                                href={"/deshboard/allUsers"}>
-                                <LuUser2 className="text-xl" />
-                                All Users
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                className={`text-xl rounded-3xl font-semibold mb-3`}
                                 href={"/deshboard/myCart"}>
                                 <RiShoppingCartLine className="text-xl" />
                                 My Cart
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link
+                                className={`text-xl rounded-3xl font-semibold mb-3`}
+                                href={"/deshboard/friends/allFriends"}>
+                                <PiUsers className="text-xl" />
+                                Friends
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link
+                                className={`text-xl rounded-3xl font-semibold mb-3`}
+                                href={"/messages/messagePage"}>
+                                <BiMessageRounded className="text-xl" />
+                                Messages
                             </Link>
                         </li>
 
@@ -74,7 +86,7 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                                 <form method="dialog">
                                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
                                 </form>
-                               <AddPost></AddPost>
+                                <AddPost></AddPost>
                             </div>
                         </dialog>
                     </ul>
