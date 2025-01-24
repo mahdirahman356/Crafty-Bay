@@ -1,11 +1,10 @@
 "use client"
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RiUserFollowLine, RiUserSharedLine } from "react-icons/ri";
 import { LayoutProps } from "../../../../../../.next/types/app/layout";
-import SearchAccounts from "@/app/SearchAccounts/SearchAccounts";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Lia500Px } from "react-icons/lia";
 
 const layout: React.FC<LayoutProps> = ({ children }) => {
 

@@ -12,8 +12,8 @@ export const POST = async(request: NextRequest) => {
             throw new Error("Database connection failed");
         }
 
-        const orderCllection = db.collection("orders")
-        const res = await orderCllection.insertOne(order)
+        const orderCollection = db.collection("orders")
+        const res = await orderCollection.insertOne(order)
         return Response.json(res)
         
      } catch (error) {

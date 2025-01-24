@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 import BuyerUsersPosts from "@/app/BuyerUsersPosts/BuyerUsersPosts";
+import useProfile from "@/app/Hooks/useProfile";
 import UsersPosts from "@/app/UsersPosts/UsersPosts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -14,9 +15,9 @@ interface Params {
 
 const page = ({ params }: { params: Params }) => {
 
-
-    const { data: userProfile = [], isLoading } = useQuery({
-        queryKey: ["userProfile", params.email],
+    const [profile,] = useProfile();
+    const { data: usersProfile = [], isLoading } = useQuery({
+        queryKey: ["usersProfile", params.email],
         queryFn: async () => {
             const { data } = await axios.get(`http://localhost:3000/deshboard/profile/api/users?email=${params.email}`)
             console.log(data)
@@ -24,7 +25,39 @@ const page = ({ params }: { params: Params }) => {
         }
     })
 
-    const { name, email, role, location, contactNumber, image } = userProfile || {}
+    const { name, email, role, location, contactNumber, image } = usersProfile || {}
+    const { name: myName, email: myEmail, role: myRole, image: myImage } = profile || {}
+
+
+    const handleFrinedRequests = async () => {
+        const requestsData = {
+            sentRequestTo: {
+                userEmail: email,
+                userName: name,
+                userImage: image,
+                role: role
+            },
+            requestFrom: {
+                userEmail: myEmail,
+                userName: myName,
+                userImage: myImage,
+                role: myRole
+            },
+            status: "request",
+            date: new Date(),
+        }
+        console.log(requestsData)
+
+        try {
+            const res = await axios.post("http://localhost:3000/requests/api/sentRequests", requestsData)
+            console.log(res.data)
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
 
     return (
         <div className="w-[95%] md:w-[80%] mx-auto pt-10">
@@ -51,7 +84,7 @@ const page = ({ params }: { params: Params }) => {
                                         <span className="text-sm dark:text-gray-600">Role {role}</span>
                                     </div>
                                     <div className="flex items-center gap-2 mt-3">
-                                        <button className="btn">
+                                        <button onClick={handleFrinedRequests} className="btn">
                                             Add Friend
                                         </button>
                                         <button className="btn">Message</button>

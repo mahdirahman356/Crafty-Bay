@@ -89,7 +89,7 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
 
                         {/* user profile */}
 
-                        <Link href={`/crafts/userProfile/${crafts.email}`}>
+                        <Link href={`/usersProfile/${crafts.email}`}>
                             <div className="flex items-center gap-4 mt-2 mb-6 pl-3">
                                 <img
                                     className="object-cover w-10 h-10 rounded-full"

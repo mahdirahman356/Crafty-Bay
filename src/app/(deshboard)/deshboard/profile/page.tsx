@@ -2,28 +2,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import { FiEdit3 } from "react-icons/fi";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
 import UpdateProfile from '@/app/UpdateProfile/UpdateProfile';
 import { LiaBorderAllSolid } from 'react-icons/lia';
 import MyPost from '@/app/MyPost/MyPost';
+import useProfile from "@/app/Hooks/useProfile";
 
 const profilePage = () => {
     const { data: session } = useSession()
     console.log(session?.user)
 
-    const { data: profile = [], isLoading, refetch } = useQuery({
-        queryKey: ["userProfile", session?.user?.email],
-        queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/deshboard/profile/api/users?email=${session?.user?.email}`)
-            console.log(data)
-            return data
-        }
-    })
-
+    const [profile, refetch, isLoading] = useProfile();
     const { _id, name, email, location, contactNumber, image } = profile || {}
 
     return (

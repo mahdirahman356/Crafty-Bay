@@ -30,7 +30,7 @@ const AllCraftRequests = ({ craftsRequests }: AllCraftsRequestsProps) => {
                 {craftsRequests.map((post: Posts, index: Key | null | undefined) => <div key={index} className="card bg-base-100 rounded-sm shadow-xl">
                     <div className="flex justify-between items-start">
                         {/* user profile image */}
-                        <Link href={`/crafts/userProfile/${post.email}`}>
+                        <Link href={`/usersProfile/${post.email}`}>
                         <div className="flex items-center gap-4 mt-2 mb-6 pl-4">
                             <img className="w-10 h-10 rounded-full object-cover"
                                 alt="user-image"
