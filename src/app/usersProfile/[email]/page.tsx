@@ -2,6 +2,7 @@
 "use client"
 import BuyerUsersPosts from "@/app/BuyerUsersPosts/BuyerUsersPosts";
 import useProfile from "@/app/Hooks/useProfile";
+import useRequestsData from "@/app/Hooks/useRequestsData";
 import UsersPosts from "@/app/UsersPosts/UsersPosts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -16,6 +17,8 @@ interface Params {
 const page = ({ params }: { params: Params }) => {
 
     const [profile,] = useProfile();
+    const [RequestsData, refetch] = useRequestsData()
+
     const { data: usersProfile = [], isLoading } = useQuery({
         queryKey: ["usersProfile", params.email],
         queryFn: async () => {
@@ -24,6 +27,8 @@ const page = ({ params }: { params: Params }) => {
             return data
         }
     })
+
+    const sentEmails = RequestsData.map((request: { sentRequestTo: { userEmail: string }; }) => request.sentRequestTo.userEmail);
 
     const { name, email, role, location, contactNumber, image } = usersProfile || {}
     const { name: myName, email: myEmail, role: myRole, image: myImage } = profile || {}
@@ -51,6 +56,7 @@ const page = ({ params }: { params: Params }) => {
         try {
             const res = await axios.post("http://localhost:3000/requests/api/sentRequests", requestsData)
             console.log(res.data)
+            refetch()
 
         } catch (error) {
             console.log(error)
@@ -84,9 +90,13 @@ const page = ({ params }: { params: Params }) => {
                                         <span className="text-sm dark:text-gray-600">Role {role}</span>
                                     </div>
                                     <div className="flex items-center gap-2 mt-3">
-                                        <button onClick={handleFrinedRequests} className="btn">
-                                            Add Friend
-                                        </button>
+                                        {sentEmails.includes(email)
+                                            ? <button className="btn">
+                                                Cancel Requests
+                                            </button>
+                                            : <button onClick={handleFrinedRequests} className="btn">
+                                                Add Friend
+                                            </button>}
                                         <button className="btn">Message</button>
                                     </div>
                                 </div>
