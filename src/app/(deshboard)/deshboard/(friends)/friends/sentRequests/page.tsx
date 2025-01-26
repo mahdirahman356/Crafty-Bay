@@ -1,5 +1,5 @@
 "use client"
-import useRequestsData from "@/app/Hooks/useRequestsData";
+import useSentRequestsData from "@/app/Hooks/useSentRequestsData";
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-unescaped-entities */
@@ -22,7 +22,7 @@ type Data = {
 
 const page = () => {
 
-    const [RequestsData, refetch, isLoading] = useRequestsData()
+    const [sentRequestsData, refetchSentRequests, isLoading] = useSentRequestsData()
    
 
 
@@ -30,7 +30,7 @@ const page = () => {
         try {
             const res = await axios.delete(`http://localhost:3000/requests/api/cancelRequest/${_id}`)
             console.log(res.data)
-            refetch()
+            refetchSentRequests()
 
         } catch (error) {
             console.log(error)
@@ -46,7 +46,7 @@ const page = () => {
                     <progress className="progress w-56"></progress>
                 </div>
                 : <div>
-                    {RequestsData.length === 0
+                    {sentRequestsData.length === 0
                         ? <div className="h-[80vh] text-gray-800 flex flex-col gap-4 justify-center items-center">
                             <RiUserSharedLine className='text-8xl' />
                             <div className="text-center">
@@ -67,7 +67,7 @@ const page = () => {
                                 </thead>
                                 <tbody>
                                     {/* row 1 */}
-                                    {RequestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
+                                    {sentRequestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
                                         <td>
                                             <div className="flex items-center gap-3">
                                                 <div className="avatar">

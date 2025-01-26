@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 
 export const POST = async (request: NextRequest) => {
 
-    const requestsData = await request.json()
+    const sentRequestsData = await request.json()
       
     try {
 
@@ -14,10 +14,10 @@ export const POST = async (request: NextRequest) => {
      }
 
      const requestCllection = db.collection("requests")   
-     const res = await requestCllection.insertOne(requestsData)
+     const res = await requestCllection.insertOne(sentRequestsData)
 
-     return Response.json(res)
-        
+     return Response.json(res)      
+
     } catch (error) {
         return Response.json({message: "someting is wrong"})
     }

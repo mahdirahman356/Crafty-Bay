@@ -3,11 +3,13 @@
 import BuyerUsersPosts from "@/app/BuyerUsersPosts/BuyerUsersPosts";
 import useProfile from "@/app/Hooks/useProfile";
 import useRequestsData from "@/app/Hooks/useRequestsData";
+import useSentRequestsData from "@/app/Hooks/useSentRequestsData";
 import UsersPosts from "@/app/UsersPosts/UsersPosts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
 import { LiaBorderAllSolid } from "react-icons/lia";
+import { RiDeleteBin5Line, RiUserFollowLine } from "react-icons/ri";
 /* eslint-disable react-hooks/rules-of-hooks */
 
 interface Params {
@@ -17,7 +19,9 @@ interface Params {
 const page = ({ params }: { params: Params }) => {
 
     const [profile,] = useProfile();
-    const [RequestsData, refetch] = useRequestsData()
+    const [sentRequestsData, refetchSentRequests] = useSentRequestsData()
+    const [requestsData, refetchRequests] = useRequestsData()
+
 
     const { data: usersProfile = [], isLoading } = useQuery({
         queryKey: ["usersProfile", params.email],
@@ -28,14 +32,15 @@ const page = ({ params }: { params: Params }) => {
         }
     })
 
-    const sentEmails = RequestsData.map((request: { sentRequestTo: { userEmail: string }; }) => request.sentRequestTo.userEmail);
+    const isSentRequest = sentRequestsData.map((request: { sentRequestTo: { userEmail: string }; }) => request.sentRequestTo.userEmail);
+    const isRequested = requestsData.map((request: { requestFrom: { userEmail: string }; }) => request.requestFrom.userEmail);
 
     const { name, email, role, location, contactNumber, image } = usersProfile || {}
     const { name: myName, email: myEmail, role: myRole, image: myImage } = profile || {}
 
 
     const handleFrinedRequests = async () => {
-        const requestsData = {
+        const sentRequestsData = {
             sentRequestTo: {
                 userEmail: email,
                 userName: name,
@@ -51,12 +56,13 @@ const page = ({ params }: { params: Params }) => {
             status: "request",
             date: new Date(),
         }
-        console.log(requestsData)
+        console.log(sentRequestsData)
 
         try {
-            const res = await axios.post("http://localhost:3000/requests/api/sentRequests", requestsData)
+            const res = await axios.post("http://localhost:3000/requests/api/sentRequests", sentRequestsData)
             console.log(res.data)
-            refetch()
+            refetchSentRequests()
+            refetchRequests()
 
         } catch (error) {
             console.log(error)
@@ -90,13 +96,34 @@ const page = ({ params }: { params: Params }) => {
                                         <span className="text-sm dark:text-gray-600">Role {role}</span>
                                     </div>
                                     <div className="flex items-center gap-2 mt-3">
-                                        {sentEmails.includes(email)
+                                        {isSentRequest.includes(email)
                                             ? <button className="btn">
                                                 Cancel Requests
                                             </button>
-                                            : <button onClick={handleFrinedRequests} className="btn">
-                                                Add Friend
-                                            </button>}
+                                            : <>
+                                                {isRequested.includes(email)
+                                                    ? <div className="dropdown">
+                                                        <div tabIndex={0} role="button" className="btn m-1">Respond</div>
+                                                        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                                                            <li>
+                                                                <a>
+                                                                    <RiUserFollowLine className='text-xl' />
+                                                                    Confirm
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a>
+                                                                    <RiDeleteBin5Line className="text-xl" />
+                                                                    Remove
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    : <button onClick={handleFrinedRequests} className="btn">
+                                                        Add Friend
+                                                    </button>}
+
+                                            </>}
                                         <button className="btn">Message</button>
                                     </div>
                                 </div>
