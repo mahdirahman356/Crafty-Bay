@@ -23,10 +23,11 @@ type Data = {
 const page = () => {
 
     const [sentRequestsData, refetchSentRequests, isLoading] = useSentRequestsData()
-   
+    const filteredSentRequestsData: Data[] = sentRequestsData.filter((requests: Data) => requests.status !== "friends") ?? []
 
 
-  const handleCancelRequest = async (_id: string) => {
+
+    const handleCancelRequest = async (_id: string) => {
         try {
             const res = await axios.delete(`http://localhost:3000/requests/api/cancelRequest/${_id}`)
             console.log(res.data)
@@ -54,57 +55,63 @@ const page = () => {
                                 <p className="text-gray-600 text-sm md:text-base">You don't sent any friend requests</p>
                             </div>
                         </div>
-                        : <div className="overflow-x-auto">
-                            <table className="table">
-                                {/* head */}
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Time</th>
-                                        <th>Cancel request</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* row 1 */}
-                                    {sentRequestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
-                                        <td>
-                                            <div className="flex items-center gap-3">
-                                                <div className="avatar">
-                                                    <div className="mask mask-squircle h-12 w-12">
-                                                        <img
-                                                            src={data.sentRequestTo.userImage ? data.sentRequestTo.userImage : "/image/user.avif"}
-                                                            alt="profile" />
+                        : <div>
+                            <div className='pl-4 flex items-center gap-2 mt-5 md:mt-10 mb-5'>
+                                <h3 className='text-2xl font-semibold'>Sent Requests</h3>
+                                <p className='text-primary font-semibold text-2xl'>{filteredSentRequestsData.length}</p>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="table">
+                                    {/* head */}
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Time</th>
+                                            <th>Cancel request</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {/* row 1 */}
+                                        {filteredSentRequestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
+                                            <td>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="avatar">
+                                                        <div className="mask mask-squircle h-12 w-12">
+                                                            <img
+                                                                src={data.sentRequestTo.userImage ? data.sentRequestTo.userImage : "/image/user.avif"}
+                                                                alt="profile" />
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-bold">{data.sentRequestTo.userName}</div>
+                                                        <div className="text-sm opacity-50">{data.sentRequestTo.role}</div>
                                                     </div>
                                                 </div>
-                                                <div>
-                                                    <div className="font-bold">{data.sentRequestTo.userName}</div>
-                                                    <div className="text-sm opacity-50">{data.sentRequestTo.role}</div>
+                                            </td>
+                                            <td>
+                                                <div className="flex gap-2 text-nowrap">
+                                                    <p className="text-sm text-gray-500 text-nowrap">{data.date.split('T')[0]}</p>
+                                                    <p className="text-sm text-gray-500 text-nowrap">{data.date.split('T')[1].split('.')[0]}</p>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="flex gap-2 text-nowrap">
-                                                <p className="text-sm text-gray-500 text-nowrap">{data.date.split('T')[0]}</p>
-                                                <p className="text-sm text-gray-500 text-nowrap">{data.date.split('T')[1].split('.')[0]}</p>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-sm">
-                                                <span onClick={() => handleCancelRequest(data._id)} className="font-thin	text-sm text-primary">
-                                                    Cancel request
-                                                </span>
-                                            </button>
-                                        </td>
-                                        <th>
-                                            <Link href={`/usersProfile/${data.sentRequestTo.userEmail}`}>
-                                                <button className="btn btn-ghost btn-xs">view profile</button>
-                                            </Link>
+                                            </td>
+                                            <td>
+                                                <button className="btn btn-sm">
+                                                    <span onClick={() => handleCancelRequest(data._id)} className="font-thin	text-sm text-primary">
+                                                        Cancel request
+                                                    </span>
+                                                </button>
+                                            </td>
+                                            <th>
+                                                <Link href={`/usersProfile/${data.sentRequestTo.userEmail}`}>
+                                                    <button className="btn btn-ghost btn-xs">view profile</button>
+                                                </Link>
 
-                                        </th>
-                                    </tr>)}
-                                </tbody>
-                            </table>
+                                            </th>
+                                        </tr>)}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>}
                 </div>}
 
