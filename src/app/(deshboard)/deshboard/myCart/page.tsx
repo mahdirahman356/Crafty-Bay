@@ -86,7 +86,8 @@ const page = () => {
                                 title: "Deleted!",
                                 text: `This item has been deleted from your shopping cart.`,
                                 icon: "success"
-                            });
+
+                            })
                         }
                     })
 
@@ -127,9 +128,9 @@ const page = () => {
                     <MdOutlineShoppingBag className='text-8xl' />
                     <div className="text-center">
                         <Link href={"/crafts"}>
-                        <button className="text-blue-500">
-                            Start Shopping
-                        </button>
+                            <button className="text-blue-500">
+                                Start Shopping
+                            </button>
                         </Link>
                         <p className="text-gray-600 text-sm md:text-base">You have not placed an order yet</p>
                     </div>

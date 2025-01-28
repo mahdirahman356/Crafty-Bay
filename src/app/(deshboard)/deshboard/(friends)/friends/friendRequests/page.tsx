@@ -8,6 +8,7 @@ import Link from 'next/link';
 import React, { Key, useState } from 'react';
 import { RiUserFollowLine } from 'react-icons/ri';
 import { TbUsers } from 'react-icons/tb';
+import Swal from 'sweetalert2';
 
 type Data = {
     _id: string,
@@ -23,8 +24,12 @@ type Data = {
 
 const page = () => {
 
-    const [requestsData, refetchRequests, isLoading] = useRequestsData()
+    const [loading, setLoading] = useState(false)
+
+
+    const [requestsData, refetchRequests, isLoadingRequests] = useRequestsData()
     const filteredRequestsData: Data[] = requestsData.filter((requests: Data) => requests.status !== "friends") ?? []
+
     const [confirmedRequests, setConfirmedRequests] = useState<string[]>([])
 
     const handleRemoveRequest = async (_id: string) => {
@@ -32,6 +37,12 @@ const page = () => {
             const res = await axios.delete(`http://localhost:3000/requests/api/cancelRequest/${_id}`)
             console.log(res.data)
             refetchRequests()
+            Swal.fire({
+                title: "Removed",
+                text: `Your friend request has been removed.`,
+                icon: "success"
+
+            })
 
         } catch (error) {
             console.log(error)
@@ -40,9 +51,11 @@ const page = () => {
     }
 
     const handleAcceptRequest = async (_id: string) => {
+        setLoading(true)
         try {
             const res = await axios.patch('http://localhost:3000/requests/api/acceptRequest', { id: _id })
             console.log(res.data)
+            setLoading(false)
             setConfirmedRequests((prev) => [...prev, _id])
 
         } catch (error) {
@@ -55,7 +68,7 @@ const page = () => {
     return (
         <div className="w-[97%] md:w-[95%] mx-auto text-gray-900">
 
-            {isLoading
+            {isLoadingRequests
                 ? <div className="h-[80vh] flex justify-center items-center">
                     <progress className="progress w-56"></progress>
                 </div>
@@ -70,8 +83,8 @@ const page = () => {
                         </div>
                         : <div>
                             <div className='pl-4 flex items-center gap-2 mt-5 md:mt-10 mb-5'>
-                            <h3 className='text-2xl font-semibold'>Friend Requests</h3>
-                            <p className='text-primary font-semibold text-2xl'>{filteredRequestsData.length}</p>
+                                <h3 className='text-2xl font-semibold'>Friend Requests</h3>
+                                <p className='text-primary font-semibold text-2xl'>{filteredRequestsData.length}</p>
                             </div>
                             <div className="overflow-x-auto">
                                 <table className="table">
@@ -121,13 +134,15 @@ const page = () => {
                                                             </span>
                                                             : <span className='flex items-center gap-1'>
                                                                 <RiUserFollowLine className='text-xl' />
-                                                                Confirm
+                                                                {loading
+                                                                    ? <span className="loading loading-dots loading-sm"></span>
+                                                                    : "Confirm"}
                                                             </span>}
                                                     </p>
                                                 </button>
                                             </td>
                                             <td>
-                                                <button className="btn btn-sm">
+                                                <button className="btn btn-sm w-20">
                                                     <span onClick={() => handleRemoveRequest(data._id)} className="font-thin text-sm text-primary">
                                                         Remove
                                                     </span>

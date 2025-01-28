@@ -20,7 +20,7 @@ export const PATCH = async (request: NextRequest) => {
         const requestCollection = db.collection("requests")
         const result = await requestCollection.updateOne(
             {_id: new ObjectId(id)},
-            {$set: {status: "friends"}}
+            {$set: {status: "friends", date: new Date()}}
         )
 
         if (result.matchedCount === 0) {

@@ -7,6 +7,7 @@ import axios from "axios";
 import Link from "next/link";
 import { Key } from "react";
 import { RiUserSharedLine } from "react-icons/ri";
+import Swal from "sweetalert2";
 
 type Data = {
     _id: string,
@@ -22,7 +23,7 @@ type Data = {
 
 const page = () => {
 
-    const [sentRequestsData, refetchSentRequests, isLoading] = useSentRequestsData()
+    const [sentRequestsData, refetchSentRequests, isLoadingSentRequest] = useSentRequestsData()
     const filteredSentRequestsData: Data[] = sentRequestsData.filter((requests: Data) => requests.status !== "friends") ?? []
 
 
@@ -32,6 +33,12 @@ const page = () => {
             const res = await axios.delete(`http://localhost:3000/requests/api/cancelRequest/${_id}`)
             console.log(res.data)
             refetchSentRequests()
+            Swal.fire({
+                title: "Canceled!",
+                text: `Your request has been canceled.`,
+                icon: "success"
+
+            })
 
         } catch (error) {
             console.log(error)
@@ -40,14 +47,16 @@ const page = () => {
     }
 
 
+
+
     return (
         <div className="md:w-[95%] mx-auto text-gray-900">
-            {isLoading
+            {isLoadingSentRequest
                 ? <div className="h-[80vh] flex justify-center items-center">
                     <progress className="progress w-56"></progress>
                 </div>
                 : <div>
-                    {sentRequestsData.length === 0
+                    {filteredSentRequestsData.length === 0
                         ? <div className="h-[80vh] text-gray-800 flex flex-col gap-4 justify-center items-center">
                             <RiUserSharedLine className='text-8xl' />
                             <div className="text-center">
@@ -96,7 +105,7 @@ const page = () => {
                                                 </div>
                                             </td>
                                             <td>
-                                                <button className="btn btn-sm">
+                                                <button className="btn btn-sm w-28">
                                                     <span onClick={() => handleCancelRequest(data._id)} className="font-thin	text-sm text-primary">
                                                         Cancel request
                                                     </span>
