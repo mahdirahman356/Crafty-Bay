@@ -26,7 +26,8 @@ type CartData = {
         price: string,
         quantity: number,
         location: string,
-    }
+    },
+    date: string;
 }
 
 const page = () => {
@@ -145,12 +146,11 @@ const page = () => {
                         <table className="table">
                             {/* head */}
                             <thead className="bg-primary text-white">
-                                <tr>
-                                    <th></th>
-                                    <th>Craft Name</th>
+                                <tr className="hidden md:table-row">
+                                    <th>Crafts</th>
                                     <th>Price</th>
+                                    <th>Time</th>
                                     <th>Quantity</th>
-                                    <th>Location</th>
                                     <th>Details</th>
                                     <th>Payment</th>
                                     <th>Delete</th>
@@ -161,18 +161,27 @@ const page = () => {
 
                                 {cartData.map((cartData: CartData, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
                                     <td>
-                                        <div className="avatar">
-                                            <div className="mask mask-squircle h-12 w-12">
-                                                <img
-                                                    src={cartData.orderData.craftImage}
-                                                    alt="Avatar Tailwind CSS Component" />
+                                        <div className="flex items-center gap-3">
+                                            <div className="avatar">
+                                                <div className="mask mask-squircle h-12 w-12">
+                                                    <img
+                                                        src={cartData.orderData.craftImage}
+                                                        alt="Order image" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="font-semibold text-gray-800">{cartData.orderData.craftName}</div>
+                                                <div className="opacity-50 text-sm mt-1">{cartData.orderData.location}</div>
                                             </div>
                                         </div>
                                     </td>
+                                    <td className="text-gray-600">{cartData.orderData.price} TK</td>
                                     <td>
-                                        {cartData.orderData.craftName}
+                                        <div className="flex gap-2 text-nowrap">
+                                            <p className="text-sm text-gray-600 text-nowrap">{cartData.date.split('T')[0]}</p>
+                                            <p className="text-sm text-gray-600 text-nowrap">{cartData.date.split('T')[1].split('.')[0]}</p>
+                                        </div>
                                     </td>
-                                    <td>{cartData.orderData.price} TK</td>
                                     <td>
                                         <div className="flex items-center gap-2">
                                             {cartData.orderData.quantity === 1 ?
@@ -184,14 +193,13 @@ const page = () => {
                                             <button onClick={() => handleQuantityAddition(cartData._id, cartData.orderData.quantity)} className="text-xl">+</button>
                                         </div>
                                     </td>
-                                    <td>{cartData.orderData.location}</td>
-                                    <th>
+                                    <td className="text-wrap">
                                         <button className="btn btn-ghost btn-xs font-sans"
                                             onClick={() => {
                                                 const dialogElement = document.getElementById(`my_modal_my_post_${cartData.orderData.orderId}`) as HTMLDialogElement;
                                                 dialogElement.showModal();
                                             }}>
-                                            details
+                                            <span className="text-nowrap">View details</span>
                                         </button>
                                         <dialog id={`my_modal_my_post_${cartData.orderData.orderId}`} className="modal">
                                             <div className="modal-box w-full max-w-3xl">
@@ -201,7 +209,7 @@ const page = () => {
                                                 <PostDetails id={cartData.orderData.orderId} />
                                             </div>
                                         </dialog>
-                                    </th>
+                                    </td>
                                     <td>
                                         <button onClick={() => handlePaymentSystem(cartData.orderData.price, cartData.orderData.craftName, cartData.orderData.quantity)} className="btn btn-xs font-sans text-primary">Payment</button>
                                     </td>

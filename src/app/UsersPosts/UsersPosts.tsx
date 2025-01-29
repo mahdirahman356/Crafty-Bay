@@ -57,7 +57,8 @@ const UsersPosts = ({ userEmail }: { userEmail: string }) => {
                 price: price,
                 quantity: 1,
                 location: location
-            }
+            },
+            date: new Date()
         }
         console.log(order)
 

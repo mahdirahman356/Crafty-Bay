@@ -6,7 +6,7 @@ const useRequestsData = () => {
     
     const { data: session } = useSession()
 
-    const { data: requestsData = [], refetch: refetchRequests, isLoading } = useQuery({
+    const { data: requestsData = [], refetch: refetchRequests, isLoading: isLoadingRequests } = useQuery({
         queryKey: ["requestsData", session?.user?.email],
         queryFn: async () => {
             const { data } = await axios.get(`http://localhost:3000/requests/api/getRequests?email=${session?.user?.email}`)
@@ -15,7 +15,7 @@ const useRequestsData = () => {
         }
     })
 
-    return [requestsData, refetchRequests, isLoading]
+    return [requestsData, refetchRequests, isLoadingRequests]
 };
 
 export default useRequestsData;

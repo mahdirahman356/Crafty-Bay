@@ -6,7 +6,10 @@ import useSentRequestsData from "@/app/Hooks/useSentRequestsData";
 import axios from "axios";
 import Link from "next/link";
 import { Key } from "react";
+import { BsThreeDots } from "react-icons/bs";
+import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiUserSharedLine } from "react-icons/ri";
+import { RxCross2 } from "react-icons/rx";
 import Swal from "sweetalert2";
 
 type Data = {
@@ -69,11 +72,11 @@ const page = () => {
                                 <h3 className='text-2xl font-semibold'>Sent Requests</h3>
                                 <p className='text-primary font-semibold text-2xl'>{filteredSentRequestsData.length}</p>
                             </div>
-                            <div className="overflow-x-auto">
+                            <div className="overflow-x-auto pb-20">
                                 <table className="table">
                                     {/* head */}
                                     <thead>
-                                        <tr>
+                                        <tr className="hidden md:table-row">
                                             <th>Name</th>
                                             <th>Time</th>
                                             <th>Cancel request</th>
@@ -94,28 +97,55 @@ const page = () => {
                                                     </div>
                                                     <div>
                                                         <div className="font-bold">{data.sentRequestTo.userName}</div>
-                                                        <div className="text-sm opacity-50">{data.sentRequestTo.role}</div>
+                                                        <div className="text-sm opacity-50 hidden md:block">{data.sentRequestTo.role}</div>
+                                                        <div className="flex gap-2 text-nowrap mt-1 md:hidden">
+                                                            <p className="text-xs text-gray-500 text-nowrap">{data.date.split('T')[0]}</p>
+                                                            <p className="text-xs text-gray-500 text-nowrap">{data.date.split('T')[1].split('.')[0]}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td className="md:hidden">
+                                                <div className="dropdown dropdown-bottom dropdown-end">
+                                                    <div tabIndex={0} role="button" className="m-1 cursor-pointer">
+                                                        <BsThreeDots className="text-xl text-gray-600" />
+                                                    </div>
+                                                    <ul
+                                                        tabIndex={0}
+                                                        className="dropdown-content menu bg-base-200 rounded-box z-50 w-52 p-2 shadow-lg"
+                                                    >
+                                                        <li>
+                                                            <a onClick={() => handleCancelRequest(data._id)} className="text-gray-700">
+                                                                <RxCross2 className="text-xl" />
+                                                                Cancel request
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <Link className="text-gray-700" href={`/usersProfile/${data.sentRequestTo.userEmail}`}>
+                                                                <MdOutlineRemoveRedEye className="text-xl" />
+                                                                View Details
+                                                            </Link>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td className="hidden md:table-cell">
                                                 <div className="flex gap-2 text-nowrap">
                                                     <p className="text-sm text-gray-500 text-nowrap">{data.date.split('T')[0]}</p>
                                                     <p className="text-sm text-gray-500 text-nowrap">{data.date.split('T')[1].split('.')[0]}</p>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td className="hidden md:table-cell">
                                                 <button className="btn btn-sm w-28">
                                                     <span onClick={() => handleCancelRequest(data._id)} className="font-thin	text-sm text-primary">
                                                         Cancel request
                                                     </span>
                                                 </button>
                                             </td>
-                                            <th>
+                                            <th className="hidden md:table-cell">
                                                 <Link href={`/usersProfile/${data.sentRequestTo.userEmail}`}>
                                                     <button className="btn btn-ghost btn-xs">view profile</button>
                                                 </Link>
-
                                             </th>
                                         </tr>)}
                                     </tbody>

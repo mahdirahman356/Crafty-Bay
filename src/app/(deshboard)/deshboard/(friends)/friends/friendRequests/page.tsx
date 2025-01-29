@@ -6,7 +6,10 @@ import useRequestsData from '@/app/Hooks/useRequestsData';
 import axios from 'axios';
 import Link from 'next/link';
 import React, { Key, useState } from 'react';
+import { BsThreeDots } from 'react-icons/bs';
+import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiUserFollowLine } from 'react-icons/ri';
+import { RxCross2 } from 'react-icons/rx';
 import { TbUsers } from 'react-icons/tb';
 import Swal from 'sweetalert2';
 
@@ -86,12 +89,12 @@ const page = () => {
                                 <h3 className='text-2xl font-semibold'>Friend Requests</h3>
                                 <p className='text-primary font-semibold text-2xl'>{filteredRequestsData.length}</p>
                             </div>
-                            <div className="overflow-x-auto">
+                            <div className="overflow-x-auto pb-28">
                                 <table className="table">
                                     {/* head */}
 
                                     <thead>
-                                        <tr>
+                                        <tr className="hidden md:table-row">
                                             <th>Name</th>
                                             <th>Time</th>
                                             <th>Accept requests</th>
@@ -113,18 +116,63 @@ const page = () => {
                                                     </div>
                                                     <div>
                                                         <div className="font-bold">{data.requestFrom.userName}</div>
-                                                        <div className="text-sm opacity-50">{data.requestFrom.role}</div>
+                                                        <div className="text-sm opacity-50 hidden md:block">{data.requestFrom.role}</div>
+                                                        <div className="flex gap-2 text-nowrap mt-1 md:hidden">
+                                                            <p className="text-xs text-gray-500 text-nowrap">{data.date.split('T')[0]}</p>
+                                                            <p className="text-xs text-gray-500 text-nowrap">{data.date.split('T')[1].split('.')[0]}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
 
-                                            <td>
+                                            <td className="md:hidden">
+                                                <div className="dropdown dropdown-bottom dropdown-end">
+                                                    <div tabIndex={0} role="button" className="m-1 cursor-pointer">
+                                                        <BsThreeDots className="text-xl text-gray-600" />
+                                                    </div>
+                                                    <ul
+                                                        tabIndex={0}
+                                                        className="dropdown-content menu bg-base-200 rounded-box z-50 w-52 p-2 shadow-lg"
+                                                    >
+
+                                                        <li>
+                                                            <a onClick={() => handleAcceptRequest(data._id)} className="text-gray-700">
+                                                                {confirmedRequests.includes(data._id)
+                                                                    ? <span className='flex items-center gap-1'>
+                                                                        <TbUsers className='text-xl' />
+                                                                        Friend
+                                                                    </span>
+                                                                    : <span className='flex items-center gap-1'>
+                                                                        <RiUserFollowLine className='text-xl' />
+                                                                        {loading
+                                                                            ? <span className="loading loading-dots loading-sm"></span>
+                                                                            : "Confirm"}
+                                                                    </span>}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a onClick={() => handleRemoveRequest(data._id)} className="text-gray-700">
+                                                                <RxCross2 className="text-xl" />
+                                                                Remove
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <Link className="text-gray-700" href={`/usersProfile/${data.requestFrom.userEmail}`}>
+                                                                <MdOutlineRemoveRedEye className="text-xl" />
+                                                                View Details
+                                                            </Link>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+
+                                            <td className="hidden md:table-cell">
                                                 <div className="flex gap-2 text-nowrap">
                                                     <p className="text-sm text-gray-500 text-nowrap">{data.date.split('T')[0]}</p>
                                                     <p className="text-sm text-gray-500 text-nowrap">{data.date.split('T')[1].split('.')[0]}</p>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td className="hidden md:table-cell">
                                                 <button className="btn btn-sm w-24">
                                                     <p onClick={() => handleAcceptRequest(data._id)} className="font-thin	text-sm text-primary">
                                                         {confirmedRequests.includes(data._id)
@@ -141,7 +189,7 @@ const page = () => {
                                                     </p>
                                                 </button>
                                             </td>
-                                            <td>
+                                            <td className="hidden md:table-cell">
                                                 <button className="btn btn-sm w-20">
                                                     <span onClick={() => handleRemoveRequest(data._id)} className="font-thin text-sm text-primary">
                                                         Remove
@@ -149,7 +197,7 @@ const page = () => {
                                                 </button>
                                             </td>
 
-                                            <th>
+                                            <th className="hidden md:table-cell">
                                                 <Link href={`/usersProfile/${data.requestFrom.userEmail}`}>
                                                     <button className="btn btn-ghost btn-xs">view profile</button>
                                                 </Link>
