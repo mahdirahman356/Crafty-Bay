@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Key } from "react";
 import { GoDuplicate } from "react-icons/go";
-import CraftRequestsPostDetails from "../craftRequestsPostDetails/CraftRequestsPostDetails";
+import CraftRequestsPostDetails from "../CraftRequestsPostDetails/CraftRequestsPostDetails";
 
  
 type Post = {

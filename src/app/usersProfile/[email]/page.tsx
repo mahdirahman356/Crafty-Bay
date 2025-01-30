@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
-import BuyerUsersPosts from "@/app/BuyerUsersPosts/BuyerUsersPosts";
+import BuyerUsersPosts from "@/app/components/BuyerUsersPosts/BuyerUsersPosts";
 import useProfile from "@/app/Hooks/useProfile";
 import useRequestsData from "@/app/Hooks/useRequestsData";
 import useSentRequestsData from "@/app/Hooks/useSentRequestsData";
-import UsersPosts from "@/app/UsersPosts/UsersPosts";
+import UsersPosts from "@/app/components/UsersPosts/UsersPosts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
@@ -127,7 +127,7 @@ const page = ({ params }: { params: Params }) => {
                                         {filteredRequestedEmail.includes(email) || filteredSentRequestedEmail.includes(email)
                                             ? <>
                                                 <button className="btn btn-sm text-xs text-primary">
-                                                    <Link href={'/deshboard/friends/allFriends'}>
+                                                    <Link href={'/deshboard/friends/allFriends'} prefetch={true}>
                                                         Friends
                                                     </Link>
                                                 </button>
@@ -135,14 +135,14 @@ const page = ({ params }: { params: Params }) => {
                                             : <>
                                                 {sentRequestEmail.includes(email)
                                                     ? <button className="btn btn-sm w-28 text-nowrap text-xs text-primary">
-                                                        <Link href={"/deshboard/friends/sentRequests"}>
+                                                        <Link href={"/deshboard/friends/sentRequests"} prefetch={true}>
                                                             Cancel Requests
                                                         </Link>
                                                     </button>
                                                     : <>
                                                         {requestedEmail.includes(email)
                                                             ? <button className="btn btn-sm text-xs text-primary">
-                                                                <Link href={"/deshboard/friends/friendRequests"}>
+                                                                <Link href={"/deshboard/friends/friendRequests"} prefetch={true}>
                                                                     Respond
                                                                 </Link>
                                                             </button>

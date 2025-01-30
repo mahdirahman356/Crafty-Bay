@@ -5,15 +5,15 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { Key, SetStateAction, useState } from "react";
-import PostDetails from "../postDetails/PostDetails";
 import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbPencilMinus } from "react-icons/tb";
 import Swal from "sweetalert2";
-import UpdatePosts from "../updatePosts/UpdatePosts";
 import { GoDuplicate } from "react-icons/go";
-import CraftRequestsPostDetails from "../craftRequestsPostDetails/CraftRequestsPostDetails";
+import PostDetails from "@/app/components/PostDetails/PostDetails";
 import UpdateCraftRequestsPost from "../updateCraftRequestsPost/UpdateCraftRequestsPost";
+import CraftRequestsPostDetails from "@/app/components/CraftRequestsPostDetails/CraftRequestsPostDetails";
+import UpdatePosts from "../updatePosts/UpdatePosts";
 type Post = {
     _id: string,
     userData: {

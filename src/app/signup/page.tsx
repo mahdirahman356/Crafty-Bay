@@ -141,7 +141,7 @@ const page = () => {
                     <p className="text-sm text-center">____________or____________</p>
                     <SocialSignIn />
 
-                    <p className="text-sm text-center">Already have an account ? <span className="text-primary underline"><Link href={"/login"}>Login</Link></span></p>
+                    <p className="text-sm text-center">Already have an account ? <span className="text-primary underline"><Link href={"/login"} prefetch={true}>Login</Link></span></p>
                 </div>
             </div>
         </div>

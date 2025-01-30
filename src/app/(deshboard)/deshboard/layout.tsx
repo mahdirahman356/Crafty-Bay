@@ -4,11 +4,11 @@
 import Link from "next/link";
 import { LuUser2 } from "react-icons/lu";
 import { LayoutProps } from "../../../../.next/types/app/api/auth/[...nextauth]/route";
-import AddPost from "@/app/AddPost/AddPost";
 import { RiHome2Line, RiMenu2Fill, RiShoppingCartLine } from "react-icons/ri";
 import { useSession } from "next-auth/react";
 import { BiMessageRounded } from "react-icons/bi";
 import { PiUsers } from "react-icons/pi";
+import AddPost from "./deshboardComponents/AddPost/AddPost";
 
 interface UserWithRole {
     name?: string | null;
@@ -34,7 +34,7 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul className="menu min-h-full w-60 p-7 fixed bg-primary text-white">
                         <li>
-                            <Link
+                            <Link prefetch={true}
                                 className={`text-xl rounded-3xl font-semibold mb-3`}
                                 href={"/deshboard/profile"}>
                                 <LuUser2 className="text-xl" />
@@ -42,7 +42,7 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                             </Link>
                         </li>
                         <li>
-                            <Link
+                            <Link prefetch={true}
                                 className={`text-xl rounded-3xl font-semibold mb-3`}
                                 href={"/deshboard/myCart"}>
                                 <RiShoppingCartLine className="text-xl" />
@@ -51,7 +51,7 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                         </li>
 
                         <li>
-                            <Link
+                            <Link prefetch={true}
                                 className={`text-xl rounded-3xl font-semibold mb-3`}
                                 href={"/deshboard/friends/allFriends"}>
                                 <PiUsers className="text-xl" />
@@ -60,7 +60,7 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                         </li>
 
                         <li>
-                            <Link
+                            <Link prefetch={true}
                                 className={`text-xl rounded-3xl font-semibold mb-3`}
                                 href={"/messages/messagePage"}>
                                 <BiMessageRounded className="text-xl" />
@@ -69,7 +69,7 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                         </li>
 
                         <li>
-                            <Link
+                            <Link prefetch={true}
                                 className={`text-xl rounded-3xl font-semibold mb-3`}
                                 href={"/"}>
                                 <RiHome2Line className="text-xl" />

@@ -2,13 +2,13 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { Key } from "react";
-import PostDetails from "../postDetails/PostDetails";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import useCartData from "../Hooks/useCartData";
+import useCartData from "../../Hooks/useCartData";
+import PostDetails from "../PostDetails/PostDetails";
 
 type Crafts = {
     _id: string,
@@ -40,6 +40,23 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
     const [, refetch] = useCartData()
 
     const handleAddToCart = async (orderId: string, craftName: string, craftImage: string, price: string, location: string, sellerEmail: string, sellerName: string, sellerImage: string) => {
+        if(!session?.user?.email){
+            Swal.fire({
+                title: "You are not logged in!",
+                text: "Please log in to continue.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Login",
+                customClass: {
+                    confirmButton: 'btn btn-primary rounded-sm text-white ',
+                    cancelButton: 'btn btn-secondary rounded-sm text-white '
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                     window.location.href = "/login"
+                }
+            });
+        }else if (session.user.email){
         const order = {
             userEmail: session?.user?.email,
             sellerData: {
@@ -58,7 +75,6 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
             date: new Date()
         }
         console.log(order)
-
         try {
 
             const res = await axios.post("http://localhost:3000/crafts/api/addToCart", order)
@@ -80,6 +96,7 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
         } catch (error) {
             console.log(error)
         }
+       }
     }
 
     return (

@@ -121,7 +121,7 @@ const page = () => {
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <Link className="text-gray-700" href={`/usersProfile/${data.sentRequestTo.userEmail}`}>
+                                                            <Link className="text-gray-700" href={`/usersProfile/${data.sentRequestTo.userEmail}`} prefetch={true}>
                                                                 <MdOutlineRemoveRedEye className="text-xl" />
                                                                 View Details
                                                             </Link>
@@ -143,7 +143,7 @@ const page = () => {
                                                 </button>
                                             </td>
                                             <th className="hidden md:table-cell">
-                                                <Link href={`/usersProfile/${data.sentRequestTo.userEmail}`}>
+                                                <Link href={`/usersProfile/${data.sentRequestTo.userEmail}`} prefetch={true}>
                                                     <button className="btn btn-ghost btn-xs">view profile</button>
                                                 </Link>
                                             </th>

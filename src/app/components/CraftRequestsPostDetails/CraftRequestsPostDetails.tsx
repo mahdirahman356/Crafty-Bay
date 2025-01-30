@@ -12,7 +12,7 @@ const CraftRequestsPostDetails: React.FC<CraftRequestsPostProps> = ({ id }) => {
     const { data: CraftRequestsPostDetails = [], isLoading } = useQuery({
         queryKey: ["CraftRequestsPostDetails", id],
         queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/craftRequestsPostDetails/api/${id}`)
+            const { data } = await axios.get(`http://localhost:3000/components/CraftRequestsPostDetails/api/${id}`)
             console.log(data)
             return data
         }

@@ -8,12 +8,13 @@ import { MdSearch } from "react-icons/md";
 import { Arvo } from "next/font/google";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import AllCrafts from "../AllCrafts/AllCrafts";
 import { useState } from "react";
-import SearchAccounts from "../SearchAccounts/SearchAccounts";
+import SearchAccounts from "../components/SearchAccounts/SearchAccounts";
 import useCartData from "../Hooks/useCartData";
 import Link from "next/link";
+import AllCrafts from "../components/AllCrafts/AllCrafts";
 const header = Arvo({ weight: ["400", "700"], subsets: ["latin"] })
+
 const page = () => {
 
     const [searchTerm, setSearchTerm,] = useState("")
@@ -115,7 +116,7 @@ const page = () => {
                                         <div className="card-body">
                                             <span className="text-lg font-bold">{cartData.length} Items</span>
                                             <div className="card-actions">
-                                                <Link href={"/deshboard/myCart"} className="w-full">
+                                                <Link href={"/deshboard/myCart"} className="w-full" prefetch={true}>
                                                     <button className="btn btn-primary btn-block font-thin text-sm text-white rounded-sm">View cart</button>
                                                 </Link>
                                             </div>
@@ -175,7 +176,8 @@ const page = () => {
                             <p className="text-center text-gray-500">Not found</p>
                         </div>
                     </>
-                ) : (<AllCrafts crafts={crafts} />)
+                ) : (
+                    <AllCrafts crafts={crafts} />)
                 }
 
             </div>

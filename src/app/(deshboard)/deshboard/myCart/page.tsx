@@ -1,8 +1,8 @@
 "use client"
-import useCartData from "@/app/Hooks/useCartData";
-import PostDetails from "@/app/postDetails/PostDetails";
+import PostDetails from "@/app/components/PostDetails/PostDetails";
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-img-element */
+import useCartData from "@/app/Hooks/useCartData";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -11,6 +11,7 @@ import { Key } from "react";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { RiDeleteBin6Line, RiShoppingCartLine } from "react-icons/ri";
 import Swal from "sweetalert2";
+
 
 type CartData = {
     _id: string
@@ -31,7 +32,7 @@ type CartData = {
 }
 
 const page = () => {
-
+ 
     const { data: session } = useSession()
 
     const [cartData, refetch, isLoading] = useCartData()
@@ -128,7 +129,7 @@ const page = () => {
                 ? <div className="h-[80vh] md:h-screen text-gray-800 flex flex-col gap-4 justify-center items-center">
                     <MdOutlineShoppingBag className='text-8xl' />
                     <div className="text-center">
-                        <Link href={"/crafts"}>
+                        <Link href={"/crafts"} prefetch={true}>
                             <button className="text-blue-500">
                                 Start Shopping
                             </button>

@@ -4,11 +4,11 @@
 import { IoCallOutline, IoLocationOutline } from "react-icons/io5";
 import { LuUser2 } from "react-icons/lu";
 import { useSession } from "next-auth/react";
-import { imageUplode } from "../imageAPI/index";
+import { imageUplode } from "../../../../imageAPI/index";
 import { useEffect, useRef, useState } from "react";
 import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import axios from "axios";
-import { reloadSession } from "../lib/funcs";
+import { reloadSession } from "../../../../lib/funcs";
 
 interface UpdateProfileProps {
     id: string;

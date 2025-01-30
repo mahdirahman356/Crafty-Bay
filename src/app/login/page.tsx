@@ -81,7 +81,7 @@ const page = () => {
                <div className="space-y-6 mt-4">
                <p className="text-sm text-center">____________or____________</p>
                     <SocialSignIn />
-                    <p className="text-sm text-center">Do not have an account ? <span className="text-primary underline"><Link href={"/signup"}>create account</Link></span></p>
+                    <p className="text-sm text-center">Do not have an account ? <span className="text-primary underline"><Link href={"/signup"} prefetch={true}>create account</Link></span></p>
                </div>
             </div>
         </div>

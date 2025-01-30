@@ -25,7 +25,7 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                                 <ul className="rounded-t-none bg-none  p-2">
                                     <li>
                                         <span>
-                                            <Link href={"/deshboard/friends/friendRequests"}
+                                            <Link href={"/deshboard/friends/friendRequests"} prefetch={true}
                                                 className={`${pathName.includes("/deshboard/friends/friendRequests") ? "text-primary" : ""} text-nowrap flex items-center gap-2`}>
                                                 <RiUserFollowLine className="text-xl" />
                                                 Friend requests
@@ -34,7 +34,7 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                                     </li>
                                     <li>
                                         <span>
-                                            <Link href={"/deshboard/friends/sentRequests"}
+                                            <Link href={"/deshboard/friends/sentRequests"} prefetch={true}
                                                 className={`${pathName.includes("/deshboard/friends/sentRequests") ? "text-primary" : ""} text-nowrap flex items-center gap-2`}>
                                                 <RiUserSharedLine className="text-xl" />
                                                 View sent request
@@ -46,7 +46,7 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                         </li>
                         <li>
                             <span>
-                            <Link
+                            <Link prefetch={true}
                                 className={`${pathName.includes("/deshboard/friends/allFriends") ? "text-primary" : ""}`}
                                 href={"/deshboard/friends/allFriends"}>
                                 Friends

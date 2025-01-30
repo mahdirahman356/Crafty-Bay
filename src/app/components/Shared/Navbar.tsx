@@ -31,7 +31,7 @@ const Navbar = () => {
         },
     ]
     return (
-        <div className={`${pathName.includes('deshboard') ||  pathName.includes('/login') || pathName.includes('/signup') || pathName.includes('/messages') ? 'hidden' : ""} relative z-10 w-full bg-transparent text-black`}>
+        <div className={`${pathName.includes('deshboard') ||  pathName.includes('/login') || pathName.includes('/signup') || pathName.includes('/messages') ? 'hidden' : ""} relative z-10 w-full bg-transparent`}>
             <div className="navbar absolute	w-[95%] md:w-[85%] mx-auto py-4" style={{ left: "50%", transform: "translateX(-50%)" }} >
             <div className="navbar-start">
                 <div className="dropdown">
@@ -69,13 +69,13 @@ const Navbar = () => {
                 <ul className="menu menu-horizontal px-1">
 
                     {navItem.map((item, index) =>
-                        <li key={index}><Link href={item.path}>{item.title}</Link></li>)}
+                        <li key={index}><Link prefetch={true} href={item.path}>{item.title}</Link></li>)}
 
                 </ul>
             </div>
             <div className="navbar-end">
                 {!session.data ?
-                    <Link className="btn rounded-sm bg-primary text-white" href={"/login"}>Sign In</Link>
+                    <Link prefetch={true} className="btn rounded-sm bg-primary text-white" href={"/login"}>Sign In</Link>
                     : <button className="btn rounded-sm bg-primary text-white" onClick={() => signOut()}>Log Out</button>
                 }
             </div>

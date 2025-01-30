@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { imageUplode } from "@/app/imageAPI";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -7,7 +8,6 @@ import { useRef, useState } from "react";
 import { IoLocationOutline, IoPricetagsOutline } from "react-icons/io5";
 import { LiaCommentSolid } from "react-icons/lia";
 import { TbBrandCraft } from "react-icons/tb";
-import { imageUplode } from "../imageAPI";
 
 interface UpdatePostsProps {
     id: string;
@@ -76,7 +76,7 @@ const UpdatePosts: React.FC<UpdatePostsProps> = ({ id }) => {
 
         try {
 
-            const res = await axios.put('http://localhost:3000/updatePosts/api/update', postUpdate)
+            const res = await axios.put('http://localhost:3000/deshboard/deshboardComponents/updatePosts/api/update', postUpdate)
             console.log(res)
             if (res.data) {
                 window.location.reload()

@@ -5,10 +5,10 @@
 import { useSession } from "next-auth/react";
 import { FiEdit3 } from "react-icons/fi";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
-import UpdateProfile from '@/app/UpdateProfile/UpdateProfile';
 import { LiaBorderAllSolid } from 'react-icons/lia';
-import MyPost from '@/app/MyPost/MyPost';
 import useProfile from "@/app/Hooks/useProfile";
+import MyPost from "../deshboardComponents/MyPost/MyPost";
+import UpdateProfile from "../deshboardComponents/UpdateProfile/UpdateProfile";
 
 const profilePage = () => {
     const { data: session } = useSession()

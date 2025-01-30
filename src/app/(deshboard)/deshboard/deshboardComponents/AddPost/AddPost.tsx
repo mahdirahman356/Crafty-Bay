@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { IoLocationOutline, IoPricetagsOutline } from 'react-icons/io5';
 import { LiaCommentSolid } from 'react-icons/lia';
 import { TbBrandCraft } from 'react-icons/tb';
-import {imageUplode} from "../imageAPI/index"
+import { imageUplode } from '@/app/imageAPI';
 
 interface UserWithRole {
     name?: string | null;
@@ -72,7 +72,7 @@ const AddPost = () => {
     
             try {
     
-                const res = await axios.post("http://localhost:3000/AddPost/api/post", post)
+                const res = await axios.post("http://localhost:3000/deshboard/deshboardComponents/AddPost/api/post", post)
                 console.log(res.data)
                 if (res.data.acknowledged === true) {
                     window.location.reload()
@@ -103,7 +103,7 @@ const AddPost = () => {
     
             try {
     
-                const res = await axios.post("http://localhost:3000/AddPost/api/craftRequestsPost", craftRequestsPost)
+                const res = await axios.post("http://localhost:3000/deshboard/deshboardComponents/AddPost/api/craftRequestsPost", craftRequestsPost)
                 console.log(res.data)
                 if (res.data.acknowledged === true) {
                     window.location.reload()

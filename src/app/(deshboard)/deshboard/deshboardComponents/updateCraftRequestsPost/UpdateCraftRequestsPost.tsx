@@ -51,7 +51,7 @@ const UpdateCraftRequestsPost: React.FC<UpdateCraftRequestsPostsProps> = ({id}) 
 
         try {
 
-            const res = await axios.put('http://localhost:3000/updateCraftRequestsPost/api/update', postUpdate)
+            const res = await axios.put('http://localhost:3000/deshboard/deshboardComponents/updateCraftRequestsPost/api/update', postUpdate)
             console.log(res)
             if (res.data) {
                 window.location.reload()

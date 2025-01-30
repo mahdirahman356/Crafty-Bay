@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Key } from "react";
-import CraftRequestsPostDetails from "../craftRequestsPostDetails/CraftRequestsPostDetails";
 import Link from "next/link";   
+import CraftRequestsPostDetails from "../CraftRequestsPostDetails/CraftRequestsPostDetails";
 
 type Posts = {
     _id: string,

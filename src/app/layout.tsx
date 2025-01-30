@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="craftyBayTheme">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${outfit.className} antialiased bg-white`}
+        className={`${geistSans.variable} ${geistMono.variable} ${outfit.className} antialiased`}
       >
         <AuthProvider>
           <QueryProvider>

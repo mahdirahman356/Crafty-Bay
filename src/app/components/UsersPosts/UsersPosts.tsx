@@ -3,10 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Key } from "react";
 import { HiOutlineShoppingCart } from "react-icons/hi";
-import PostDetails from "../postDetails/PostDetails";
 import { useSession } from "next-auth/react";
 import Swal from "sweetalert2";
 import { GoDuplicate } from "react-icons/go";
+import PostDetails from "../PostDetails/PostDetails";
 
 type Posts = {
     _id: string,

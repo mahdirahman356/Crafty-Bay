@@ -7,9 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Arvo } from "next/font/google";
 import { MdSearch } from "react-icons/md";
-import AllCraftRequests from "../AllCraftRequests/AllCraftRequests";
 import { useState } from "react";
-import SearchAccounts from "../SearchAccounts/SearchAccounts";
+import SearchAccounts from "../components/SearchAccounts/SearchAccounts";
+import AllCraftRequests from "../components/AllCraftRequests/AllCraftRequests";
 const header = Arvo({ weight: ["400", "700"], subsets: ["latin"] })
 const page = () => {
 

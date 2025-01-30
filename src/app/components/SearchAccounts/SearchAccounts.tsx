@@ -73,7 +73,7 @@ const SearchAccounts = () => {
                         </>
                     ) : (<div>
                         {usersToShow.map((users: any, index: Key | null | undefined) => <div key={index}>
-                            <Link href={`/usersProfile/${users.email}`}>
+                            <Link href={`/usersProfile/${users.email}`} prefetch={true}>
                                 <div className="flex items-center gap-4 p-3 hover:bg-gray-100">
                                     <img className="object-cover border w-10 h-10 rounded-full"
                                         alt="user-image"
