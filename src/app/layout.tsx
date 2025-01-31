@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "./components/Shared/Navbar";
 import AuthProvider from "./services/AuthProvider";
 import QueryProvider from '../app/QueryProvider/QueryProvider';
+import MobileDeviceNavbar from "./components/Shared/MobileDeviceNavbar";
 
 
 
@@ -41,6 +42,7 @@ export default function RootLayout({
           <QueryProvider>
             <Navbar />
             {children}
+            <MobileDeviceNavbar />
           </QueryProvider>
         </AuthProvider>
       </body>

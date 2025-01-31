@@ -1,15 +1,18 @@
+"use client"
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
 import Link from "next/link";
 import { LuUser2 } from "react-icons/lu";
-import { LayoutProps } from "../../../../.next/types/app/api/auth/[...nextauth]/route";
 import { RiHome2Line, RiMenu2Fill, RiShoppingCartLine } from "react-icons/ri";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { BiMessageRounded } from "react-icons/bi";
 import { PiUsers } from "react-icons/pi";
 import AddPost from "./deshboardComponents/AddPost/AddPost";
-
+import { MdLogout } from "react-icons/md";
+import { useRouter } from "next/navigation";
+interface LayoutProps {
+    children: React.ReactNode
+  }
 interface UserWithRole {
     name?: string | null;
     email?: string | null;
@@ -17,10 +20,18 @@ interface UserWithRole {
     role?: string | null;
 }
 
-const layout: React.FC<LayoutProps> = ({ children }) => {
+const layout = ({ children }: LayoutProps) => {
 
     const { data: session } = useSession()
     const userWithRole = session?.user as UserWithRole | undefined;
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        await signOut({ redirect: false });
+        router.push("/login");
+    };
+
+
     return (
         <div className={`lg:flex`}>
             <div className="drawer lg:drawer-open w-72 z-30">
@@ -75,6 +86,15 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                                 <RiHome2Line className="text-xl" />
                                 Home
                             </Link>
+                        </li>
+
+                        <li>
+                            <button
+                                onClick={handleLogout}
+                                className={`text-xl rounded-3xl font-semibold mb-3`}>
+                                <MdLogout className="text-xl" />
+                                Log Out
+                            </button>
                         </li>
 
                         {/* post button  */}

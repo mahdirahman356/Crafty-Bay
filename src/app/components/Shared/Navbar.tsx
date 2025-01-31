@@ -1,7 +1,10 @@
 "use client"
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { MdOutlineNotifications } from "react-icons/md";
+import { RiMessengerLine } from "react-icons/ri";
+import Notifications from "../Notifications/Notifications";
 
 const Navbar = () => {
     const pathName = usePathname()
@@ -14,72 +17,56 @@ const Navbar = () => {
             path: "/"
         },
         {
-            title:"Crafts",
+            title: "Crafts",
             path: "/crafts"
         },
         {
-            title:"Crafts Requests",
+            title: "Crafts Requests",
             path: "/craftRequests"
         },
         {
-            title:"Profile",
+            title: "Profile",
             path: "/deshboard/profile"
-        },
-        {
-            title:"Messages",
-            path: "/messages/messagePage"
         },
     ]
     return (
-        <div className={`${pathName.includes('deshboard') ||  pathName.includes('/login') || pathName.includes('/signup') || pathName.includes('/messages') ? 'hidden' : ""} relative z-10 w-full bg-transparent`}>
-            <div className="navbar absolute	w-[95%] md:w-[85%] mx-auto py-4" style={{ left: "50%", transform: "translateX(-50%)" }} >
-            <div className="navbar-start">
-                <div className="dropdown">
-                    <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M4 6h16M4 12h8m-8 6h16" />
-                        </svg>
-                    </div>
-                    <ul
-                        tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                        <li><a>Item 1</a></li>
-                        <li>
-                            <a>Parent</a>
-                            <ul className="p-2">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </li>
-                        <li><a>Item 3</a></li>
+        <div className={`${pathName.includes('deshboard') || pathName.includes('/login') || pathName.includes('/signup') || pathName.includes('/messages') ? 'hidden' : ""} relative z-10 w-full bg-transparent`}>
+            <div className="navbar absolute w-[99%] md:w-[85%] mx-auto py-4" style={{ left: "50%", transform: "translateX(-50%)" }} >
+                <div className="navbar-start">
+                    <a className="font-bold text-nowrap ml-3 text-2xl md:text-4xl">Crafty Bay<span className="text-primary">.</span></a>
+                </div>
+                <div className="navbar-center hidden lg:flex">
+                    <ul className="menu menu-horizontal px-1">
+
+                        {navItem.map((item, index) =>
+                            <li key={index}><Link prefetch={true} href={item.path}>{item.title}</Link></li>)}
+
                     </ul>
                 </div>
-                <a className="font-bold text-nowrap ml-3 text-2xl md:text-4xl">Crafty Bay<span className="text-primary">.</span></a>
+                <div className="navbar-end">
+                    <div className="flex items-center gap-3 md:gap-6">
+                        <div>
+                            <div className="dropdown dropdown-end">
+                                <div tabIndex={0} role="button" className="btn btn-circle">
+                                    <MdOutlineNotifications className="text-2xl" />
+                                </div>
+                                <div tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] overflow-auto w-[calc(16rem-7px)] md:w-72 max-h-80 shadow">
+                                    <div>
+                                        <Notifications />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button className="btn btn-circle">
+                                <Link href={"/messages/messagePage"}>
+                                    <RiMessengerLine className="text-2xl" />
+                                </Link>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1">
-
-                    {navItem.map((item, index) =>
-                        <li key={index}><Link prefetch={true} href={item.path}>{item.title}</Link></li>)}
-
-                </ul>
-            </div>
-            <div className="navbar-end">
-                {!session.data ?
-                    <Link prefetch={true} className="btn rounded-sm bg-primary text-white" href={"/login"}>Sign In</Link>
-                    : <button className="btn rounded-sm bg-primary text-white" onClick={() => signOut()}>Log Out</button>
-                }
-            </div>
-        </div>
         </div>
     );
 };
