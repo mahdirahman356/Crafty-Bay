@@ -13,8 +13,8 @@ export const POST = async (request: NextRequest) => {
         throw new Error("Database connection failed");
      }
 
-     const requestCllection = db.collection("requests")   
-     const res = await requestCllection.insertOne(sentRequestsData)
+     const requestCollection = db.collection("requests")   
+     const res = await requestCollection.insertOne(sentRequestsData)
 
      return Response.json(res)      
 

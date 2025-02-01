@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
+import useAcceptedRequests from "@/app/Hooks/useAcceptedRequests";
+import useReceivedRequests from "@/app/Hooks/useReceivedRequests";
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import useRequestsData from "@/app/Hooks/useRequestsData";
-import useSentRequestsData from "@/app/Hooks/useSentRequestsData";
 import axios from "axios";
 import Link from "next/link";
 import { Key } from "react";
@@ -32,12 +32,10 @@ type Data = {
 
 const page = () => {
 
-    const [requestsData, refetchRequests, isLoadingRequests] = useRequestsData()
-    const [sentRequestsData, refetchSentRequests, isLoadingSentRequest] = useSentRequestsData()
+    const [acceptedRequests, refetchAcceptedRequest, isLoadingAcceptedRequest] = useAcceptedRequests()
+    const [recevedRequestsData, refetchRecevedRequests, isLoadingRecevedRequests] = useReceivedRequests()
 
 
-    const filteredRequestsData: Data[] = requestsData.filter((requests: Data) => requests.status === "friends") ?? []
-    const filteredSentRequestsData: Data[] = sentRequestsData.filter((requests: Data) => requests.status === "friends") ?? []
 
     const handleUnfriend = async (_id: string, userName: string) => {
 
@@ -57,8 +55,8 @@ const page = () => {
                     .then(res => {
                         console.log(res.data)
                         if (res.status === 200) {
-                            refetchRequests()
-                            refetchSentRequests()
+                            refetchAcceptedRequest()
+                            refetchRecevedRequests()
                             Swal.fire({
                                 title: "Unfriend",
                                 text: `You unfriended ${userName}.`,
@@ -76,12 +74,12 @@ const page = () => {
 
     return (
         <div className="md:w-[95%] mx-auto text-gray-900">
-            {isLoadingRequests || isLoadingSentRequest
+            {isLoadingAcceptedRequest || isLoadingRecevedRequests
                 ? <div className="h-[80vh] flex justify-center items-center">
                     <progress className="progress w-56"></progress>
                 </div>
                 : <div>
-                    {filteredSentRequestsData.length === 0 && filteredRequestsData.length === 0
+                    {recevedRequestsData.length === 0 && acceptedRequests.length === 0
                         ? <div className="h-[80vh] text-gray-800 flex flex-col gap-4 justify-center items-center">
                             <TbUsers className='text-8xl' />
                             <div className="text-center">
@@ -92,7 +90,7 @@ const page = () => {
                         : <div>
                             <div className='pl-4 flex items-center gap-2 mt-5 md:mt-10 mb-5'>
                                 <h3 className='text-2xl font-semibold'>Friends</h3>
-                                <p className='text-primary font-semibold text-2xl'>{filteredRequestsData.length + filteredSentRequestsData.length}</p>
+                                <p className='text-primary font-semibold text-2xl'>{acceptedRequests.length + recevedRequestsData.length}</p>
                             </div>
                             <div className="overflow-x-auto pb-20">
                                 <table className="table">
@@ -109,7 +107,7 @@ const page = () => {
                                     <tbody>
                                         {/* row 1 */}
 
-                                        {filteredRequestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
+                                        {acceptedRequests.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
                                             <td>
                                                 <div className="flex items-center gap-3">
                                                     <div className="avatar">
@@ -177,7 +175,7 @@ const page = () => {
 
                                             </th>
                                         </tr>)}
-                                        {filteredSentRequestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
+                                        {recevedRequestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
                                             <td>
                                                 <div className="flex items-center gap-3">
                                                     <div className="avatar">
@@ -229,9 +227,10 @@ const page = () => {
                                                 </div>
                                             </td>
                                             <td className="hidden md:table-cell">
-                                                <button className="btn btn-sm font-thin text-sm">
+                                            <span className='flex items-center gap-1'>
+                                                    <TbUsers className='text-xl' />
                                                     {data.status === "friends" && "Friends"}
-                                                </button>
+                                                </span>
                                             </td>
                                             <td className="hidden md:table-cell">
                                                 <button onClick={() => handleUnfriend(data._id, data.sentRequestTo.userName)} className="btn btn-sm font-thin text-sm text-primary">

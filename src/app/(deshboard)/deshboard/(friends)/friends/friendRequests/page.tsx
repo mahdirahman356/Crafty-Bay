@@ -4,6 +4,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import useRequestsData from '@/app/Hooks/useRequestsData';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React, { Key, useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
@@ -27,11 +28,12 @@ type Data = {
 
 const page = () => {
 
+    const { data: session } = useSession()
+
     const [loading, setLoading] = useState(false)
 
-
     const [requestsData, refetchRequests, isLoadingRequests] = useRequestsData()
-    const filteredRequestsData: Data[] = requestsData.filter((requests: Data) => requests.status !== "friends") ?? []
+    // const requestsData: Data[] = requestsData.filter((requests: Data) => requests.status !== "friends") ?? []
 
     const [confirmedRequests, setConfirmedRequests] = useState<string[]>([])
 
@@ -58,8 +60,12 @@ const page = () => {
         try {
             const res = await axios.patch('http://localhost:3000/requests/api/acceptRequest', { id: _id })
             console.log(res.data)
-            setLoading(false)
-            setConfirmedRequests((prev) => [...prev, _id])
+            if (res.data) {
+                setLoading(false)
+                setConfirmedRequests((prev) => [...prev, _id])
+                const res = await axios.post(`http://localhost:3000/friends/api/insertFriends?email=${session?.user?.email}`)
+                console.log(res.data)
+            }
 
         } catch (error) {
             console.log(error)
@@ -76,7 +82,7 @@ const page = () => {
                     <progress className="progress w-56"></progress>
                 </div>
                 : <div>
-                    {filteredRequestsData.length === 0
+                    {requestsData.length === 0
                         ? <div className="h-[80vh] text-gray-800 flex flex-col gap-4 justify-center items-center">
                             <RiUserFollowLine className='text-8xl' />
                             <div className="text-center">
@@ -87,7 +93,7 @@ const page = () => {
                         : <div>
                             <div className='pl-4 flex items-center gap-2 mt-5 md:mt-10 mb-5'>
                                 <h3 className='text-2xl font-semibold'>Friend Requests</h3>
-                                <p className='text-primary font-semibold text-2xl'>{filteredRequestsData.length}</p>
+                                <p className='text-primary font-semibold text-2xl'>{requestsData.length}</p>
                             </div>
                             <div className="overflow-x-auto pb-28">
                                 <table className="table">
@@ -104,7 +110,7 @@ const page = () => {
                                     </thead>
                                     <tbody>
                                         {/* row 1 */}
-                                        {filteredRequestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
+                                        {requestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
                                             <td>
                                                 <div className="flex items-center gap-3">
                                                     <div className="avatar">

@@ -27,7 +27,7 @@ type Data = {
 const page = () => {
 
     const [sentRequestsData, refetchSentRequests, isLoadingSentRequest] = useSentRequestsData()
-    const filteredSentRequestsData: Data[] = sentRequestsData.filter((requests: Data) => requests.status !== "friends") ?? []
+    // const sentRequestsData: Data[] = sentRequestsData.filter((requests: Data) => requests.status !== "friends") ?? []
 
 
 
@@ -59,7 +59,7 @@ const page = () => {
                     <progress className="progress w-56"></progress>
                 </div>
                 : <div>
-                    {filteredSentRequestsData.length === 0
+                    {sentRequestsData.length === 0
                         ? <div className="h-[80vh] text-gray-800 flex flex-col gap-4 justify-center items-center">
                             <RiUserSharedLine className='text-8xl' />
                             <div className="text-center">
@@ -70,7 +70,7 @@ const page = () => {
                         : <div>
                             <div className='pl-4 flex items-center gap-2 mt-5 md:mt-10 mb-5'>
                                 <h3 className='text-2xl font-semibold'>Sent Requests</h3>
-                                <p className='text-primary font-semibold text-2xl'>{filteredSentRequestsData.length}</p>
+                                <p className='text-primary font-semibold text-2xl'>{sentRequestsData.length}</p>
                             </div>
                             <div className="overflow-x-auto pb-20">
                                 <table className="table">
@@ -85,7 +85,7 @@ const page = () => {
                                     </thead>
                                     <tbody>
                                         {/* row 1 */}
-                                        {filteredSentRequestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
+                                        {sentRequestsData.map((data: Data, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
                                             <td>
                                                 <div className="flex items-center gap-3">
                                                     <div className="avatar">

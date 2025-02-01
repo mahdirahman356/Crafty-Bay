@@ -1,5 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 "use client"
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @next/next/no-img-element */
 import BuyerUsersPosts from "@/app/components/BuyerUsersPosts/BuyerUsersPosts";
 import useProfile from "@/app/Hooks/useProfile";
 import useRequestsData from "@/app/Hooks/useRequestsData";
@@ -11,29 +12,13 @@ import Link from "next/link";
 import { useState } from "react";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
 import { LiaBorderAllSolid } from "react-icons/lia";
-/* eslint-disable react-hooks/rules-of-hooks */
+import useAcceptedRequests from "@/app/Hooks/useAcceptedRequests";
+import useReceivedRequests from "@/app/Hooks/useReceivedRequests";
 
 interface Params {
     email: string
 }
 
-type Data = {
-    _id: string,
-    sentRequestTo: {
-        userEmail: string,
-        userName: string,
-        userImage: string,
-        role: string
-    },
-    requestFrom: {
-        userEmail: string,
-        userName: string,
-        userImage: string,
-        role: string
-    },
-    status: string,
-    date: string,
-}
 
 const page = ({ params }: { params: Params }) => {
 
@@ -41,7 +26,8 @@ const page = ({ params }: { params: Params }) => {
     const [profile,] = useProfile();
     const [sentRequestsData, refetchSentRequests] = useSentRequestsData()
     const [requestsData, refetchRequests] = useRequestsData()
-
+    const [acceptedRequests] = useAcceptedRequests()
+    const [recevedRequestsData] = useReceivedRequests()
 
     const { data: usersProfile = [], isLoading } = useQuery({
         queryKey: ["usersProfile", params.email],
@@ -55,11 +41,13 @@ const page = ({ params }: { params: Params }) => {
     const sentRequestEmail = sentRequestsData.map((request: { sentRequestTo: { userEmail: string }; }) => request.sentRequestTo.userEmail);
     const requestedEmail = requestsData.map((request: { requestFrom: { userEmail: string }; }) => request.requestFrom.userEmail);
 
-    const filteredRequestsData: Data[] = requestsData.filter((requests: Data) => requests.status === "friends") ?? []
-    const filteredRequestedEmail = filteredRequestsData.map((request: { requestFrom: { userEmail: string }; }) => request.requestFrom.userEmail);
+    const acceptedRequestsEmail = acceptedRequests.map((request: { requestFrom: { userEmail: string }; }) => request.requestFrom.userEmail);
+    const recevedRequestsDataEmail = recevedRequestsData.map((request: { sentRequestTo: { userEmail: string }; }) => request.sentRequestTo.userEmail);
 
-    const filteredSentRequestsData: Data[] = sentRequestsData.filter((requests: Data) => requests.status === "friends") ?? []
-    const filteredSentRequestedEmail = filteredSentRequestsData.map((request: { sentRequestTo: { userEmail: string }; }) => request.sentRequestTo.userEmail);
+    const allFriendsEmail = [...acceptedRequestsEmail, ...recevedRequestsDataEmail]
+    console.log(allFriendsEmail)
+
+    
 
     const { name, email, role, location, contactNumber, image } = usersProfile || {}
     const { name: myName, email: myEmail, role: myRole, image: myImage } = profile || {}
@@ -124,7 +112,7 @@ const page = ({ params }: { params: Params }) => {
                                         <span className="text-sm dark:text-gray-600">Role {role}</span>
                                     </div>
                                     <div className="flex items-center gap-2 mt-3">
-                                        {filteredRequestedEmail.includes(email) || filteredSentRequestedEmail.includes(email)
+                                        {allFriendsEmail.includes(email)
                                             ? <>
                                                 <button className="btn btn-sm text-xs text-primary">
                                                     <Link href={'/deshboard/friends/allFriends'} prefetch={true}>
