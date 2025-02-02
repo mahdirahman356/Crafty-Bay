@@ -14,6 +14,7 @@ import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5
 import { LiaBorderAllSolid } from "react-icons/lia";
 import useAcceptedRequests from "@/app/Hooks/useAcceptedRequests";
 import useReceivedRequests from "@/app/Hooks/useReceivedRequests";
+import { useRouter } from "next/navigation";
 
 interface Params {
     email: string
@@ -22,6 +23,7 @@ interface Params {
 
 const page = ({ params }: { params: Params }) => {
 
+    const router = useRouter();
     const [loading, setLoading] = useState(false)
     const [profile,] = useProfile();
     const [sentRequestsData, refetchSentRequests] = useSentRequestsData()
@@ -47,10 +49,10 @@ const page = ({ params }: { params: Params }) => {
     const allFriendsEmail = [...acceptedRequestsEmail, ...recevedRequestsDataEmail]
     console.log(allFriendsEmail)
 
-    
 
-    const { name, email, role, location, contactNumber, image } = usersProfile || {}
-    const { name: myName, email: myEmail, role: myRole, image: myImage } = profile || {}
+
+    const { _id, name, email, role, location, contactNumber, image } = usersProfile || {}
+    const { _id: myId, name: myName, email: myEmail, role: myRole, image: myImage } = profile || {}
 
 
     const handleFrinedRequests = async () => {
@@ -85,6 +87,19 @@ const page = ({ params }: { params: Params }) => {
         }
 
 
+    }
+
+    const handleConversation = async() => {
+        router.push(`/messages/conversation/${_id}`)
+        const conversation = {
+            createdAt: new Date(),
+            lastMessageAt: new Date(),
+            userIds: [myId, _id]
+        }
+        console.log(conversation)
+
+        const res = await axios.post('http://localhost:3000/messagesApi/api/conversation', conversation)
+        console.log(res.data)
     }
 
     return (
@@ -135,7 +150,7 @@ const page = ({ params }: { params: Params }) => {
                                                                 </Link>
                                                             </button>
                                                             : <button onClick={handleFrinedRequests} className="btn btn-sm w-24 text-xs text-primary text-nowrap">
-                                                                 {loading
+                                                                {loading
                                                                     ? <span className="loading loading-dots loading-sm"></span>
                                                                     : "Add Friend"}
                                                             </button>}
@@ -143,7 +158,11 @@ const page = ({ params }: { params: Params }) => {
                                                     </>}
                                             </>}
 
-                                        <button className="btn btn-sm text-xs text-primary">Message</button>
+                                        <button 
+                                        onClick={handleConversation}
+                                        className="btn btn-sm text-xs text-primary">
+                                                Message
+                                        </button>
                                     </div>
                                 </div>
 

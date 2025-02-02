@@ -1,9 +1,16 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+"use client"
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { LayoutProps } from '../../../../.next/types/app/layout';
-import { RiMenu2Fill } from 'react-icons/ri';
+import { RiMenu2Fill, RiMessengerLine } from 'react-icons/ri';
+import UserList from './messageComponents/UserList/UserList';
+interface LayoutProps {
+    children: React.ReactNode;
+}
 
-const layout: React.FC<LayoutProps> = ({ children }) => {
+const layout = ({ children }: LayoutProps) => {
+
+
     return (
         <div className={`lg:flex`}>
             <div className="drawer lg:drawer-open w-72 z-30">
@@ -15,18 +22,13 @@ const layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
                 <div className="drawer-side">
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
-                    <ul className="menu min-h-full w-72 p-7 fixed bg-primary text-white">
+                    <ul className="menu min-h-full w-60 p-7 fixed bg-primary text-white">
+                        <p className='text-white flex items-center gap-1 px-4 font-semibold text-center text-xl mb-4'>
+                            <RiMessengerLine className="text-2xl" />
+                            Messages
+                        </p>
                         <li>
-                            <div className="flex items-center gap-4 mt-2 mb-6 pl-3">
-                                <img
-                                    className="object-cover w-10 h-10 rounded-full"
-                                    alt="user-image"
-                                    src="/image/user.avif" />
-                                <div>
-                                    <p className="font-semibold">Aryan Mahdi</p>
-                                    <p className="text-xs font-thin">Message</p>
-                                </div>
-                            </div>
+                            <UserList />
                         </li>
                     </ul>
 

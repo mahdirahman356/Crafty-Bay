@@ -23,8 +23,6 @@ const Notifications = () => {
     const [recevedRequestsData, isLoadingRecevedRequests] = useReceivedRequests()
     const [requestsData, , isLoadingRequests] = useRequestsData()
 
-    console.log("recevedReqest", recevedRequestsData)
-    console.log("requestsData", requestsData)
 
 
     return (
