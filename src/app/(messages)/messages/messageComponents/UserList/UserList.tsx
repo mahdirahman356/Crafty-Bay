@@ -1,19 +1,28 @@
-/* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
 
-const UserList = () => {
-    
+/* eslint-disable @next/next/no-img-element */
+type Users = {
+    _id: string
+    name: string,
+    image: string
+}
+
+const UserList = ({users}: {users: Users}) => {
+
     return (
         <div>
-            <div className="flex items-center gap-4">
+           <Link href={`/messages/conversation/${users._id}`}>
+           <div className="flex items-center gap-4">
                 <img
                     className="object-cover w-10 h-10 rounded-full"
                     alt="user-image"
-                    src="/image/user.avif" />
+                    src={users.image ? users.image : "/image/user.avif"} />
                 <div>
-                    <p className="font-semibold">Aryan Mahdi</p>
+                    <p className="font-semibold">{users.name}</p>
                     <p className="text-xs font-thin">Message</p>
                 </div>
             </div>
+           </Link>
         </div>
     );
 };

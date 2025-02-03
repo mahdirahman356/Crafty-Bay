@@ -15,6 +15,7 @@ import { LiaBorderAllSolid } from "react-icons/lia";
 import useAcceptedRequests from "@/app/Hooks/useAcceptedRequests";
 import useReceivedRequests from "@/app/Hooks/useReceivedRequests";
 import { useRouter } from "next/navigation";
+import useConversation from "@/app/Hooks/useConversation";
 
 interface Params {
     email: string
@@ -30,6 +31,8 @@ const page = ({ params }: { params: Params }) => {
     const [requestsData, refetchRequests] = useRequestsData()
     const [acceptedRequests] = useAcceptedRequests()
     const [recevedRequestsData] = useReceivedRequests()
+    const [conversation] = useConversation()
+
 
     const { data: usersProfile = [], isLoading } = useQuery({
         queryKey: ["usersProfile", params.email],
@@ -47,12 +50,14 @@ const page = ({ params }: { params: Params }) => {
     const recevedRequestsDataEmail = recevedRequestsData.map((request: { sentRequestTo: { userEmail: string }; }) => request.sentRequestTo.userEmail);
 
     const allFriendsEmail = [...acceptedRequestsEmail, ...recevedRequestsDataEmail]
-    console.log(allFriendsEmail)
-
 
 
     const { _id, name, email, role, location, contactNumber, image } = usersProfile || {}
     const { _id: myId, name: myName, email: myEmail, role: myRole, image: myImage } = profile || {}
+
+    const inConversation = conversation.flatMap((conversation: { userIds: string[]; }) =>
+        conversation.userIds.filter((userId: string) => userId !== myId)
+    );
 
 
     const handleFrinedRequests = async () => {
@@ -89,7 +94,7 @@ const page = ({ params }: { params: Params }) => {
 
     }
 
-    const handleConversation = async() => {
+    const handleConversation = async () => {
         router.push(`/messages/conversation/${_id}`)
         const conversation = {
             createdAt: new Date(),
@@ -105,7 +110,7 @@ const page = ({ params }: { params: Params }) => {
     return (
         <div className="w-[95%] md:w-[80%] mx-auto pt-10">
             {isLoading
-                ? <div className="min-h-screen flex justify-center items-center">
+                ? <div className="min-h-[90vh] flex justify-center items-center">
                     <progress className="progress w-56"></progress>
                 </div>
                 : <div className='md:py-12 lg:py-0 lg:my-10 text-gray-800'>
@@ -157,12 +162,17 @@ const page = ({ params }: { params: Params }) => {
 
                                                     </>}
                                             </>}
-
-                                        <button 
-                                        onClick={handleConversation}
-                                        className="btn btn-sm text-xs text-primary">
-                                                Message
-                                        </button>
+                                        {inConversation.includes(_id)
+                                            ? <Link href={`/messages/conversation/${_id}`}>
+                                                <button className="btn btn-sm text-xs text-primary">
+                                                    Messages
+                                                </button>
+                                            </Link>
+                                            : <button
+                                                onClick={handleConversation}
+                                                className="btn btn-sm text-xs text-primary">
+                                                Messages
+                                            </button>}
                                     </div>
                                 </div>
 

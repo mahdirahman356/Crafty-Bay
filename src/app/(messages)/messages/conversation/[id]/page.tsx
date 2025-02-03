@@ -12,7 +12,7 @@ interface Params {
 const page = ({ params }: { params: Params }) => {
 
     const { data: user = [] } = useQuery({
-        queryKey: ["sentRequestsData"],
+        queryKey: ["user"],
         queryFn: async () => {
             const { data } = await axios.get(`http://localhost:3000/users/api/getUser?id=${params.id}`)
             console.log(data)
@@ -24,7 +24,7 @@ const page = ({ params }: { params: Params }) => {
 
     return (
         <div>
-            <div className="flex items-center gap-4 p-4 border-b-2 border-gray-200">
+            <div className="flex items-center gap-4 px-4 py-2 border-b-2 border-gray-200">
                 <img
                     className="object-cover w-10 h-10 rounded-full border"
                     alt="user-image"
