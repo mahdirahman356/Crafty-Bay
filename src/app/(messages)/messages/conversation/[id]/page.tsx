@@ -1,9 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 "use client"
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
+import MessageForm from "../../messageComponents/MessageForm/MessageForm";
+import MessageBody from "../../messageComponents/MessageBody/MessageBody";
 
 interface Params {
     id: string
@@ -23,7 +25,7 @@ const page = ({ params }: { params: Params }) => {
     const { name, image, email } = user || {}
 
     return (
-        <div>
+        <div className="mb-20">
             <div className="flex items-center gap-4 px-4 py-2 border-b-2 border-gray-200">
                 <img
                     className="object-cover w-10 h-10 rounded-full border"
@@ -45,13 +47,14 @@ const page = ({ params }: { params: Params }) => {
                     />
                 </div>
                 <h2 className="text-gray-800 font-semibold text-xl md:text-2xl">{name}</h2>
-                    <button className="btn btn-sm">
-                        <Link href={`/usersProfile/${email}`}>
-                            View Profile
-                        </Link>
-                    </button>
+                <button className="btn btn-sm">
+                    <Link href={`/usersProfile/${email}`}>
+                        View Profile
+                    </Link>
+                </button>
             </div>
-
+                <MessageBody />
+                <MessageForm params={params} />
         </div>
     );
 };

@@ -11,7 +11,7 @@ const MobileDeviceNavbar = () => {
     const pathName = usePathname()
 
     return (
-        <div className="lg:hidden fixed bottom-0 left-0 w-full bg-gray-100 py-2 shadow-md">
+    <div className={`${pathName.includes('/messages') && "hidden"} lg:hidden fixed bottom-0 left-0 w-full bg-gray-100 py-2 shadow-md`}>
             <ul className="flex justify-around items-center">
                 <li>
                     <Link href={"/"}>
