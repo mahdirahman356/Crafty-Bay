@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import useFormatDate from "@/app/Hooks/useFormatDate";
 import useProfile from "@/app/Hooks/useProfile";
 import useSenderMessages from "@/app/Hooks/useSenderMessages";
 import { Key } from "react";
@@ -8,13 +9,21 @@ interface Message {
     createdAt: string
 }
 
-const MessageBody = () => {
+interface Params {
+    id: string
+}
 
-    const [senderMessages] = useSenderMessages()
+const MessageBody = ({params}: {params: Params}) => {
+
+    console.log(params.id)
+
+    const [senderMessages] = useSenderMessages(params.id)
     const [profile] = useProfile()
     const { image } = profile
-
+    
     console.log(senderMessages)
+
+    const {formatDateTime} = useFormatDate()
 
     return (
         <div className="w-[95%] mx-auto">
@@ -27,7 +36,7 @@ const MessageBody = () => {
                     </div>
                 </div>
                 <div className="chat-header">
-                    <time className="text-xs opacity-50">12:30 pm</time>
+                    <time className="text-xs opacity-50">{formatDateTime(msg.createdAt)}</time>
                 </div>
                 <div className="chat-bubble text-sm md:text-base bg-primary text-white">{msg.body}</div>
                 <div className="text-xs chat-footer opacity-50">Seen</div>

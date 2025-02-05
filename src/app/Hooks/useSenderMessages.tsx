@@ -2,16 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import useProfile from "./useProfile";
 import axios from "axios";
 
-const useSenderMessages = () => {
-
-    const [profile,] = useProfile();
+const  useSenderMessages = (conversationId?: string) => {
+    const [profile] = useProfile();
 
     const { _id } = profile || {}
 
     const { data: senderMessages = [], refetch: refetchSenderMessages } = useQuery({
-        queryKey: ["senderMessages", _id],
+        queryKey: ["senderMessages", _id, conversationId],
         queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/messagesApi/api/getSenderMessages?id=${_id}`)
+            const { data } = await axios.get(`http://localhost:3000/messagesApi/api/getSenderMessages?id=${_id}&conversationId=${conversationId}`)
             console.log(data)
             return data
         }

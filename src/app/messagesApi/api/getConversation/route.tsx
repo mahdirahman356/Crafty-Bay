@@ -18,7 +18,7 @@ export const GET = async (request: NextRequest) => {
         }
 
         const conversationCollection = db.collection('conversation')
-        const res = await conversationCollection.find({ userIds: id }).toArray()
+        const res = await conversationCollection.find({ "userIds.myId": id }).toArray()
 
         if (!res) {
             return NextResponse.json({ message: "data is not available" }, { status: 404 })

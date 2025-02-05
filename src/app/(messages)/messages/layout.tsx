@@ -6,11 +6,16 @@ import { RiMenu2Fill, RiMessengerLine } from 'react-icons/ri';
 import UserList from './messageComponents/UserList/UserList';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import useProfile from '@/app/Hooks/useProfile';
 import useConversation from '@/app/Hooks/useConversation';
-import { TbMessages } from 'react-icons/tb';
 interface LayoutProps {
     children: React.ReactNode;
+}
+
+interface Conversation {
+    userIds:{
+        myId: string,
+        conversationId: string
+    }
 }
 
 type Users = {
@@ -21,19 +26,18 @@ type Users = {
 
 const layout = ({ children }: LayoutProps) => {
 
-    const [profile,] = useProfile();
-    const { _id } = profile || {}
     const [conversation] = useConversation()
 
-    const otherUserIds = conversation.flatMap((conversation: { userIds: string[]; }) =>
-        conversation.userIds.filter((userId: string) => userId !== _id)
-    );
-    console.log(otherUserIds)
 
-    const { data: users = [] } = useQuery({
-        queryKey: ["users", otherUserIds],
+    
+    const conversationUsers = conversation.map((convo: Conversation) => {
+        return convo?.userIds?.conversationId;
+    });
+        
+    const { data: users = [], isLoading: isLoadingUserList } = useQuery({
+        queryKey: ["users", conversationUsers],
         queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/users/api/getUser?userIds=${otherUserIds}`)
+            const { data } = await axios.get(`http://localhost:3000/users/api/getUser?userIds=${conversationUsers}`)
             console.log(data)
             return data
         }
@@ -52,30 +56,40 @@ const layout = ({ children }: LayoutProps) => {
                 </div>
                 <div className="drawer-side">
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
-                    <ul className="menu min-h-full w-60 p-7 fixed bg-primary text-white">
-                        <p className='text-white flex items-center gap-1 px-4 font-semibold text-center text-xl mb-4'>
+                    <ul className="menu min-h-full w-72 p-7 fixed bg-gray-200">
+                        <p className='flex items-center gap-1 px-4 font-semibold text-center text-xl mb-4'>
                             <RiMessengerLine className="text-2xl" />
                             Messages
                         </p>
 
-                        {users.length === 0
-                            ? <p className='flex flex-col justify-center items-center gap-2 h-[80vh]'>                
-                            <TbMessages className="text-6xl" />
-                                No Conversation
-                            </p>
-                            : <>
-                                {users.map((users: Users, index: React.Key | null | undefined) => <li key={index}>
-                                    <UserList users={users} />
-                                </li>)}
+                        {isLoadingUserList
+                            ? <>
+                                <li>
+                                    <div className="flex w-48 flex-col gap-4">
+                                        <div className="flex items-center gap-4">
+                                            <div className="skeleton h-10 w-10 shrink-0 rounded-full"></div>
+                                            <div className="flex flex-col gap-4">
+                                                <div className="skeleton h-3 w-16"></div>
+                                                <div className="skeleton h-3 w-24"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </>
+                            : <>{users.length === 0
+                                ? <p className='flex flex-col justify-center items-center gap-2 h-[80vh]'>
+                                    <span className=''>No messages found</span>
+                                </p>
+                                : <>
+                                    {users.map((users: Users, index: React.Key | null | undefined) => <li key={index}>
+                                        <UserList users={users} />
+                                    </li>)}
+                                </>}
                             </>}
-
-
-
                     </ul>
-
                 </div>
             </div>
-            <div className="w-full">
+            <div className="w-full lg:ml-14">
                 {children}
             </div>
         </div>

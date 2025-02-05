@@ -48,6 +48,8 @@ const page = ({ params }: { params: Params }) => {
 
     const acceptedRequestsEmail = acceptedRequests.map((request: { requestFrom: { userEmail: string }; }) => request.requestFrom.userEmail);
     const recevedRequestsDataEmail = recevedRequestsData.map((request: { sentRequestTo: { userEmail: string }; }) => request.sentRequestTo.userEmail);
+    
+    const inConversation = conversation.map((conva: { userIds: { conversationId: string }; }) => conva.userIds.conversationId);
 
     const allFriendsEmail = [...acceptedRequestsEmail, ...recevedRequestsDataEmail]
 
@@ -55,9 +57,7 @@ const page = ({ params }: { params: Params }) => {
     const { _id, name, email, role, location, contactNumber, image } = usersProfile || {}
     const { _id: myId, name: myName, email: myEmail, role: myRole, image: myImage } = profile || {}
 
-    const inConversation = conversation.flatMap((conversation: { userIds: string[]; }) =>
-        conversation.userIds.filter((userId: string) => userId !== myId)
-    );
+    
 
 
     const handleFrinedRequests = async () => {
@@ -99,7 +99,10 @@ const page = ({ params }: { params: Params }) => {
         const conversation = {
             createdAt: new Date(),
             lastMessageAt: new Date(),
-            userIds: [myId, _id]
+            userIds: {
+                myId: myId,
+                conversationId: _id
+            }
         }
         console.log(conversation)
 
@@ -162,12 +165,12 @@ const page = ({ params }: { params: Params }) => {
 
                                                     </>}
                                             </>}
-                                        {inConversation.includes(_id)
-                                            ? <Link href={`/messages/conversation/${_id}`}>
+                                         {inConversation.includes(_id) 
+                                         ? <Link href={`/messages/conversation/${_id}`}>
                                                 <button className="btn btn-sm text-xs text-primary">
                                                     Messages
                                                 </button>
-                                            </Link>
+                                            </Link> 
                                             : <button
                                                 onClick={handleConversation}
                                                 className="btn btn-sm text-xs text-primary">

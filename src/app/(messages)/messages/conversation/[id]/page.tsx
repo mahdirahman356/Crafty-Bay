@@ -13,7 +13,7 @@ interface Params {
 
 const page = ({ params }: { params: Params }) => {
 
-    const { data: user = [] } = useQuery({
+    const { data: user = [], isLoading } = useQuery({
         queryKey: ["user"],
         queryFn: async () => {
             const { data } = await axios.get(`http://localhost:3000/users/api/getUser?id=${params.id}`)
@@ -26,15 +26,26 @@ const page = ({ params }: { params: Params }) => {
 
     return (
         <div className="mb-20">
-            <div className="flex items-center gap-4 px-4 py-2 border-b-2 border-gray-200">
-                <img
-                    className="object-cover w-10 h-10 rounded-full border"
-                    alt="user-image"
-                    src={image ? image : "/image/user.avif"} />
-                <div>
-                    <p className="font-semibold">{name}</p>
+            {isLoading
+                ? <div className="flex w-full flex-col gap-4 px-4 py-3 border-b-2 border-gray-200">
+                    <div className="flex items-center gap-4">
+                        <div className="skeleton h-10 w-10 shrink-0 rounded-full"></div>
+                        <div className="flex flex-col gap-3">
+                            <div className="skeleton h-3 w-16"></div>
+                            <div className="skeleton h-3 w-24"></div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                : <div className="flex items-center gap-3 px-4 py-2 border-b-2 border-gray-200">
+                    <img
+                        className="object-cover w-10 h-10 rounded-full border"
+                        alt="user-image"
+                        src={image ? image : "/image/user.avif"} />
+                    <div>
+                        <p className="font-semibold">{name}</p>
+                    </div>
+                </div>}
+
 
             <div className="flex flex-col justify-center items-center gap-2 my-5 md:my-8">
                 <div className="w-28 h-28 md:w-36 md:h-36">
@@ -53,8 +64,8 @@ const page = ({ params }: { params: Params }) => {
                     </Link>
                 </button>
             </div>
-                <MessageBody />
-                <MessageForm params={params} />
+            <MessageBody params={params} />
+            <MessageForm params={params} />
         </div>
     );
 };

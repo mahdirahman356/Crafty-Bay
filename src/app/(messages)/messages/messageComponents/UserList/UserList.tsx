@@ -7,22 +7,24 @@ type Users = {
     image: string
 }
 
-const UserList = ({users}: {users: Users}) => {
+const UserList = ({ users }: { users: Users }) => {
 
     return (
         <div>
-           <Link href={`/messages/conversation/${users._id}`}>
-           <div className="flex items-center gap-4">
-                <img
-                    className="object-cover w-10 h-10 rounded-full"
-                    alt="user-image"
-                    src={users.image ? users.image : "/image/user.avif"} />
-                <div>
-                    <p className="font-semibold">{users.name}</p>
-                    <p className="text-xs font-thin">Message</p>
-                </div>
-            </div>
-           </Link>
+            <Link href={`/messages/conversation/${users._id}`}>
+                    <div className="flex items-center gap-4">
+                        <img
+                            className="object-cover w-10 h-10 rounded-full"
+                            alt="user-image"
+                            src={users.image ? users.image : "/image/user.avif"} />
+                        <div>
+                            <p className="font-semibold">{users.name}</p>
+                            <p className="text-xs font-thin">Message</p>
+                        </div>
+                    </div>
+                </Link>
+
+
         </div>
     );
 };
