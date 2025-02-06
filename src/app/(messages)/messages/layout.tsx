@@ -4,19 +4,11 @@
 import React from 'react';
 import { RiMenu2Fill, RiMessengerLine } from 'react-icons/ri';
 import UserList from './messageComponents/UserList/UserList';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import useConversation from '@/app/Hooks/useConversation';
+import useUsersList from '@/app/Hooks/useUsersList';
 interface LayoutProps {
     children: React.ReactNode;
 }
 
-interface Conversation {
-    userIds:{
-        myId: string,
-        conversationId: string
-    }
-}
 
 type Users = {
     _id: string,
@@ -26,24 +18,18 @@ type Users = {
 
 const layout = ({ children }: LayoutProps) => {
 
-    const [conversation] = useConversation()
+    // const [conversation] = useConversation()
+    // const params = useParams(); 
+    // const id = params?.id;
+    // console.log(id)
+    // const conversations = conversation.map((convo: Conversation) => {
+    //     return convo?.conversationId;
+    // });
+    // const conversationUsers = [...conversations, id]
 
+    const [userList, , isLoadingUserList] = useUsersList()
 
-    
-    const conversationUsers = conversation.map((convo: Conversation) => {
-        return convo?.userIds?.conversationId;
-    });
-        
-    const { data: users = [], isLoading: isLoadingUserList } = useQuery({
-        queryKey: ["users", conversationUsers],
-        queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/users/api/getUser?userIds=${conversationUsers}`)
-            console.log(data)
-            return data
-        }
-    })
-
-    console.log(users)
+    console.log(userList)
 
     return (
         <div className={`lg:flex`}>
@@ -76,12 +62,12 @@ const layout = ({ children }: LayoutProps) => {
                                     </div>
                                 </li>
                             </>
-                            : <>{users.length === 0
+                            : <>{userList.length === 0
                                 ? <p className='flex flex-col justify-center items-center gap-2 h-[80vh]'>
                                     <span className=''>No messages found</span>
                                 </p>
                                 : <>
-                                    {users.map((users: Users, index: React.Key | null | undefined) => <li key={index}>
+                                    {userList.map((users: Users, index: React.Key | null | undefined) => <li key={index}>
                                         <UserList users={users} />
                                     </li>)}
                                 </>}

@@ -8,16 +8,16 @@ const useConversation = () => {
 
     const { _id } = profile || {}
 
-    const { data: conversation = [] } = useQuery({
+    const { data: conversation = [], refetch: refetchConversation } = useQuery({
         queryKey: ["conversation", _id],
         queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/messagesApi/api/getConversation?id=${_id}`)
+            const { data } = await axios.get(`http://localhost:3000/messagesApi/api/getConversation?senderId=${_id}`)
             console.log(data)
             return data
         }
     })
 
-    return [conversation]
+    return [conversation, refetchConversation]
 };
 
 export default useConversation;

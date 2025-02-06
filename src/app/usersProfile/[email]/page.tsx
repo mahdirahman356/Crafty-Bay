@@ -14,8 +14,6 @@ import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5
 import { LiaBorderAllSolid } from "react-icons/lia";
 import useAcceptedRequests from "@/app/Hooks/useAcceptedRequests";
 import useReceivedRequests from "@/app/Hooks/useReceivedRequests";
-import { useRouter } from "next/navigation";
-import useConversation from "@/app/Hooks/useConversation";
 
 interface Params {
     email: string
@@ -24,14 +22,12 @@ interface Params {
 
 const page = ({ params }: { params: Params }) => {
 
-    const router = useRouter();
     const [loading, setLoading] = useState(false)
     const [profile,] = useProfile();
     const [sentRequestsData, refetchSentRequests] = useSentRequestsData()
     const [requestsData, refetchRequests] = useRequestsData()
     const [acceptedRequests] = useAcceptedRequests()
     const [recevedRequestsData] = useReceivedRequests()
-    const [conversation] = useConversation()
 
 
     const { data: usersProfile = [], isLoading } = useQuery({
@@ -48,16 +44,14 @@ const page = ({ params }: { params: Params }) => {
 
     const acceptedRequestsEmail = acceptedRequests.map((request: { requestFrom: { userEmail: string }; }) => request.requestFrom.userEmail);
     const recevedRequestsDataEmail = recevedRequestsData.map((request: { sentRequestTo: { userEmail: string }; }) => request.sentRequestTo.userEmail);
-    
-    const inConversation = conversation.map((conva: { userIds: { conversationId: string }; }) => conva.userIds.conversationId);
 
     const allFriendsEmail = [...acceptedRequestsEmail, ...recevedRequestsDataEmail]
 
 
     const { _id, name, email, role, location, contactNumber, image } = usersProfile || {}
-    const { _id: myId, name: myName, email: myEmail, role: myRole, image: myImage } = profile || {}
+    const { name: myName, email: myEmail, role: myRole, image: myImage } = profile || {}
 
-    
+
 
 
     const handleFrinedRequests = async () => {
@@ -92,22 +86,6 @@ const page = ({ params }: { params: Params }) => {
         }
 
 
-    }
-
-    const handleConversation = async () => {
-        router.push(`/messages/conversation/${_id}`)
-        const conversation = {
-            createdAt: new Date(),
-            lastMessageAt: new Date(),
-            userIds: {
-                myId: myId,
-                conversationId: _id
-            }
-        }
-        console.log(conversation)
-
-        const res = await axios.post('http://localhost:3000/messagesApi/api/conversation', conversation)
-        console.log(res.data)
     }
 
     return (
@@ -165,17 +143,11 @@ const page = ({ params }: { params: Params }) => {
 
                                                     </>}
                                             </>}
-                                         {inConversation.includes(_id) 
-                                         ? <Link href={`/messages/conversation/${_id}`}>
-                                                <button className="btn btn-sm text-xs text-primary">
-                                                    Messages
-                                                </button>
-                                            </Link> 
-                                            : <button
-                                                onClick={handleConversation}
-                                                className="btn btn-sm text-xs text-primary">
+                                        <Link href={`/messages/conversation/${_id}`}>
+                                            <button className="btn btn-sm text-xs text-primary">
                                                 Messages
-                                            </button>}
+                                            </button>
+                                        </Link>
                                     </div>
                                 </div>
 

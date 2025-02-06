@@ -1,6 +1,8 @@
 "use client"
+import useConversation from "@/app/Hooks/useConversation";
 import useProfile from "@/app/Hooks/useProfile";
 import useSenderMessages from "@/app/Hooks/useSenderMessages";
+import useUsersList from "@/app/Hooks/useUsersList";
 import axios from "axios";
 import { useState } from "react";
 import { IoIosSend } from "react-icons/io";
@@ -13,6 +15,8 @@ const MessageForm = ({ params }: { params: Params }) => {
 
     const [message, setMessage] = useState("")
     const [, refetchSenderMessages] = useSenderMessages(params.id)
+    const [, refetchUserList] = useUsersList()
+    const [, refetchConversation] = useConversation()
     const [profile] = useProfile()
     const { _id } = profile || {}
 
@@ -32,7 +36,9 @@ const MessageForm = ({ params }: { params: Params }) => {
         try {
             const res = await axios.post("http://localhost:3000/messagesApi/api/sendMessage", messageData)
             console.log(res.data)
-            refetchSenderMessages()
+            await refetchConversation()
+            await refetchUserList()
+            await refetchSenderMessages()
             setMessage("")
             setSending(false)
         } catch (error) {

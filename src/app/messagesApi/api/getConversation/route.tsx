@@ -6,25 +6,38 @@ export const GET = async (request: NextRequest) => {
     try {
 
         const { searchParams } = new URL(request.url)
-        const id = searchParams.get("id")
+        const senderId = searchParams.get("senderId")
+        const conversationId = searchParams.get("conversationId")
 
-        if (!id) {
-            return NextResponse.json({ message: "User id is required" }, { status: 400 })
-        }
 
         const db: Db | undefined = await connectDB()
         if (!db) {
             throw new Error("Database connection failed");
         }
 
-        const conversationCollection = db.collection('conversation')
-        const res = await conversationCollection.find({ "userIds.myId": id }).toArray()
+        const messageCollection = db.collection('message')
 
-        if (!res) {
-            return NextResponse.json({ message: "data is not available" }, { status: 404 })
+
+        if (senderId) {
+            const res = await messageCollection.find({ senderId: senderId }).toArray()
+
+            if (!res) {
+                return NextResponse.json({ message: "data is not available" }, { status: 404 })
+            }
+            return NextResponse.json(res)
         }
 
-        return NextResponse.json(res)
+        if(conversationId){
+            const res = await messageCollection.find({ conversationId : conversationId }).toArray()
+
+            if (!res) {
+                return NextResponse.json({ message: "data is not available" }, { status: 404 })
+            }
+            return NextResponse.json(res)
+        }
+
+        return NextResponse.json({ message: "sender ID or conversation IDs are required" }, { status: 400 });
+
 
 
     } catch (error) {
