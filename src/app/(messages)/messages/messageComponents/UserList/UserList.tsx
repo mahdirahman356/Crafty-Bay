@@ -1,3 +1,4 @@
+import useReceiverMessages from "@/app/Hooks/useReceiverMessages";
 import Link from "next/link";
 
 /* eslint-disable @next/next/no-img-element */
@@ -7,7 +8,10 @@ type Users = {
     image: string
 }
 
-const UserList = ({ users }: { users: Users }) => {
+const UserList = ({ users }: { users: Users}) => {
+
+   const [receiverMessages] = useReceiverMessages(users._id)
+
 
     return (
         <div>

@@ -64,7 +64,7 @@ const page = ({ params }: { params: Params }) => {
                     </Link>
                 </button>
             </div>
-            <MessageBody params={params} />
+            <MessageBody user={user} params={params} />
             <MessageForm params={params} />
         </div>
     );

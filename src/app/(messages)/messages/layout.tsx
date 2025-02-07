@@ -5,6 +5,7 @@ import React from 'react';
 import { RiMenu2Fill, RiMessengerLine } from 'react-icons/ri';
 import UserList from './messageComponents/UserList/UserList';
 import useUsersList from '@/app/Hooks/useUsersList';
+import { useParams } from 'next/navigation';
 interface LayoutProps {
     children: React.ReactNode;
 }
@@ -18,17 +19,9 @@ type Users = {
 
 const layout = ({ children }: LayoutProps) => {
 
-    // const [conversation] = useConversation()
-    // const params = useParams(); 
-    // const id = params?.id;
-    // console.log(id)
-    // const conversations = conversation.map((convo: Conversation) => {
-    //     return convo?.conversationId;
-    // });
-    // const conversationUsers = [...conversations, id]
-
     const [userList, , isLoadingUserList] = useUsersList()
-
+    const params = useParams()
+    const {id} = params
     console.log(userList)
 
     return (
@@ -67,7 +60,7 @@ const layout = ({ children }: LayoutProps) => {
                                     <span className=''>No messages found</span>
                                 </p>
                                 : <>
-                                    {userList.map((users: Users, index: React.Key | null | undefined) => <li key={index}>
+                                    {userList.map((users: Users, index: React.Key | null | undefined) => <li key={index} className={`${users._id === id && "bg-gray-300 rounded-md"}`}>
                                         <UserList users={users} />
                                     </li>)}
                                 </>}

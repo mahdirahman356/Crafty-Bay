@@ -10,7 +10,7 @@ const  useSenderMessages = (conversationId?: string) => {
     const { data: senderMessages = [], refetch: refetchSenderMessages } = useQuery({
         queryKey: ["senderMessages", _id, conversationId],
         queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/messagesApi/api/getSenderMessages?id=${_id}&conversationId=${conversationId}`)
+            const { data } = await axios.get(`http://localhost:3000/messagesApi/api/getMessages?senderId=${_id}&receiverId=${conversationId}`)
             console.log(data)
             return data
         }
