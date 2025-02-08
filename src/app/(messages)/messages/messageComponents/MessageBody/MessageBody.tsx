@@ -6,6 +6,7 @@ import useSenderMessages from "@/app/Hooks/useSenderMessages";
 import { Key, useEffect, useRef } from "react";
 
 interface Message {
+    _id: string,
     body: string,
     createdAt: string
 }
@@ -36,6 +37,11 @@ const MessageBody = ({ params, user }: { params: Params; user: User }) => {
         (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     );
 
+    const lastIndex = allMessages.length -1
+    const lastMessage = allMessages[lastIndex]
+    const isSender = senderMessages.some((msg: { _id: string; }) => msg._id === lastMessage?._id)
+
+
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -60,7 +66,9 @@ const MessageBody = ({ params, user }: { params: Params; user: User }) => {
                     <div className={`chat-bubble text-sm md:text-base ${senderMessages.includes(msg) ? "bg-primary text-white" : ""}`}>
                         {msg.body}
                     </div>
-                    <div className="text-xs chat-footer opacity-50">Seen</div>
+                    <div className="text-xs chat-footer opacity-50">
+                        {lastMessage._id === msg._id && isSender && "Sent"}
+                    </div>
                 </div>
             ))}
             {/* Empty div to scroll to */}
