@@ -10,7 +10,7 @@ export const GET = async (request: NextRequest) => {
         const receiverId = searchParams.get("receiverId");
 
 
-        if (!senderId) {
+        if (!senderId && receiverId) {
             return NextResponse.json({ message: "id is required" }, { status: 400 })
         }
 
