@@ -4,6 +4,7 @@ import useReceiverMessages from "@/app/Hooks/useReceiverMessages";
 import useSenderMessages from "@/app/Hooks/useSenderMessages";
 import axios from "axios";
 import Link from "next/link";
+import { MdOutlineInsertPhoto } from "react-icons/md";
 
 /* eslint-disable @next/next/no-img-element */
 type Users = {
@@ -45,7 +46,15 @@ const UserList = ({ users }: { users: Users }) => {
                     <div>
                         <p className="font-semibold">{users.name}</p>
                         <p className={`${!isSender && (lastMessage?.seenIds?.includes(lastMessage?.conversationId) ? "font-thin" : "font-semibold text-gray-700")} text-xs text-gray-500`}>
-                            { lastMessage ? (isSender ? (lastMessage.seenIds.includes(lastMessage.conversationId) ? "Seen message" : "Sent message") : lastMessage.body) : "Message"}
+                            { lastMessage ? 
+                            (isSender ? 
+                            (lastMessage.seenIds.includes(lastMessage.conversationId) 
+                            ? "Seen message" 
+                            : "Sent message") 
+                            : (lastMessage.image 
+                            ? <span className="flex items-center gap-1"><MdOutlineInsertPhoto /> Photo</span> 
+                            : lastMessage.body)) 
+                            : "Message"}
                         </p>
                     </div>
                 </div>

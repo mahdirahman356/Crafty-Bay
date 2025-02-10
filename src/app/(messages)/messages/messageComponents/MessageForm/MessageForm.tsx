@@ -4,6 +4,7 @@ import useConversation from "@/app/Hooks/useConversation";
 import useProfile from "@/app/Hooks/useProfile";
 import useSenderMessages from "@/app/Hooks/useSenderMessages";
 import useUsersList from "@/app/Hooks/useUsersList";
+import { imageUplode } from "@/app/imageAPI";
 import axios from "axios";
 import React, { useRef, useState } from "react";
 import { IoIosSend } from "react-icons/io";
@@ -30,23 +31,50 @@ const MessageForm = ({ params }: { params: Params }) => {
         e.preventDefault()
         setSending(true)
         console.log(message)
-        const messageData = {
-            body: message,
-            createdAt: new Date(),
-            conversationId: params.id,
-            senderId: _id,
-            seenIds: [_id]
+        const form = e.target as HTMLFormElement
+        const img = (form.elements.namedItem("img") as HTMLInputElement)?.files?.[0];
+        let imageUrl;
+        if (img) {
+            const uploadResult = await imageUplode(img);
+            imageUrl = uploadResult;
         }
-        console.log(messageData)
-
+        
         try {
-            const res = await axios.post("http://localhost:3000/messagesApi/api/sendMessage", messageData)
-            console.log(res.data)
-            await refetchConversation()
-            await refetchUserList()
-            await refetchSenderMessages()
-            setMessage("")
-            setSending(false)
+            if (message) {
+                const messageData = {
+                    body: message,
+                    createdAt: new Date(),
+                    conversationId: params.id,
+                    senderId: _id,
+                    seenIds: [_id]
+                };
+                await axios.post("http://localhost:3000/messagesApi/api/sendMessage", messageData);
+                setSending(false)
+                console.log("Message sent:", messageData);
+            }
+    
+            if (imageUrl) {
+                const messageData = {
+                    image: imageUrl,
+                    createdAt: new Date(),
+                    conversationId: params.id,
+                    senderId: _id,
+                    seenIds: [_id]
+                };
+                await axios.post("http://localhost:3000/messagesApi/api/sendMessage", messageData);
+                setSending(false)
+                console.log("Image sent:", messageData);
+            }
+    
+            await refetchConversation();
+            await refetchUserList();
+            await refetchSenderMessages();
+    
+            setMessage("");
+            setSelectedImg(null);
+            if (imageRef.current) {
+                imageRef.current.value = "";
+            }
         } catch (error) {
             console.log("message sending error", error)
         }
@@ -65,17 +93,29 @@ const MessageForm = ({ params }: { params: Params }) => {
 
     const handleCancelSelectedImg = () => {
         setSelectedImg(null)
-    }
-
-    const handleSentImage = () => {
-
+        if (imageRef.current) {
+            imageRef.current.value = "";
+        }
     }
 
     return (
         <div className="">
             <div className="fixed bottom-0 right-0 left-0 lg:left-60 bg-white p-4 lg:pl-16">
+                {selectedImg &&
+                    <div className="relative mb-3 ml-2">
+                        <button onClick={handleCancelSelectedImg} className="btn btn-xs btn-circle absolute left-[85px] bottom-[85px]">
+                            <RxCross2 />
+                        </button>
+                        <img
+                            src={selectedImg && selectedImg} alt="profile"
+                            width={400}
+                            height={300}
+                            className='object-cover rounded-lg w-24 h-24'
+                        />
+                    </div>
+                }
                 <form
-                    className={`w-full input input-sm md:input-md input-bordered bg-gray-200 border-none flex justify-between items-center gap-2 rounded-3xl ${selectedImg ? "min-h-28" : ""}`}
+                    className={`w-full input input-sm md:input-md input-bordered bg-gray-200 border-none flex justify-between items-center gap-2 rounded-3xl`}
                     onSubmit={handleMessageForm}>
                     <label>
                         <input
@@ -83,23 +123,10 @@ const MessageForm = ({ params }: { params: Params }) => {
                             value={message}
                             type="text"
                             name="message"
-                            className={`${selectedImg && "hidden"} grow text-sm md:text-base`}
+                            className={`grow text-sm md:text-base`}
                             placeholder="Message..."
-                            required
+                            required={!selectedImg}
                         />
-                        {selectedImg &&
-                        <div className="relative">
-                            <button onClick={handleCancelSelectedImg} className="btn btn-xs btn-circle absolute left-[68px] bottom-[68px]">
-                                <RxCross2 />
-                            </button>
-                            <img
-                                src={selectedImg && selectedImg} alt="profile"
-                                width={400}
-                                height={300}
-                                className='object-cover rounded-lg w-20 h-20'
-                            />
-                        </div>
-                    }
                     </label>
                     <div className="flex justify-center items-center gap-2 md:gap-4">
                         <label>

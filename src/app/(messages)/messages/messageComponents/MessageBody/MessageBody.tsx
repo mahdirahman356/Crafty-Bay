@@ -1,13 +1,17 @@
+"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import useFormatDate from "@/app/Hooks/useFormatDate";
 import useProfile from "@/app/Hooks/useProfile";
 import useReceiverMessages from "@/app/Hooks/useReceiverMessages";
 import useSenderMessages from "@/app/Hooks/useSenderMessages";
 import { Key, useEffect, useRef } from "react";
+import ImageModal from "../ImageModal/ImageModal";
 
 interface Message {
     _id: string,
     body: string,
+    image: string,
     createdAt: string
     conversationId: string
 }
@@ -52,9 +56,9 @@ const MessageBody = ({ params, user }: { params: Params; user: User }) => {
         <div className="w-[95%] mx-auto">
             {isLoadingReceiverMessages && isLoadingSenderMessages
                 ? <>
-                  <div className="mt-7 flex justify-center items-center">
-                  <span className="loading loading-spinner loading-md md:loading-lg"></span>
-                  </div>
+                    <div className="mt-7 flex justify-center items-center">
+                        <span className="loading loading-spinner loading-md md:loading-lg"></span>
+                    </div>
                 </>
                 : <>
                     {allMessages.map((msg: Message, index: Key | null | undefined) => (
@@ -70,9 +74,13 @@ const MessageBody = ({ params, user }: { params: Params; user: User }) => {
                             <div className="chat-header">
                                 <time className="text-xs opacity-50">{formatDateTime(msg.createdAt)}</time>
                             </div>
-                            <div className={`chat-bubble text-sm md:text-base ${senderMessages.includes(msg) ? "bg-primary text-white" : ""}`}>
-                                {msg.body}
-                            </div>
+                            {msg?.image && <>
+                                <ImageModal msgId={msg._id} msgImage={msg.image}/>
+                            </>}
+                            {msg?.body &&
+                                <div className={`chat-bubble text-sm md:text-base text-nowrap ${senderMessages.includes(msg) ? "bg-primary text-white" : ""}`}>
+                                    {msg.body}
+                                </div>}
                             <div className="text-xs chat-footer opacity-50">
                                 {lastMessage._id === msg._id && (isSender && (lastMessage.seenIds.includes(msg.conversationId) ? "Seen" : "Sent"))}
                             </div>
