@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
 /* eslint-disable @next/next/no-img-element */
@@ -6,6 +7,8 @@ import { RiMenu2Fill, RiMessengerLine } from 'react-icons/ri';
 import UserList from './messageComponents/UserList/UserList';
 import useUsersList from '@/app/Hooks/useUsersList';
 import { useParams } from 'next/navigation';
+import { IoIosSearch } from 'react-icons/io';
+import SearchAccounts from '@/app/components/SearchAccounts/SearchAccounts';
 interface LayoutProps {
     children: React.ReactNode;
 }
@@ -21,7 +24,7 @@ const layout = ({ children }: LayoutProps) => {
 
     const [userList, , isLoadingUserList] = useUsersList()
     const params = useParams()
-    const {id} = params
+    const { id } = params
     console.log(userList)
 
     return (
@@ -36,10 +39,30 @@ const layout = ({ children }: LayoutProps) => {
                 <div className="drawer-side">
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul className="menu min-h-full w-72 p-7 fixed bg-gray-200">
-                        <p className='flex items-center gap-1 px-4 font-semibold text-center text-xl mb-4'>
-                            <RiMessengerLine className="text-2xl" />
-                            Messages
-                        </p>
+                        <div className='flex justify-between items-center mb-4 px-4'>
+                            <p className='flex items-center gap-1 font-semibold text-center text-xl'>
+                                <RiMessengerLine className="text-2xl" />
+                                Messages
+                            </p>
+                            <div>
+                                <button className="" onClick={() => {
+                                    const modal = document.getElementById(`account_search_modal`) as HTMLDialogElement;
+                                    modal?.showModal();
+                                }}>
+                                    <span>
+                                        <IoIosSearch className='text-xl' />
+                                    </span>
+                                </button>
+                                <dialog id="account_search_modal" className="modal modal-top mt-20 w-[98%] md:w-[70%] lg:w-[40%] mx-auto rounded-xl">
+                                    <div className="modal-box">
+                                        <form method="dialog">
+                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                        </form>
+                                        <SearchAccounts />
+                                    </div>
+                                </dialog>
+                            </div>
+                        </div>
 
                         {isLoadingUserList
                             ? <>

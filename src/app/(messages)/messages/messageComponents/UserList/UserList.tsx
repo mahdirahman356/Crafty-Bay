@@ -53,7 +53,7 @@ const UserList = ({ users }: { users: Users }) => {
                             : "Sent message") 
                             : (lastMessage.image 
                             ? <span className="flex items-center gap-1"><MdOutlineInsertPhoto /> Photo</span> 
-                            : lastMessage.body)) 
+                            : <>{lastMessage.body.slice(0,20)}...</>)) 
                             : "Message"}
                         </p>
                     </div>

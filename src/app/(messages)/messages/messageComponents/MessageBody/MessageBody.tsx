@@ -7,6 +7,7 @@ import useReceiverMessages from "@/app/Hooks/useReceiverMessages";
 import useSenderMessages from "@/app/Hooks/useSenderMessages";
 import { Key, useEffect, useRef } from "react";
 import ImageModal from "../ImageModal/ImageModal";
+import Messages from "../Messages/Messages";
 
 interface Message {
     _id: string,
@@ -26,7 +27,6 @@ interface User {
 
 const MessageBody = ({ params, user }: { params: Params; user: User }) => {
 
-    console.log(params.id)
 
     const [profile] = useProfile()
     const { image: userImage } = user
@@ -75,12 +75,11 @@ const MessageBody = ({ params, user }: { params: Params; user: User }) => {
                                 <time className="text-xs opacity-50">{formatDateTime(msg.createdAt)}</time>
                             </div>
                             {msg?.image && <>
-                                <ImageModal msgId={msg._id} msgImage={msg.image}/>
+                                <ImageModal  msg={msg} params={params} />
                             </>}
-                            {msg?.body &&
-                                <div className={`chat-bubble text-sm md:text-base text-nowrap ${senderMessages.includes(msg) ? "bg-primary text-white" : ""}`}>
-                                    {msg.body}
-                                </div>}
+                            {msg?.body && <>
+                                <Messages msg={msg} params={params} />
+                            </>}
                             <div className="text-xs chat-footer opacity-50">
                                 {lastMessage._id === msg._id && (isSender && (lastMessage.seenIds.includes(msg.conversationId) ? "Seen" : "Sent"))}
                             </div>
