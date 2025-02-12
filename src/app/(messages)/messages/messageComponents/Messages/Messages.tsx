@@ -27,7 +27,7 @@ const Messages = ({ msg, params }: { msg: Message, params: Params }) => {
     const [copied, setCopied] = useState<boolean>(false)
 
     const [senderMessages, refetchSenderMessages] = useSenderMessages(params.id)
-    const [receiverMessages] = useReceiverMessages(params.id)
+    const [receiverMessages, refetchReceiverMessages] = useReceiverMessages(params.id)
     const { formatDateTime } = useFormatDate()
 
     const handleCopy = async (text: string) => {
@@ -44,7 +44,8 @@ const Messages = ({ msg, params }: { msg: Message, params: Params }) => {
         try {
             const res = await axios.delete(`http://localhost:3000/messagesApi/api/deleteMessage/${_id}`)
             console.log(res.data)
-            refetchSenderMessages()
+                refetchSenderMessages()
+                refetchReceiverMessages()
             Swal.fire({
                 title: "Deleted!",
                 text: `Your message has been deleted.`,

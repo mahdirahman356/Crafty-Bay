@@ -10,7 +10,7 @@ export const GET = async (request: NextRequest) => {
         const receiverId = searchParams.get("receiverId");
 
 
-        if (!senderId && receiverId) {
+        if (!senderId && !receiverId) {
             return NextResponse.json({ message: "id is required" }, { status: 400 })
         }
 
@@ -22,11 +22,7 @@ export const GET = async (request: NextRequest) => {
         const messageCollection = db.collection("message")
         const res = await messageCollection.find({senderId: senderId, conversationId: receiverId}).sort({ createdAt: 1 }).toArray()
 
-        if (!res || res.length === 0) {
-            return NextResponse.json({ message: "No messages found for this conversation" }, { status: 404 });
-          }
-
-        return NextResponse.json(res);
+          return NextResponse.json(res, { status: 200 });
 
     } catch (error) {
         return NextResponse.json({ message: "something is wrong" })

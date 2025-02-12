@@ -44,6 +44,8 @@ const SearchAccounts = () => {
 
   return (
     <div>
+        {pathName.includes("message") 
+        && <h3 className="text-center text-2xl font-semibold text-gray-700 my-2">Search For Chat</h3>} 
       <form onSubmit={handleAccountSearch} className="mt-5">
         <label className="input input-bordered flex items-center gap-2">
           <input
@@ -109,15 +111,14 @@ const SearchAccounts = () => {
                       </div>
                     </div>
                   </Link>
-
-                  {pathName.includes("messages") && (
-                    <button
-                      className="btn btn-sm text-xs text-primary"
-                      onClick={() => handleRedirectMessagePage(user._id)}
-                    >
-                      Message
-                    </button>
-                  )}
+                      {pathName.includes("messages") && (
+                        <button
+                          className="btn btn-sm text-xs text-primary"
+                          onClick={() => handleRedirectMessagePage(user._id)}
+                        >
+                          Message
+                        </button>
+                      )}
                 </div>
               ))}
 

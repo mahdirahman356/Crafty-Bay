@@ -44,7 +44,7 @@ const UserList = ({ users }: { users: Users }) => {
                         alt="user-image"
                         src={users.image ? users.image : "/image/user.avif"} />
                     <div>
-                        <p className="font-semibold">{users.name}</p>
+                        <p className="font-semibold text-nowrap">{users.name}</p>
                         <p className={`${!isSender && (lastMessage?.seenIds?.includes(lastMessage?.conversationId) ? "font-thin" : "font-semibold text-gray-700")} text-xs text-gray-500`}>
                             { lastMessage ? 
                             (isSender ? 

@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-
 import useFormatDate from "@/app/Hooks/useFormatDate";
 import useReceiverMessages from "@/app/Hooks/useReceiverMessages";
 import useSenderMessages from "@/app/Hooks/useSenderMessages";
 import axios from "axios";
 import { useState } from "react";
+import { CgMailForward } from "react-icons/cg";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Swal from "sweetalert2";
+import Forward from "../Forward/Forward";
 
 interface Message {
     _id: string,
@@ -24,14 +25,15 @@ interface Params {
 const ImageModal = ({ msg, params }: { msg: Message, params: Params }) => {
 
     const [hoveredImage, setHoveredImage] = useState<string | null>(null)
-    const [receiverMessages] = useReceiverMessages(params.id)
+    const [receiverMessages, refetchReceiverMessages] = useReceiverMessages(params.id)
     const [senderMessages, refetchSenderMessages] = useSenderMessages(params.id)
 
     const handleDeleteImage = async (_id: string) => {
         try {
             const res = await axios.delete(`http://localhost:3000/messagesApi/api/deleteMessage/${_id}`)
             console.log(res.data)
-            refetchSenderMessages()
+            await refetchSenderMessages();
+            await refetchReceiverMessages()
             Swal.fire({
                 title: "Deleted!",
                 text: `Your message has been deleted.`,
@@ -39,7 +41,7 @@ const ImageModal = ({ msg, params }: { msg: Message, params: Params }) => {
 
             })
         } catch (error) {
-           console.log(error)
+            console.log(error)
         }
     }
 
@@ -62,7 +64,23 @@ const ImageModal = ({ msg, params }: { msg: Message, params: Params }) => {
                                         <p className="m-2 p-2 text-xs border-b-[1px] border-gray-400">{formatDateTime(msg.createdAt)}</p>
                                         <li>
                                             <a>
-                                                item 1
+                                                <button className="" onClick={() => {
+                                                    const modal = document.getElementById(`forward_modal_${msg._id}`) as HTMLDialogElement;
+                                                    modal?.showModal();
+                                                }}>
+                                                    <span className="flex items-center gap-2">
+                                                        <CgMailForward className="text-xl" />
+                                                        Forward
+                                                    </span>
+                                                </button>
+                                                <dialog id={`forward_modal_${msg._id}`} className="modal modal-top mt-20 w-[98%] md:w-[70%] lg:w-[40%] mx-auto rounded-xl">
+                                                    <div className="modal-box">
+                                                        <form method="dialog">
+                                                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                        </form>
+                                                        <Forward msg={msg} modalId={`forward_modal_${msg._id}`} />
+                                                    </div>
+                                                </dialog>
                                             </a>
                                         </li>
                                         {senderMessages.includes(msg)
