@@ -65,7 +65,7 @@ const Messages = ({ msg, params }: { msg: Message, params: Params }) => {
                 <div className='w-5 flex justify-center'>
                     {hoveredMessage === msg._id &&
                         <>
-                            <div className={`dropdown ${receiverMessages.includes(msg) ? "dropdown-right" : "dropdown-left"} dropdown-end`}>
+                            <div className={`dropdown ${receiverMessages.includes(msg) ? "dropdown-left md:dropdown-right" : "dropdown-left"} dropdown-end`}>
                                 <div tabIndex={0} role="button" className="">
                                     <PiDotsThreeOutlineVerticalFill className="text-gray-600" />
                                 </div>
@@ -96,7 +96,7 @@ const Messages = ({ msg, params }: { msg: Message, params: Params }) => {
                         </>
                     }
                 </div>
-                <div className={`chat-bubble text-sm md:text-base text-nowrap ${senderMessages.includes(msg) ? "bg-primary text-white" : ""}`}>
+                <div className={`chat-bubble text-sm md:text-base text-wrap max-w-52 md:max-w-72 break-words ${senderMessages.includes(msg) ? "bg-primary text-white" : ""}`}>
                     {msg.body}
                 </div>
             </div>

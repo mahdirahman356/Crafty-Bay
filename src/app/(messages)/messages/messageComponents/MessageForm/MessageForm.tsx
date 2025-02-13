@@ -114,20 +114,17 @@ const MessageForm = ({ params }: { params: Params }) => {
                         />
                     </div>
                 }
-                <form
-                    className={`w-full input input-sm md:input-md input-bordered bg-gray-200 border-none flex justify-between items-center gap-2 rounded-3xl`}
+                <form 
                     onSubmit={handleMessageForm}>
-                    <label>
-                        <input
+                    <label className="w-full input input-sm md:input-md input-bordered bg-gray-200 border-none flex justify-between items-center gap-2 rounded-3xl">
+                        <textarea
                             onChange={(e) => setMessage(e.target.value)}
                             value={message}
-                            type="text"
                             name="message"
-                            className={`grow text-sm md:text-base`}
+                            className="w-full h-6 md:h-7 text-sm md:text-base bg-transparent outline-none resize-none overflow-x-hidden"
                             placeholder="Message..."
                             required={!selectedImg}
                         />
-                    </label>
                     <div className="flex justify-center items-center gap-2 md:gap-4">
                         <label>
                             <div>
@@ -150,6 +147,7 @@ const MessageForm = ({ params }: { params: Params }) => {
                             }
                         </button>
                     </div>
+                    </label>
                 </form>
             </div>
         </div >
