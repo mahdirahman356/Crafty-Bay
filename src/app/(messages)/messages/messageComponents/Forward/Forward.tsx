@@ -3,6 +3,7 @@
 "use client";
 import useConversation from "@/app/Hooks/useConversation";
 import useProfile from "@/app/Hooks/useProfile";
+import useReceiverMessages from "@/app/Hooks/useReceiverMessages";
 import useSenderMessages from "@/app/Hooks/useSenderMessages";
 import useUsersList from "@/app/Hooks/useUsersList";
 import { useQuery } from "@tanstack/react-query";
@@ -27,6 +28,7 @@ const Forward = ({ msg, modalId }: { msg: Message, modalId: string }) => {
     const [userId, setUserId] = useState()
     const [, refetchSenderMessages] = useSenderMessages(userId)
     const [, refetchConversation] = useConversation()
+    const [, refetchReceiverMessages] = useReceiverMessages()
     const [userList, refetchUserList] = useUsersList()
     const [profile] = useProfile()
     const { _id } = profile || {}
@@ -67,6 +69,7 @@ const Forward = ({ msg, modalId }: { msg: Message, modalId: string }) => {
             await refetchConversation();
             await refetchUserList();
             await refetchSenderMessages();
+            await refetchReceiverMessages()
         } catch (error) {
             console.log(error)
         }finally {

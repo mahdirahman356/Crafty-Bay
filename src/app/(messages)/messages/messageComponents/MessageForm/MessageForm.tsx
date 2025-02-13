@@ -2,6 +2,7 @@
 "use client"
 import useConversation from "@/app/Hooks/useConversation";
 import useProfile from "@/app/Hooks/useProfile";
+import useReceiverMessages from "@/app/Hooks/useReceiverMessages";
 import useSenderMessages from "@/app/Hooks/useSenderMessages";
 import useUsersList from "@/app/Hooks/useUsersList";
 import { imageUplode } from "@/app/imageAPI";
@@ -24,6 +25,7 @@ const MessageForm = ({ params }: { params: Params }) => {
     const [, refetchSenderMessages] = useSenderMessages(params.id)
     const [, refetchUserList] = useUsersList()
     const [, refetchConversation] = useConversation()
+    const [, refetchReceiverMessages] = useReceiverMessages()
     const [profile] = useProfile()
     const { _id } = profile || {}
 
@@ -69,6 +71,7 @@ const MessageForm = ({ params }: { params: Params }) => {
             await refetchConversation();
             await refetchUserList();
             await refetchSenderMessages();
+            await refetchReceiverMessages()
     
             setMessage("");
             setSelectedImg(null);
