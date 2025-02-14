@@ -11,6 +11,7 @@ import axios from "axios";
 import { useState } from "react";
 import AllCrafts from "../components/AllCrafts/AllCrafts";
 import CraftPageNavbar from "../components/CraftPageNavbar/CraftPageNavbar";
+import SmallDeviceCraftNavbar from "../components/SmallDeviceCraftNavbar/SmallDeviceCraftNavbar";
 const header = Arvo({ weight: ["400", "700"], subsets: ["latin"] })
 
 const page = () => {
@@ -47,6 +48,9 @@ const page = () => {
         <div className="text-black">
             <div className="hidden md:block">
                 <CraftPageNavbar handleSearch={handleSearch} handleSortChange={handleSortChange} setSearchTerm={setSearchTerm} cartData={cartData} sortOrder={sortOrder} />
+            </div>
+            <div className="md:hidden">
+                <SmallDeviceCraftNavbar handleSearch={handleSearch} handleSortChange={handleSortChange} setSearchTerm={setSearchTerm} cartData={cartData} sortOrder={sortOrder}/>
             </div>
             {/* banner */}
             {searchTerm === "" && sortOrder === "" && (
