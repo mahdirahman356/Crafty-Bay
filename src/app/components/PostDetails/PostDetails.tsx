@@ -24,7 +24,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ id }) => {
     return (
         <div>
             {isLoading
-                ? <div className=" min-h-screen flex justify-center items-center">
+                ? <div className="my-16 flex justify-center items-center">
                     <progress className="progress w-56"></progress>
                 </div>
                 : <div className="hero">
@@ -57,9 +57,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ id }) => {
                             <img
                                 src={image}
                                 alt="post"
-                                width={400}
-                                height={300}
-                                className="rounded-lg shadow-2xl" />
+                                className="object-cover rounded-lg shadow-2xl" />
                         </div>
                         <div className="md:w-1/2">
                             <p className="uppercase text-secondary mb-2 text-sm">{craftName}</p>
@@ -70,7 +68,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ id }) => {
                                 </p>
                                 <p className="text-gray-700">{location}</p>
                             </p>
-                            <p className="py-6 text-gray-700">
+                            <p className="py-6 text-gray-700 text-sm md:text-base">
                                 {description}
                             </p>
                             <h1 className=" text-end text-4xl font-bold text-primary">{price}TK</h1>

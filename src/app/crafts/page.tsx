@@ -92,7 +92,7 @@ const page = () => {
                     </div>
                 ) : crafts.length === 0 ? (
                     <>
-                        <div className="mt-14 flex flex-col justify-center items-center">
+                        <div className="my-6 md:my-14 flex flex-col justify-center items-center">
                             <img className="w-40" src="https://i.ibb.co/BVBvTvX/no-search-result-illustration-download-in-svg-png-gif-file-formats-results-empty-matches-found-zero.webp" alt="" />
                             <p className="text-center text-gray-500">Not found</p>
                         </div>
