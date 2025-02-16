@@ -9,8 +9,9 @@ import React, { Key, useState } from 'react';
 import { FaRegComments } from 'react-icons/fa';
 import { IoIosSend } from 'react-icons/io';
 import { IoCheckmarkDone } from 'react-icons/io5';
-import { LuCopy } from 'react-icons/lu';
+import { LuCopy, LuPenLine } from 'react-icons/lu';
 import { RiDeleteBin5Line } from 'react-icons/ri';
+import CommentMenuModal from '../CommentMenuModal/CommentMenuModal';
 
 type Crafts = {
     _id: string,
@@ -50,7 +51,6 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
 
     const [comment, setComment] = useState("")
     const [sending, setSending] = useState(false)
-    const [copied, setCopied] = useState(false)
     const { formatDateTime } = useFormatDate()
 
 
@@ -58,16 +58,6 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
     const { _id, image, name, email } = profile || {}
 
     const [comments, commentRefetch] = useComments(crafts._id)
-
-    const handleCopy = async (text: string) => {
-        try {
-            await navigator.clipboard.writeText(text);
-            setCopied(true)
-            setTimeout(() => setCopied(false), 1500);
-        } catch (error) {
-            console.error(error)
-        }
-    }
 
     const handleComment = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -100,18 +90,6 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
             console.error(error)
         }
 
-    }
-
-    const handleDeleteComment = async(commentId: string) => {
-         try {
-
-            const res = await axios.delete(`http://localhost:3000/components/CraftComment/api/deleteComment/${commentId}`)
-            console.log(res)
-            commentRefetch()
-
-         } catch (error) {
-            console.error("error comment delete", error) 
-         }
     }
 
     return (
@@ -158,43 +136,7 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
                                     </Link>
                                     <div>
                                         <p className="text-xs opacity-50">{formatDateTime(comment.commentData.date)}</p>
-                                        <button className=""
-                                            onClick={() => {
-                                                const modal = document.getElementById(`comment_menu_${comment._id}`) as HTMLDialogElement;
-                                                modal?.showModal();
-                                            }}>
-                                            <div className="bg-gray-300 text-sm px-3 py-2  rounded-lg text-start">{comment.commentData.comment}</div>
-                                            <dialog id={`comment_menu_${comment._id}`} className="modal">
-                                                <div className="modal-box w-auto">
-                                                    <ul tabIndex={0} className="dropdown-content menu rounded-box z-[1] w-52 p-2 text-gray-600">
-                                                        <p className="m-2 p-2 text-xs border-b-[1px] border-gray-400">{formatDateTime(comment.commentData.date)}</p>
-                                                        <li>
-                                                            <a onClick={() => handleCopy(comment.commentData.comment)} className="">
-                                                                {copied
-                                                                    ? <>
-                                                                        <IoCheckmarkDone className="text-xl" />
-                                                                        Copied
-                                                                    </>
-                                                                    : <>
-                                                                        <LuCopy className="text-xl" />
-                                                                        Copy
-                                                                    </>}
-                                                            </a>
-                                                        </li>
-                                                        {comment.commentData.userData.userId === _id
-                                                            && <li>
-                                                                <a onClick={() => handleDeleteComment(comment._id)} className="text-red-500">
-                                                                    <RiDeleteBin5Line className="text-xl" />
-                                                                    Delete Comment
-                                                                </a>
-                                                            </li>}
-                                                    </ul>
-                                                </div>
-                                                <form method="dialog" className="modal-backdrop">
-                                                    <button>close</button>
-                                                </form>
-                                            </dialog>
-                                        </button>
+                                        <CommentMenuModal comment={comment} commentRefetch={commentRefetch}/>
                                     </div>
                                 </div>)}
                             </>
