@@ -1,9 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+import useComments from '@/app/Hooks/useComments';
+import useFormatDate from '@/app/Hooks/useFormatDate';
 import useProfile from '@/app/Hooks/useProfile';
 import axios from 'axios';
-import React, { useState } from 'react';
-import { FaRegComments } from "react-icons/fa6";
+import Link from 'next/link';
+import React, { Key, useState } from 'react';
+import { FaRegComments } from 'react-icons/fa';
 import { IoIosSend } from 'react-icons/io';
 
 type Crafts = {
@@ -24,19 +27,40 @@ type Crafts = {
     };
 };
 
+type Comment = {
+    commentData: {
+        userData: {
+            email: string,
+            name: string,
+            image: string
+        },
+        comment: string,
+        date: string
+
+    }
+}
+
+
 const CraftComment = ({ crafts }: { crafts: Crafts }) => {
 
     const [comment, setComment] = useState("")
+    const [sending, setSending] = useState(false)
+    const { formatDateTime } = useFormatDate()
+
 
     const [profile] = useProfile()
-    const {image, name, email} = profile || {}
+    const { image, name, email } = profile || {}
+
+    const [comments, commentRefetch] = useComments(crafts._id)
 
 
-    const handleComment = async(e: React.FormEvent<HTMLFormElement>) => {
+    const handleComment = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setSending(true)
+
         const commentData = {
             postId: crafts._id,
-            commentData: [{
+            commentData: {
                 userData: {
                     email: email,
                     name: name,
@@ -44,15 +68,18 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
                 },
                 comment: comment,
                 date: new Date()
-            }],
+            },
         }
 
         try {
 
-            const res = await axios.put('http://localhost:3000/components/CraftComment/api/addComment', commentData)
+            const res = await axios.post('http://localhost:3000/components/CraftComment/api/addComment', commentData)
             console.log(res.data)
             setComment("")
-            
+            commentRefetch()
+            setSending(false)
+
+
         } catch (error) {
             console.error(error)
         }
@@ -67,8 +94,6 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
                         <div className="flex items-center gap-4 mt-2 mb-6">
                             <img className="w-10 h-10 rounded-full"
                                 alt="user-img"
-                                width={400}
-                                height={300}
                                 src={crafts.userData.userImage ? crafts.userData.userImage : "/image/user.avif"} />
                             <div>
                                 <p className="font-semibold text-start">{crafts.userData.name}</p>
@@ -91,14 +116,31 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
                         className="object-cover rounded-lg shadow-2xl" />
                 </div>
                 <div className="md:w-1/2">
-                    <div className="">
-                        <p className='text-sm flex flex-col items-center text-gray-500 mb-12 md:mb-16'>
-                            <FaRegComments className='text-4xl' />
-                            No Comments
-                        </p>
+                    <div className="overflow-y-auto max-h-60">
+                        {comments && comments.length > 0
+                            ? <>
+                                {comments.map((comment: Comment, index: Key | null | undefined) => <div key={index} className="chat chat-start mb-4 mx-2">
+                                    <Link href={`/usersProfile/${comment.commentData.userData.email}`}>
+                                            <div className="w-10 rounded-full">
+                                                <img
+                                                    className='w-10 h-10 object-cover rounded-full' 
+                                                    alt="user"
+                                                    src={comment.commentData.userData.image} />
+                                            </div>
+                                    </Link>
+                                   <div>
+                                   <p className="text-xs opacity-50">{formatDateTime(comment.commentData.date)}</p>
+                                   <div className="bg-gray-300 text-sm px-3 py-2  rounded-lg">{comment.commentData.comment}</div>
+                                   </div>
+                                </div>)}
+                            </>
+                            : <p className='text-sm flex flex-col items-center text-gray-500 mb-12 md:mb-16'>
+                                <FaRegComments className='text-4xl' />
+                                No Comments
+                            </p>}
                     </div>
                     <form onSubmit={handleComment} className='w-full'>
-                        <label className="w-full input input-sm bg-gray-200 rounded-3xl flex items-center gap-2">
+                        <label className="w-full input input-sm md:input-md bg-gray-200 rounded-3xl flex items-center gap-2">
                             <input
                                 onChange={(e) => setComment(e.target.value)}
                                 value={comment}
@@ -106,8 +148,11 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
                                 className="grow w-full"
                                 placeholder="Comment"
                                 required />
-                            <button type="submit" className="">
-                                <IoIosSend className="text-xl text-primary" />
+                            <button type="submit" className="md:btn md:btn-sm md:btn-circle btn-primary">
+                                {sending
+                                    ? <span className="loading loading-dots loading-sm text-white"></span>
+                                    : <IoIosSend className="text-xl text-primary md:text-white" />
+                                }
                             </button>
                         </label>
                     </form>

@@ -33,6 +33,7 @@ type AllCraftsProps = {
     crafts: Crafts[];
 };
 
+
 const AllCrafts = ({ crafts }: AllCraftsProps) => {
 
     console.log(crafts)
@@ -147,7 +148,7 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
                     <div className="flex justify-center">
                         <div className="w-56 -mt-10 overflow-hidden bg-white rounded-lg shadow-lg md:w-64">
                             <h3 className="py-2 font-bold tracking-wide text-center text-gray-800 uppercase">{crafts.postData.craftName}</h3>
-                            <PostActions crafts={crafts} />
+                            <PostActions crafts={crafts}/>
                             <div className="flex items-center justify-between px-3 py-2 bg-gray-200">
                                 <span className="font-bold text-gray-800">{crafts.postData.price} TK</span>
                                 <button onClick={() => handleAddToCart(crafts._id, crafts.postData.craftName, crafts.postData.image, crafts.postData.price, crafts.postData.location, crafts.email, crafts.userData.name, crafts.userData.userImage)}

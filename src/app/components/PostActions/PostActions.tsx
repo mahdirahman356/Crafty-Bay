@@ -21,7 +21,8 @@ type Crafts = {
     };
 };
 
-const PostActions = ({ crafts }: { crafts: Crafts }) => {
+
+const PostActions = ({ crafts }: {crafts: Crafts}) => {
 
     return (
         <div className="flex justify-between text-gray-600 items-center px-4 py-2 border-t-[1px] border-gray-300">
