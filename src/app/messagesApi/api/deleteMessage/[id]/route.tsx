@@ -25,6 +25,6 @@ export const DELETE = async (request: NextRequest, { params }: { params: Params 
         return NextResponse.json({message: "Message Deleted"}, {status: 200})
 
     } catch (error) {
-        return NextResponse.json({ message: "Error Delete Items" }, { status: 500 })
+        return NextResponse.json({ message: "Error Delete message" }, { status: 500 })
     }
 }

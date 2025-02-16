@@ -69,7 +69,6 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
         }
     }
 
-
     const handleComment = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setSending(true)
@@ -101,6 +100,18 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
             console.error(error)
         }
 
+    }
+
+    const handleDeleteComment = async(commentId: string) => {
+         try {
+
+            const res = await axios.delete(`http://localhost:3000/components/CraftComment/api/deleteComment/${commentId}`)
+            console.log(res)
+            commentRefetch()
+
+         } catch (error) {
+            console.error("error comment delete", error) 
+         }
     }
 
     return (
@@ -172,7 +183,7 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
                                                         </li>
                                                         {comment.commentData.userData.userId === _id
                                                             && <li>
-                                                                <a className="text-red-500">
+                                                                <a onClick={() => handleDeleteComment(comment._id)} className="text-red-500">
                                                                     <RiDeleteBin5Line className="text-xl" />
                                                                     Delete Comment
                                                                 </a>
