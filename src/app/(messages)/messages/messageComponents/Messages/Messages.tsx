@@ -25,7 +25,7 @@ const Messages = ({ msg, params }: { msg: Message, params: Params }) => {
     const [copied, setCopied] = useState<boolean>(false)
 
     const [senderMessages, refetchSenderMessages] = useSenderMessages(params.id)
-    const [receiverMessages, refetchReceiverMessages] = useReceiverMessages(params.id)
+    const [, refetchReceiverMessages] = useReceiverMessages(params.id)
     const { formatDateTime } = useFormatDate()
 
     const handleCopy = async (text: string) => {
@@ -65,12 +65,12 @@ const Messages = ({ msg, params }: { msg: Message, params: Params }) => {
 
     return (
         <div>
-            <button className={`flex ${receiverMessages.includes(msg) && "flex-row-reverse"} items-center gap-2`}
+            <button className=""
                 onClick={() => {
                     const modal = document.getElementById(`message_menu_${msg._id}`) as HTMLDialogElement;
                     modal?.showModal();
                 }}>
-                <div className={`chat-bubble text-sm md:text-base text-wrap max-w-52 md:max-w-72 break-words ${senderMessages.includes(msg) ? "bg-primary text-white" : ""}`}>
+                <div className={`chat-bubble text-start text-sm md:text-base max-w-52 md:max-w-72 ${senderMessages.includes(msg) ? "bg-primary text-white" : ""}`}>
                     {msg.body}
                 </div>
                 <dialog id={`message_menu_${msg._id}`} className="modal">

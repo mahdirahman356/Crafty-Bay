@@ -8,6 +8,9 @@ import Link from 'next/link';
 import React, { Key, useState } from 'react';
 import { FaRegComments } from 'react-icons/fa';
 import { IoIosSend } from 'react-icons/io';
+import { IoCheckmarkDone } from 'react-icons/io5';
+import { LuCopy } from 'react-icons/lu';
+import { RiDeleteBin5Line } from 'react-icons/ri';
 
 type Crafts = {
     _id: string,
@@ -28,8 +31,10 @@ type Crafts = {
 };
 
 type Comment = {
+    _id: string,
     commentData: {
         userData: {
+            userId: string,
             email: string,
             name: string,
             image: string
@@ -45,13 +50,24 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
 
     const [comment, setComment] = useState("")
     const [sending, setSending] = useState(false)
+    const [copied, setCopied] = useState(false)
     const { formatDateTime } = useFormatDate()
 
 
     const [profile] = useProfile()
-    const { image, name, email } = profile || {}
+    const { _id, image, name, email } = profile || {}
 
     const [comments, commentRefetch] = useComments(crafts._id)
+
+    const handleCopy = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            setCopied(true)
+            setTimeout(() => setCopied(false), 1500);
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
 
     const handleComment = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -62,6 +78,7 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
             postId: crafts._id,
             commentData: {
                 userData: {
+                    userId: _id,
                     email: email,
                     name: name,
                     image: image
@@ -121,17 +138,53 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
                             ? <>
                                 {comments.map((comment: Comment, index: Key | null | undefined) => <div key={index} className="chat chat-start mb-4 mx-2">
                                     <Link href={`/usersProfile/${comment.commentData.userData.email}`}>
-                                            <div className="w-10 rounded-full">
-                                                <img
-                                                    className='w-10 h-10 object-cover rounded-full' 
-                                                    alt="user"
-                                                    src={comment.commentData.userData.image} />
-                                            </div>
+                                        <div className="w-10 rounded-full">
+                                            <img
+                                                className='w-10 h-10 object-cover rounded-full'
+                                                alt="user"
+                                                src={comment.commentData.userData.image} />
+                                        </div>
                                     </Link>
-                                   <div>
-                                   <p className="text-xs opacity-50">{formatDateTime(comment.commentData.date)}</p>
-                                   <div className="bg-gray-300 text-sm px-3 py-2  rounded-lg">{comment.commentData.comment}</div>
-                                   </div>
+                                    <div>
+                                        <p className="text-xs opacity-50">{formatDateTime(comment.commentData.date)}</p>
+                                        <button className=""
+                                            onClick={() => {
+                                                const modal = document.getElementById(`comment_menu_${comment._id}`) as HTMLDialogElement;
+                                                modal?.showModal();
+                                            }}>
+                                            <div className="bg-gray-300 text-sm px-3 py-2  rounded-lg text-start">{comment.commentData.comment}</div>
+                                            <dialog id={`comment_menu_${comment._id}`} className="modal">
+                                                <div className="modal-box w-auto">
+                                                    <ul tabIndex={0} className="dropdown-content menu rounded-box z-[1] w-52 p-2 text-gray-600">
+                                                        <p className="m-2 p-2 text-xs border-b-[1px] border-gray-400">{formatDateTime(comment.commentData.date)}</p>
+                                                        <li>
+                                                            <a onClick={() => handleCopy(comment.commentData.comment)} className="">
+                                                                {copied
+                                                                    ? <>
+                                                                        <IoCheckmarkDone className="text-xl" />
+                                                                        Copied
+                                                                    </>
+                                                                    : <>
+                                                                        <LuCopy className="text-xl" />
+                                                                        Copy
+                                                                    </>}
+                                                            </a>
+                                                        </li>
+                                                        {comment.commentData.userData.userId === _id
+                                                            && <li>
+                                                                <a className="text-red-500">
+                                                                    <RiDeleteBin5Line className="text-xl" />
+                                                                    Delete Comment
+                                                                </a>
+                                                            </li>}
+                                                    </ul>
+                                                </div>
+                                                <form method="dialog" className="modal-backdrop">
+                                                    <button>close</button>
+                                                </form>
+                                            </dialog>
+                                        </button>
+                                    </div>
                                 </div>)}
                             </>
                             : <p className='text-sm flex flex-col items-center text-gray-500 mb-12 md:mb-16'>

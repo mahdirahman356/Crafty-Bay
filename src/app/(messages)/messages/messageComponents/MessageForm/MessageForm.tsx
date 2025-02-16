@@ -120,11 +120,12 @@ const MessageForm = ({ params }: { params: Params }) => {
                 <form 
                     onSubmit={handleMessageForm}>
                     <label className="w-full input input-sm md:input-md input-bordered bg-gray-200 border-none flex justify-between items-center gap-2 rounded-3xl">
-                        <textarea
+                        <input
                             onChange={(e) => setMessage(e.target.value)}
                             value={message}
+                            type="text"
                             name="message"
-                            className="w-full h-6 md:h-7 text-sm md:text-base bg-transparent outline-none resize-none overflow-x-hidden"
+                            className="w-full text-sm md:text-base"
                             placeholder="Message..."
                             required={!selectedImg}
                         />

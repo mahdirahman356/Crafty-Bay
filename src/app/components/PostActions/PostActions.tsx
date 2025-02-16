@@ -2,6 +2,7 @@ import { HiOutlineChatBubbleOvalLeftEllipsis } from "react-icons/hi2";
 import { IoHeartOutline } from "react-icons/io5";
 import { PiShareFat } from "react-icons/pi";
 import CraftComment from "../CraftComment/CraftComment";
+import useComments from "@/app/Hooks/useComments";
 
 type Crafts = {
     _id: string,
@@ -24,6 +25,8 @@ type Crafts = {
 
 const PostActions = ({ crafts }: {crafts: Crafts}) => {
 
+    const [comments] = useComments(crafts._id)
+
     return (
         <div className="flex justify-between text-gray-600 items-center px-4 py-2 border-t-[1px] border-gray-300">
             {/* like */}
@@ -38,7 +41,7 @@ const PostActions = ({ crafts }: {crafts: Crafts}) => {
                     modal?.showModal();
                 }}>
                 <HiOutlineChatBubbleOvalLeftEllipsis className="text-2xl" />
-                <p className="text-sm">20</p>
+                <p className="text-sm">{comments.length}</p>
             </button>
             <dialog id={`craft_comment_modal_${crafts._id}`} className="modal">
                 <div className="modal-box w-full max-w-3xl">
