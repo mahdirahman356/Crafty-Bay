@@ -26,11 +26,10 @@ type Crafts = {
     };
 };
 
-
 const PostActions = ({ crafts }: { crafts: Crafts }) => {
 
     const [comments] = useComments(crafts._id)
-    const [likes] = useCraftLikes(crafts._id)
+    const [likes, likesRefetch] = useCraftLikes(crafts._id)
     const [profile] = useProfile()
     const { _id, name, email, image } = profile || {}
 
@@ -52,17 +51,23 @@ const PostActions = ({ crafts }: { crafts: Crafts }) => {
         try {
             const res = await axios.post('http://localhost:3000/components/CraftLikes/api/likeInCrafts', likesData)
             console.log(res.data)
+            likesRefetch()
         } catch (error) {
 
         }
     }
 
+    console.log(likes)
+
+    const isLiked = likes.find((likes: { userData: { userId: string; }; }) => likes.userData.userId === _id)
+    console.log("is liked", isLiked)
+
     return (
         <div className="flex justify-between text-gray-600 items-center px-4 py-2 bg-gray-100">
             {/* like */}
             <div className="flex items-center gap-1">
-                {likes?.userData?.userId === _id
-                    ? <button>
+                {isLiked?.userData?.userId === _id
+                    ? <button> 
                         <IoHeartSharp className="text-2xl text-red-500" />
                     </button>
                     : <button onClick={handleCraftLikes}>
