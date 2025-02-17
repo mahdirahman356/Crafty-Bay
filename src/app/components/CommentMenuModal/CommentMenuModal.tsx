@@ -1,4 +1,3 @@
-import useComments from "@/app/Hooks/useComments";
 import useFormatDate from "@/app/Hooks/useFormatDate";
 import useProfile from "@/app/Hooks/useProfile";
 import { QueryObserverResult } from "@tanstack/react-query";
@@ -30,6 +29,9 @@ const CommentMenuModal = ({ comment, commentRefetch }: { comment: Comment, comme
 
     const [copied, setCopied] = useState(false)
     const [editMode, setEditMode] = useState(false)
+    const [editComment, setEditComment] = useState("")
+    const [sending, setSending] = useState(false)
+
     const { formatDateTime } = useFormatDate()
     const [profile] = useProfile()
     const { _id } = profile || {}
@@ -58,6 +60,26 @@ const CommentMenuModal = ({ comment, commentRefetch }: { comment: Comment, comme
         }
     }
 
+    const handleEditComment = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        setSending(true)
+        const edit = {
+            commentId: comment._id,
+            comment: editComment
+        }
+        try {
+
+            const res = await axios.patch(`http://localhost:3000/components/CraftComment/api/editComment`, edit)
+            console.log(res.data)
+            commentRefetch()
+            setSending(false)
+            setEditMode(false)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     return (
         <div>
@@ -69,14 +91,20 @@ const CommentMenuModal = ({ comment, commentRefetch }: { comment: Comment, comme
                 <div className="bg-gray-300 text-sm px-3 py-2  rounded-lg text-start">
                     {editMode
                         ? <>
-                            <form>
+                            <form onSubmit={handleEditComment}>
                                 <label className="input input-xs flex items-center rounded-sm gap-2">
                                     <input
+                                        onChange={(e) => setEditComment(e.target.value)}
                                         defaultValue={comment.commentData.comment}
                                         type="text"
                                         className="grow focus:outline-none focus:ring-0 bg-transparent"
                                         placeholder="Search" />
-                                    <IoIosSend className="text-xl" />
+                                    <button type="submit">
+                                        {sending
+                                            ? <span className="loading loading-dots loading-sm"></span>
+                                            : <IoIosSend className="text-xl" />
+                                        }
+                                    </button>
                                 </label>
                             </form>
                             <button onClick={() => setEditMode(false)} className="mt-1 text-sm text-blue-500 text-start">

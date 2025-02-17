@@ -28,7 +28,13 @@ export const PATCH = async (request: NextRequest) => {
             }
         )
 
-    } catch (error) {
+        if (result.matchedCount === 0) {
+            return NextResponse.json({ message: 'comment not found' }, { status: 404 });
+        }
 
+        return NextResponse.json({message: "comment updated successfully"})
+
+    } catch (error) {
+        return NextResponse.json({ message: 'Error updating comment', error }, { status: 500 });
     }
 }
