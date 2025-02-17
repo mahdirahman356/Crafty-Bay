@@ -3,7 +3,7 @@ import axios from "axios";
 
 const useComments = (postId: string) => {
 
-    const { data: comments = [], refetch: commentRefetch } = useQuery({
+    const { data: comments = [], refetch: commentRefetch, isLoading: isLoadingComments } = useQuery({
         queryKey: ["comments", postId],
         queryFn: async () => {
             const { data } = await axios.get(`http://localhost:3000/components/CraftComment/api/getComment?postId=${postId}`)
@@ -11,7 +11,7 @@ const useComments = (postId: string) => {
             return data
         }
     })
-    return [comments, commentRefetch]
+    return [comments, commentRefetch, isLoadingComments]
 };
 
 export default useComments;

@@ -8,9 +8,6 @@ import Link from 'next/link';
 import React, { Key, useState } from 'react';
 import { FaRegComments } from 'react-icons/fa';
 import { IoIosSend } from 'react-icons/io';
-import { IoCheckmarkDone } from 'react-icons/io5';
-import { LuCopy, LuPenLine } from 'react-icons/lu';
-import { RiDeleteBin5Line } from 'react-icons/ri';
 import CommentMenuModal from '../CommentMenuModal/CommentMenuModal';
 
 type Crafts = {
@@ -57,7 +54,7 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
     const [profile] = useProfile()
     const { _id, image, name, email } = profile || {}
 
-    const [comments, commentRefetch] = useComments(crafts._id)
+    const [comments, commentRefetch, isLoadingComments] = useComments(crafts._id)
 
     const handleComment = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -123,27 +120,34 @@ const CraftComment = ({ crafts }: { crafts: Crafts }) => {
                 </div>
                 <div className="md:w-1/2">
                     <div className="overflow-y-auto max-h-60">
-                        {comments && comments.length > 0
-                            ? <>
-                                {comments.map((comment: Comment, index: Key | null | undefined) => <div key={index} className="chat chat-start mb-4 mx-2">
-                                    <Link href={`/usersProfile/${comment.commentData.userData.email}`}>
-                                        <div className="w-10 rounded-full">
-                                            <img
-                                                className='w-10 h-10 object-cover rounded-full'
-                                                alt="user"
-                                                src={comment.commentData.userData.image} />
-                                        </div>
-                                    </Link>
-                                    <div>
-                                        <p className="text-xs opacity-50">{formatDateTime(comment.commentData.date)}</p>
-                                        <CommentMenuModal comment={comment} commentRefetch={commentRefetch}/>
-                                    </div>
-                                </div>)}
-                            </>
-                            : <p className='text-sm flex flex-col items-center text-gray-500 mb-12 md:mb-16'>
-                                <FaRegComments className='text-4xl' />
-                                No Comments
-                            </p>}
+                        {isLoadingComments
+                            ? <div className="h-60 flex justify-center items-center">
+                                <progress className="progress w-56"></progress>
+                            </div>
+                            : <>
+                                {comments && comments.length > 0
+                                    ? <>
+                                        {comments.map((comment: Comment, index: Key | null | undefined) => <div key={index} className="chat chat-start mb-4 mx-2">
+                                            <Link href={`/usersProfile/${comment.commentData.userData.email}`}>
+                                                <div className="w-10 rounded-full">
+                                                    <img
+                                                        className='w-10 h-10 object-cover rounded-full'
+                                                        alt="user"
+                                                        src={comment.commentData.userData.image} />
+                                                </div>
+                                            </Link>
+                                            <div>
+                                                <p className="text-xs opacity-50">{formatDateTime(comment.commentData.date)}</p>
+                                                <CommentMenuModal comment={comment} commentRefetch={commentRefetch} />
+                                            </div>
+                                        </div>)}
+                                    </>
+                                    : <p className='text-sm flex flex-col items-center text-gray-500 mb-12 md:mb-16'>
+                                        <FaRegComments className='text-4xl' />
+                                        No Comments
+                                    </p>}
+
+                            </>}
                     </div>
                     <form onSubmit={handleComment} className='w-full'>
                         <label className="w-full input input-sm md:input-md bg-gray-200 rounded-3xl flex items-center gap-2">

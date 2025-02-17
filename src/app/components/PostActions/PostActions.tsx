@@ -3,6 +3,7 @@ import { IoHeartOutline } from "react-icons/io5";
 import { PiShareFat } from "react-icons/pi";
 import CraftComment from "../CraftComment/CraftComment";
 import useComments from "@/app/Hooks/useComments";
+import CraftLikes from "../CraftLikes/CraftLikes";
 
 type Crafts = {
     _id: string,
@@ -23,16 +24,29 @@ type Crafts = {
 };
 
 
-const PostActions = ({ crafts }: {crafts: Crafts}) => {
+const PostActions = ({ crafts }: { crafts: Crafts }) => {
 
     const [comments] = useComments(crafts._id)
 
     return (
-        <div className="flex justify-between text-gray-600 items-center px-4 py-2 border-t-[1px] border-gray-300">
+        <div className="flex justify-between text-gray-600 items-center px-4 py-2 bg-gray-100">
             {/* like */}
             <button className="flex items-center gap-1">
                 <IoHeartOutline className="text-2xl" />
-                <p className="text-sm">100</p>
+                <button className="text-sm hover:underline"
+                    onClick={() => {
+                        const modal = document.getElementById(`craft_likes_modal_${crafts._id}`) as HTMLDialogElement;
+                        modal?.showModal();
+                    }}>100
+                </button>
+                <dialog id={`craft_likes_modal_${crafts._id}`} className="modal">
+                    <div className="modal-box w-full max-w-3xl">
+                        <form method="dialog">
+                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                        </form>
+                        <CraftLikes/>
+                    </div>
+                </dialog>
             </button>
             {/* comment */}
             <button className="flex items-center gap-1"
