@@ -1,8 +1,5 @@
 import { FaHandHoldingHeart } from "react-icons/fa";
 
-
-
-
 const CraftLikes = () => {
     return (
         <div>
