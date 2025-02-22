@@ -17,7 +17,7 @@ export const GET = async(request: NextRequest) => {
         throw new Error("Database connection failed");
       }
     const usersCollection = db.collection("users")  
-    const user = await usersCollection.findOne({email})
+    const user = await usersCollection.findOne({email}) 
 
     if(!user){
       return  NextResponse.json({message: "User not found"}, { status: 404 })

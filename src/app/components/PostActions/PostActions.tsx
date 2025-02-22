@@ -49,12 +49,23 @@ const PostActions = ({ crafts }: { crafts: Crafts }) => {
         console.log(likesData)
 
         try {
-            const res = await axios.post('http://localhost:3000/components/CraftLikes/api/likeInCrafts', likesData)
+            const res = await axios.post('http://localhost:3000/components/CraftLikes/api/likeCrafts', likesData)
             console.log(res.data)
             likesRefetch()
         } catch (error) {
-
+          console.log("like error", error)
         }
+    }
+
+    const handleCraftUnlike = async(_id: string) =>{
+          console.log(_id)
+          try {
+            const res = await axios.delete(`http://localhost:3000/components/CraftLikes/api/unLikeCrafts/${_id}`)
+            console.log(res.data)
+            likesRefetch()
+          } catch (error) {
+              console.log("unlike error" ,error)
+          }
     }
 
     console.log(likes)
@@ -67,7 +78,7 @@ const PostActions = ({ crafts }: { crafts: Crafts }) => {
             {/* like */}
             <div className="flex items-center gap-1">
                 {isLiked?.userData?.userId === _id
-                    ? <button> 
+                    ? <button onClick={() => handleCraftUnlike(isLiked._id)}> 
                         <IoHeartSharp className="text-2xl text-red-500" />
                     </button>
                     : <button onClick={handleCraftLikes}>
