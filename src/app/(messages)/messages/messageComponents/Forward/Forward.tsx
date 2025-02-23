@@ -9,6 +9,7 @@ import useUsersList from "@/app/Hooks/useUsersList";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { LuChevronDown } from "react-icons/lu";
 
@@ -20,7 +21,25 @@ interface Message {
     conversationId: string
 }
 
-const Forward = ({ msg, modalId }: { msg: Message, modalId: string }) => {
+type Craft ={
+    _id: string,
+    email: string,
+    userData: {
+        userImage: string;
+        name: string;
+    };
+    postData: {
+        craftName: string,
+        title: string,
+        description: string,
+        price: string,
+        location: string,
+        image: string,
+        date: string,
+    };
+}
+
+const Forward = ({ msg, crafts, modalId }: { msg: Message, crafts: Craft, modalId: string }) => {
 
     const [accountSearch, setAccountSearch] = useState("");
     const [showAll, setShowAll] = useState<boolean>(false);
@@ -29,6 +48,7 @@ const Forward = ({ msg, modalId }: { msg: Message, modalId: string }) => {
     const [, refetchSenderMessages] = useSenderMessages(userId)
     const [, refetchConversation] = useConversation()
     const [, refetchReceiverMessages] = useReceiverMessages()
+    const pathName = usePathname()
     const [userList, refetchUserList] = useUsersList()
     const [profile] = useProfile()
     const { _id } = profile || {}
@@ -55,24 +75,43 @@ const Forward = ({ msg, modalId }: { msg: Message, modalId: string }) => {
     const handleForward = async (userId: any) => {
         setSendingState((prev) => ({ ...prev, [userId]: true }));
         setUserId(userId)
-        const messageData = {
-            image: msg?.image,
-            createdAt: new Date(),
-            conversationId: userId,
-            senderId: _id,
-            seenIds: [_id]
-        };
+
+
+
         try {
 
-            const res = await axios.post("http://localhost:3000/messagesApi/api/sendMessage", messageData);
-            console.log(res.data)
+            if (msg && msg.image) {
+                const messageData = {
+                    image: msg.image,
+                    createdAt: new Date(),
+                    conversationId: userId,
+                    senderId: _id,
+                    seenIds: [_id]
+                };
+    
+                const res = await axios.post("http://localhost:3000/messagesApi/api/sendMessage", messageData);
+                console.log(res.data);
+            } else if (crafts) {
+                const messageData = {
+                    craft: crafts,
+                    createdAt: new Date(),
+                    conversationId: userId,
+                    senderId: _id,
+                    seenIds: [_id]
+                };
+    
+                console.log(messageData);
+                const res = await axios.post("http://localhost:3000/messagesApi/api/sendMessage", messageData);
+                console.log(res.data);
+            }
+
             await refetchConversation();
             await refetchUserList();
             await refetchSenderMessages();
             await refetchReceiverMessages()
         } catch (error) {
             console.log(error)
-        }finally {
+        } finally {
             setSendingState((prev) => ({ ...prev, [userId]: false })); // Reset loading state
             const modal = document.getElementById(modalId) as HTMLDialogElement;
             modal?.close();
@@ -84,7 +123,7 @@ const Forward = ({ msg, modalId }: { msg: Message, modalId: string }) => {
     return (
         <div>
             <h3 className="text-center text-2xl font-semibold text-gray-700 my-2">
-                Forward
+               {pathName.includes("crafts") ? "Share" : "Forward"}
             </h3>
             <form onSubmit={handleAccountSearch} className="mt-5">
                 <label className="input input-sm bg-gray-200 rounded-3xl flex items-center gap-2 mb-2">

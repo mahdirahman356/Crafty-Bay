@@ -48,12 +48,9 @@ const UserList = ({ users }: { users: Users }) => {
                         <p className={`${!isSender && (lastMessage?.seenIds?.includes(lastMessage?.conversationId) ? "font-thin" : "font-semibold text-gray-700")} text-xs text-gray-500`}>
                             { lastMessage ? 
                             (isSender ? 
-                            (lastMessage.seenIds.includes(lastMessage.conversationId) 
-                            ? "Seen message" 
-                            : "Sent message") 
-                            : (lastMessage.image 
-                            ? <span className="flex items-center gap-1"><MdOutlineInsertPhoto /> Photo</span> 
-                            : <>{lastMessage.body.slice(0,20)}...</>)) 
+                            (lastMessage.seenIds.includes(lastMessage.conversationId) ? "Seen message" : "Sent message") 
+                            : (lastMessage.image ? <span className="flex items-center gap-1"><MdOutlineInsertPhoto /> Photo</span> 
+                            : (lastMessage.craft ? "sent an craft" : <>{lastMessage.body.slice(0,20)}...</>))) 
                             : "Message"}
                         </p>
                     </div>

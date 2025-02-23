@@ -8,11 +8,31 @@ import useSenderMessages from "@/app/Hooks/useSenderMessages";
 import { Key, useEffect, useRef } from "react";
 import ImageModal from "../ImageModal/ImageModal";
 import Messages from "../Messages/Messages";
+import Craft from "../Craft/Craft";
+
+type Crafts ={
+    _id: string,
+    email: string,
+    userData: {
+        userImage: string;
+        name: string;
+    };
+    postData: {
+        craftName: string;
+        title: string;
+        description: string;
+        price: string;
+        location: string;
+        image: string;
+        date: string;
+    };
+}
 
 interface Message {
     _id: string,
     body: string,
     image: string,
+    craft: Crafts,
     createdAt: string
     conversationId: string
 }
@@ -79,6 +99,9 @@ const MessageBody = ({ params, user }: { params: Params; user: User }) => {
                             </>}
                             {msg?.body && <>
                                 <Messages msg={msg} params={params} />
+                            </>}
+                            {msg.craft && <>
+                                <Craft craft={msg.craft}/>
                             </>}
                             <div className="text-xs chat-footer opacity-50">
                                 {lastMessage._id === msg._id && (isSender && (lastMessage.seenIds.includes(msg.conversationId) ? "Seen" : "Sent"))}

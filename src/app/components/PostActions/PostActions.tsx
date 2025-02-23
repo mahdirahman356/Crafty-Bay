@@ -7,6 +7,7 @@ import CraftLikes from "../CraftLikes/CraftLikes";
 import useProfile from "@/app/Hooks/useProfile";
 import axios from "axios";
 import useCraftLikes from "@/app/Hooks/useCraftLikes";
+import Forward from "@/app/(messages)/messages/messageComponents/Forward/Forward";
 
 type Crafts = {
     _id: string,
@@ -53,19 +54,19 @@ const PostActions = ({ crafts }: { crafts: Crafts }) => {
             console.log(res.data)
             likesRefetch()
         } catch (error) {
-          console.log("like error", error)
+            console.log("like error", error)
         }
     }
 
-    const handleCraftUnlike = async(_id: string) =>{
-          console.log(_id)
-          try {
+    const handleCraftUnlike = async (_id: string) => {
+        console.log(_id)
+        try {
             const res = await axios.delete(`http://localhost:3000/components/CraftLikes/api/unLikeCrafts/${_id}`)
             console.log(res.data)
             likesRefetch()
-          } catch (error) {
-              console.log("unlike error" ,error)
-          }
+        } catch (error) {
+            console.log("unlike error", error)
+        }
     }
 
     console.log(likes)
@@ -78,7 +79,7 @@ const PostActions = ({ crafts }: { crafts: Crafts }) => {
             {/* like */}
             <div className="flex items-center gap-1">
                 {isLiked?.userData?.userId === _id
-                    ? <button onClick={() => handleCraftUnlike(isLiked._id)}> 
+                    ? <button onClick={() => handleCraftUnlike(isLiked._id)}>
                         <IoHeartSharp className="text-2xl text-red-500" />
                     </button>
                     : <button onClick={handleCraftLikes}>
@@ -119,10 +120,21 @@ const PostActions = ({ crafts }: { crafts: Crafts }) => {
                 </div>
             </dialog>
             {/* share */}
-            <button className="flex items-center gap-1">
-                <PiShareFat className="text-2xl" />
-                <p className="text-sm">5</p>
+            <button className="flex items-center gap-1" onClick={() => {
+                const modal = document.getElementById(`forward_modal_${crafts._id}`) as HTMLDialogElement;
+                modal?.showModal();
+            }}>
+                 <PiShareFat className="text-2xl" />
+                 <p className="text-sm">5</p>
             </button>
+            <dialog id={`forward_modal_${crafts._id}`} className="modal modal-top mt-20 w-[98%] md:w-[70%] lg:w-[40%] mx-auto rounded-xl">
+                <div className="modal-box">
+                    <form method="dialog">
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                    </form>
+                    <Forward crafts={crafts} modalId={`forward_modal_${crafts._id}`} msg={undefined} />
+                </div>
+            </dialog>
         </div>
     );
 };

@@ -57,9 +57,9 @@ const ImageModal = ({ msg, params }: { msg: Message, params: Params }) => {
                                     <form method="dialog">
                                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                     </form>
-                                    <Forward msg={msg} modalId={`forward_modal_${msg._id}`} />
+                                    <Forward msg={msg} modalId={`forward_modal_${msg._id}`} crafts={undefined} />
                                 </div>
-                            </dialog>
+                            </dialog>   
                         </div>
                         {senderMessages.includes(msg)
                             && <button onClick={() => handleDeleteImage(msg._id)} className="btn btn-sm btn-circle">
