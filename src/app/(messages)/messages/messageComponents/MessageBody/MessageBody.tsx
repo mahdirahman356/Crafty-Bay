@@ -101,7 +101,7 @@ const MessageBody = ({ params, user }: { params: Params; user: User }) => {
                                 <Messages msg={msg} params={params} />
                             </>}
                             {msg.craft && <>
-                                <Craft craft={msg.craft}/>
+                                <Craft msg={msg} params={params}/>
                             </>}
                             <div className="text-xs chat-footer opacity-50">
                                 {lastMessage._id === msg._id && (isSender && (lastMessage.seenIds.includes(msg.conversationId) ? "Seen" : "Sent"))}

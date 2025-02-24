@@ -39,7 +39,14 @@ type Craft ={
     };
 }
 
-const Forward = ({ msg, crafts, modalId }: { msg: Message, crafts: Craft, modalId: string }) => {
+type ForwardProps = {
+    msg?: Message; 
+    crafts?: Craft;
+    modalId: string;
+};
+
+
+const Forward = ({ msg, crafts, modalId }: ForwardProps) => {
 
     const [accountSearch, setAccountSearch] = useState("");
     const [showAll, setShowAll] = useState<boolean>(false);

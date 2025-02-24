@@ -125,7 +125,6 @@ const PostActions = ({ crafts }: { crafts: Crafts }) => {
                 modal?.showModal();
             }}>
                  <PiShareFat className="text-2xl" />
-                 <p className="text-sm">5</p>
             </button>
             <dialog id={`forward_modal_${crafts._id}`} className="modal modal-top mt-20 w-[98%] md:w-[70%] lg:w-[40%] mx-auto rounded-xl">
                 <div className="modal-box">
