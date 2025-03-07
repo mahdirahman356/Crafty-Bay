@@ -1,14 +1,13 @@
 import { connectDB } from "@/app/lib/connectDB";
 import axios from "axios";
-import { randomUUID } from "crypto";
-import { Db } from "mongodb";
+import { Db, ObjectId } from "mongodb";
 import { NextRequest } from "next/server";
-
+import qs from 'qs';
 export const POST = async (request: NextRequest) => {
 
     const paymentInfo = await request.json()
 
-    const trxId = randomUUID()
+    const trxId = new ObjectId().toString()
 
     const initiateData = {
         store_id: "mahdi6762a96b29d33",
@@ -44,13 +43,13 @@ export const POST = async (request: NextRequest) => {
         const response = await axios({
             method: "POST",
             url: "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
-            data: initiateData,
+            data: qs.stringify(initiateData),
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
         })
 
-        console.log("SSLCommerz Response:", response.data)
+        console.log("SSLCommerz Response:", qs.parse(response.data))
 
         const db: Db | undefined = await connectDB()
         if (!db) {
