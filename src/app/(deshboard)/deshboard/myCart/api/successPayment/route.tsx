@@ -24,16 +24,18 @@ export const POST = async (request: NextRequest) => {
               const update = await paymentsCollection.updateOne(
                      { paymentId: successData.tran_id },
                      {
-                         $set:{
-                            status: "Success"
-                         }
+                            $set: {
+                                   status: "Success"
+                            }
                      })
 
-                     if(update.matchedCount === 0){
-                            return NextResponse.json({message: "payment data not found"})
-                     }
+              if (update.matchedCount === 0) {
+                     return NextResponse.json({ message: "payment data not found" })
+              }
 
-              return NextResponse.json({ message: "Payment success" }, {status: 200}); // Send a response
+              const redirectUrl = new URL('/deshboard/successPayment', "http://localhost:3000")
+              return NextResponse.redirect(redirectUrl.toString(), 302)
+              
        } catch (error) {
               console.error("Error processing payment:", error);
               return NextResponse.json({ error: "Internal server error" }, { status: 500 });
