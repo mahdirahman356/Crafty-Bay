@@ -44,7 +44,6 @@ const PostActions = ({ crafts }: { crafts: Crafts }) => {
                 name: name,
                 image: image
             },
-            status: "like",
             date: new Date()
         }
         console.log(likesData)
