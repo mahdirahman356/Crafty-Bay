@@ -17,7 +17,7 @@ export const POST = async (request: NextRequest) => {
         tran_id: trxId,
         success_url: "http://localhost:3000/deshboard/myCart/api/successPayment",
         fail_url: "http://localhost:3000/deshboard/myCart/api/failPayment",
-        cancel_url: "http://localhost:3000/deshboard/myCart/api/canclePayment",
+        cancel_url: "http://localhost:3000/deshboard/myCart/api/cancelPayment",
         cus_name: paymentInfo.cus_name,
         cus_email: paymentInfo.cus_email,
         cus_add1: paymentInfo.cus_add,
