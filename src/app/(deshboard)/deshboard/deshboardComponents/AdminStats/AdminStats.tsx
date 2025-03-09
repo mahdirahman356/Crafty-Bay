@@ -1,58 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
+import useAdminStats from "@/app/Hooks/useAdminStats";
 import { BsBoxSeam } from "react-icons/bs";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { PiChartLineUp } from "react-icons/pi";
 
 const AdminStats = () => {
+     
+    const [adminStats] = useAdminStats()
+    console.log(adminStats)
+
     return (
         <div className="my-8">
-            {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
-                <div className="rounded-md p-6 lg:p-7 w-full bg-red-400 text-white">
-                    <div className="flex items-center justify-between mb-3">
-                        <p>Revenue</p>
-                        <PiChartLineUp className="text-2xl" />
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <p className="text-2xl font-semibold text-nowrap">1000 TK</p>
-                        <img className="w-16 h-16 hidden" src="/image/balls-image.png" alt="" />
-                    </div>
-                </div>
-
-
-                <div className="rounded-md p-6 lg:p-7 w-full bg-blue-400 text-white">
-                    <div className="flex items-center justify-between mb-3">
-                        <p>Products</p>
-                        <BsBoxSeam className="text-2xl" />
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <p className="text-2xl font-semibold">1000</p>
-                        <img className="w-16 h-16 hidden"  src="/image/balls-image.png" alt="" />
-                    </div>
-                </div>
-
-                <div className="rounded-md p-6 lg:p-7 w-full bg-emerald-400 text-white">
-                    <div className="flex items-center justify-between mb-3">
-                        <p>Customers</p>
-                        <HiOutlineUsers className="text-2xl" />
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <p className="text-2xl font-semibold">1000</p>
-                        <img className="w-16 h-16 hidden"  src="/image/balls-image.png" alt="" />
-                    </div>
-                </div>
-
-                <div className="rounded-md p-6 lg:p-7 w-full bg-purple-400 text-white">
-                    <div className="flex items-center justify-between mb-3">
-                        <p>Orders</p>
-                        <IoBookmarkOutline className="text-2xl" />
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <p className="text-2xl font-semibold">1000</p>
-                        <img className="w-16 h-16 hidden"  src="/image/balls-image.png" alt="" />
-                    </div>
-                </div>
-            </div> */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
                 <div className="relative w-full">
                     <div className="bg-gradient-to-r from-red-400 to-red-200 p-6 lg:p-7 rounded-lg relative w-full h-full">
@@ -63,7 +22,7 @@ const AdminStats = () => {
                             <p>Revenue</p>
                             <PiChartLineUp className="text-2xl" />
                         </div>
-                        <p className="text-2xl font-semibold text-nowrap">1000 TK</p>
+                        <p className="text-2xl font-semibold text-nowrap">{adminStats.revenue} TK</p>
                     </div>
                 </div>
                 <div className="relative w-full">
@@ -75,7 +34,7 @@ const AdminStats = () => {
                             <p>Products</p>
                             <BsBoxSeam className="text-2xl" />
                         </div>
-                        <p className="text-2xl font-semibold text-nowrap">1000</p>
+                        <p className="text-2xl font-semibold text-nowrap">{adminStats. products}</p>
                     </div>
                 </div>
                 <div className="relative w-full">
@@ -87,7 +46,7 @@ const AdminStats = () => {
                             <p>Customers</p>
                             <HiOutlineUsers className="text-2xl" />
                         </div>
-                        <p className="text-2xl font-semibold text-nowrap">1000</p>
+                        <p className="text-2xl font-semibold text-nowrap">{adminStats.customers}</p>
                     </div>
                 </div>
                 <div className="relative w-full">
@@ -99,7 +58,7 @@ const AdminStats = () => {
                             <p>Orders</p>
                             <IoBookmarkOutline className="text-2xl" />
                         </div>
-                        <p className="text-2xl font-semibold text-nowrap">1000</p>
+                        <p className="text-2xl font-semibold text-nowrap">{adminStats.orders}</p>
                     </div>
                 </div>
             </div>

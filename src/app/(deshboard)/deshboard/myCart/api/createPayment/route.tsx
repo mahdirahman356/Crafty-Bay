@@ -58,8 +58,7 @@ export const POST = async (request: NextRequest) => {
 
         const saveData = {
             paymentId: trxId,
-            amount: paymentInfo.amount,
-            quantity: paymentInfo.quantity,
+            amount: paymentInfo.amount * paymentInfo.quantity,
             status: "panding",
             cus_name: paymentInfo.cus_name,
             cus_email: paymentInfo.cus_email,
