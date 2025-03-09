@@ -9,6 +9,7 @@ import { LiaBorderAllSolid } from 'react-icons/lia';
 import useProfile from "@/app/Hooks/useProfile";
 import MyPost from "../deshboardComponents/MyPost/MyPost";
 import UpdateProfile from "../deshboardComponents/UpdateProfile/UpdateProfile";
+import AdminStats from "../deshboardComponents/AdminStats/AdminStats";
 
 const profilePage = () => {
     const { data: session } = useSession()
@@ -63,8 +64,13 @@ const profilePage = () => {
                     </div>
 
                     <div className='border-t-2'>
-                        <p className='flex justify-center items-center mt-3'><LiaBorderAllSolid className='text-xl' />Posts</p>
-                        <MyPost />
+                        {(session?.user as { role?: string }).role === "Admin"
+                            ? <AdminStats />
+                            : <>
+                                <p className='flex justify-center items-center mt-3'><LiaBorderAllSolid className='text-xl' />Posts</p>
+                                <MyPost />
+                            </>}
+
                     </div>
                 </div>}
 
