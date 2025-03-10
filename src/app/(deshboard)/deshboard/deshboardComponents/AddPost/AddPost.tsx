@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useRef, useState } from 'react';
@@ -8,13 +9,14 @@ import { IoLocationOutline, IoPricetagsOutline } from 'react-icons/io5';
 import { LiaCommentSolid } from 'react-icons/lia';
 import { TbBrandCraft } from 'react-icons/tb';
 import { imageUplode } from '@/app/imageAPI';
+import { HiOutlineSelector } from 'react-icons/hi';
 
 interface UserWithRole {
     name?: string | null;
     email?: string | null;
     image?: string | null;
-    role?: string | null; 
-  }
+    role?: string | null;
+}
 
 const AddPost = () => {
     const { data: session } = useSession()
@@ -22,6 +24,7 @@ const AddPost = () => {
     const [selectedImg, setSelectedImg] = useState<string | null>(null)
     const imgRef = useRef<HTMLInputElement | null>(null);
     const [loading, setLoading] = useState(false);
+    const [selectedValue, setSelectedValue] = useState('')
 
 
     const { data: userData = [] } = useQuery({
@@ -46,13 +49,14 @@ const AddPost = () => {
         const price = (form.elements.namedItem("price") as HTMLInputElement).value;
         const img = (form.elements.namedItem("img") as HTMLInputElement)?.files?.[0];
         const location = (form.elements.namedItem("location") as HTMLInputElement).value;
+        const categories = (form.elements.namedItem("categories") as HTMLInputElement).value;
         let url;
         if (img) {
             const uploadResult = await imageUplode(img);
             url = uploadResult;
         }
 
-        if(userWithRole.role === "seller"){
+        if (userWithRole.role === "seller") {
             const post = {
                 email: session?.user?.email,
                 userData: {
@@ -61,6 +65,7 @@ const AddPost = () => {
                 },
                 postData: {
                     craftName: craftName,
+                    categories: categories,
                     title: title,
                     description: description,
                     price: parseInt(price),
@@ -69,15 +74,15 @@ const AddPost = () => {
                     date: new Date()
                 }
             }
-    
+
             try {
-    
+
                 const res = await axios.post("http://localhost:3000/deshboard/deshboardComponents/AddPost/api/post", post)
                 console.log(res.data)
                 if (res.data.acknowledged === true) {
                     window.location.reload()
                 }
-    
+
             } catch (error) {
                 console.error('Error', error);
             } finally {
@@ -85,7 +90,7 @@ const AddPost = () => {
             }
         }
 
-        if(userWithRole.role === "buyer"){
+        if (userWithRole.role === "buyer") {
             const craftRequestsPost = {
                 email: session?.user?.email,
                 userData: {
@@ -100,15 +105,15 @@ const AddPost = () => {
                     date: new Date()
                 }
             }
-    
+
             try {
-    
+
                 const res = await axios.post("http://localhost:3000/deshboard/deshboardComponents/AddPost/api/craftRequestsPost", craftRequestsPost)
                 console.log(res.data)
                 if (res.data.acknowledged === true) {
                     window.location.reload()
                 }
-    
+
             } catch (error) {
                 console.error('Error', error);
             } finally {
@@ -116,7 +121,7 @@ const AddPost = () => {
             }
         }
 
-        
+
 
 
 
@@ -133,8 +138,9 @@ const AddPost = () => {
         }
     };
 
-
-    console.log(selectedImg)
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedValue(event.target.value);
+    };
 
     return (
         <div className="text-black">
@@ -167,7 +173,7 @@ const AddPost = () => {
 
                     <div className='flex items-center gap-2 mb-4'>
                         <img
-                            src={session?.user?.image || image  ?  session?.user?.image || image : "/image/user.avif"} alt="profile"
+                            src={session?.user?.image || image ? session?.user?.image || image : "/image/user.avif"} alt="profile"
                             width={400}
                             height={300}
                             className='object-cover h-10 w-10 rounded-full'
@@ -180,7 +186,7 @@ const AddPost = () => {
                         name="description"
                         rows={4}
                         cols={50}
-                        className="grow w-full text-[16px]  bg-gray-100 p-3 mb-6 rounded-md text-black border-gray-300 pb-2 focus:border-blue-500 outline-none"
+                        className="grow resize-none w-full text-[16px]  bg-gray-100 p-3 mb-6 rounded-md text-black border-gray-300 pb-2 focus:border-blue-500 outline-none"
                         placeholder="Write Something About Your Post"
                     />
                     {/* Craft Name */}
@@ -196,8 +202,53 @@ const AddPost = () => {
                         />
                     </div>
 
+                    {/* categories */}
+                    <div className="flex items-center mb-4 w-full">
+                        <span className="pb-2 border-gray-300 border-b-2 ">
+                            <HiOutlineSelector className="text-gray-500 text-xl" />
+                        </span>
+                        <select
+                            onChange={handleSelectChange}
+                            name="categories"
+                            className={`grow ${selectedValue ? "text-black" : "text-gray-400"} border-b-2 pl-3 bg-white border-gray-300 pb-2 focus:border-blue-500 outline-none rounded-none custom-select`}>
+                            <option className='text-gray-400' disabled selected value=''>
+                                Categories
+                            </option>
+                            <option className='text-black' value="Knitting and Crochet">
+                                Knitting and Crochet
+                            </option>
+                            <option className='text-black' value="Sewing and Quilting">
+                                Sewing and Quilting
+                            </option>
+                            <option className='text-black' value="Dyeing and Batik">
+                                Dyeing and Batik
+                            </option>
+                            <option className='text-black' value="Scrapbooking and Card Making">
+                                Scrapbooking and Card Making
+                            </option>
+                            <option className='text-black' value="Paper Flowers">
+                                Paper Craft
+                            </option>
+                            <option className='text-black' value="Wood Furniture">
+                                Wood Furniture
+                            </option>
+                            <option className='text-black' value="Hand-Built Pottery">
+                                Hand-Built Pottery
+                            </option>
+                            <option className='text-black' value="Leatherworking">
+                                Leatherworking
+                            </option>
+                            <option className='text-black' value="Glasswork and Stained Glass">
+                                Glasswork and Stained Glass
+                            </option>
+                            <option className='text-black' value="Art">
+                                Art
+                            </option>
+                        </select>
+                    </div>
+
                     {/* title */}
-                    <div className="flex items-center mb-4 w-full text-gray-700 ">
+                    <div className="flex items-center mb-4 w-full text-gray-700">
                         <span className="pb-2 border-gray-300 border-b-2 ">
                             <LiaCommentSolid className="text-gray-500 text-xl  mr-3" />
                         </span>
