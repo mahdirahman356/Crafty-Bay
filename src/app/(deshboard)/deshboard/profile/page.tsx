@@ -10,6 +10,7 @@ import useProfile from "@/app/Hooks/useProfile";
 import MyPost from "../deshboardComponents/MyPost/MyPost";
 import UpdateProfile from "../deshboardComponents/UpdateProfile/UpdateProfile";
 import AdminStats from "../deshboardComponents/AdminStats/AdminStats";
+import Chart from "../deshboardComponents/Chart/Chart";
 
 const profilePage = () => {
     const { data: session } = useSession()
@@ -65,7 +66,10 @@ const profilePage = () => {
 
                     <div className='border-t-2'>
                         {(session?.user as { role?: string }).role === "Admin"
-                            ? <AdminStats />
+                            ? <>
+                                <AdminStats />
+                                <Chart />
+                            </>
                             : <>
                                 <p className='flex justify-center items-center mt-3'><LiaBorderAllSolid className='text-xl' />Posts</p>
                                 <MyPost />

@@ -22,7 +22,7 @@ const AdminStats = () => {
                             <p>Revenue</p>
                             <PiChartLineUp className="text-2xl" />
                         </div>
-                        <p className="text-2xl font-semibold text-nowrap">{adminStats.revenue} TK</p>
+                        <p className="text-2xl font-semibold text-nowrap">{adminStats?.revenue} TK</p>
                     </div>
                 </div>
                 <div className="relative w-full">
@@ -34,7 +34,7 @@ const AdminStats = () => {
                             <p>Products</p>
                             <BsBoxSeam className="text-2xl" />
                         </div>
-                        <p className="text-2xl font-semibold text-nowrap">{adminStats. products}</p>
+                        <p className="text-2xl font-semibold text-nowrap">{adminStats?. products}</p>
                     </div>
                 </div>
                 <div className="relative w-full">
@@ -46,7 +46,7 @@ const AdminStats = () => {
                             <p>Customers</p>
                             <HiOutlineUsers className="text-2xl" />
                         </div>
-                        <p className="text-2xl font-semibold text-nowrap">{adminStats.customers}</p>
+                        <p className="text-2xl font-semibold text-nowrap">{adminStats?.customers}</p>
                     </div>
                 </div>
                 <div className="relative w-full">
@@ -58,7 +58,7 @@ const AdminStats = () => {
                             <p>Orders</p>
                             <IoBookmarkOutline className="text-2xl" />
                         </div>
-                        <p className="text-2xl font-semibold text-nowrap">{adminStats.orders}</p>
+                        <p className="text-2xl font-semibold text-nowrap">{adminStats?.orders}</p>
                     </div>
                 </div>
             </div>

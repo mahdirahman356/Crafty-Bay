@@ -150,7 +150,7 @@ const   MyPost = () => {
                                             <div className="flex justify-between items-start">
                                                 <div className="flex items-center gap-4 mt-2 mb-6 pl-3">
                                                     {/* user profile image */}
-                                                    <img className="w-10 h-10 rounded-full"
+                                                    <img className="w-10 h-10 rounded-full object-cover"
                                                         alt="user-image"
                                                         src={post.userData.userImage ? post.userData.userImage : "/image/user.avif"} />
                                                     <div>

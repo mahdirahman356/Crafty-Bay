@@ -65,7 +65,7 @@ const AddPost = () => {
                 },
                 postData: {
                     craftName: craftName,
-                    categories: categories,
+                    category: categories,
                     title: title,
                     description: description,
                     price: parseInt(price),
@@ -238,11 +238,11 @@ const AddPost = () => {
                             <option className='text-black' value="Leatherworking">
                                 Leatherworking
                             </option>
-                            <option className='text-black' value="Glasswork and Stained Glass">
-                                Glasswork and Stained Glass
-                            </option>
                             <option className='text-black' value="Art">
                                 Art
+                            </option>
+                            <option className='text-black' value="Blanket">
+                                Blanket
                             </option>
                         </select>
                     </div>
