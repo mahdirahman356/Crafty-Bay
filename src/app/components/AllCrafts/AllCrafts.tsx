@@ -21,6 +21,7 @@ type Crafts = {
     postData: {
         craftName: string;
         title: string;
+        category: string;
         description: string;
         price: string;
         location: string;
@@ -41,7 +42,7 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
     const { data: session } = useSession()
     const [, refetch] = useCartData()
 
-    const handleAddToCart = async (orderId: string, craftName: string, craftImage: string, price: string, location: string, sellerEmail: string, sellerName: string, sellerImage: string) => {
+    const handleAddToCart = async (productId: string, craftName: string, craftImage: string, price: string, location: string, sellerEmail: string, sellerName: string, sellerImage: string, category: string) => {
         if (!session?.user?.email) {
             Swal.fire({
                 title: "You are not logged in!",
@@ -67,9 +68,10 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
                     image: sellerImage
                 },
                 orderData: {
-                    orderId: orderId,
+                    productId: productId,
                     craftName: craftName,
                     craftImage: craftImage,
+                    category: category,
                     price: price,
                     quantity: 1,
                     location: location
@@ -148,10 +150,10 @@ const AllCrafts = ({ crafts }: AllCraftsProps) => {
                     <div className="flex justify-center">
                         <div className="w-56 -mt-10 overflow-hidden bg-white rounded-lg shadow-lg md:w-64">
                             <h3 className="py-2 font-bold tracking-wide text-center text-gray-800 uppercase">{crafts.postData.craftName}</h3>
-                            <PostActions crafts={crafts}/>
+                            <PostActions crafts={crafts} />
                             <div className="flex items-center justify-between px-3 py-2 bg-gray-200">
                                 <span className="font-bold text-gray-800">{crafts.postData.price} TK</span>
-                                <button onClick={() => handleAddToCart(crafts._id, crafts.postData.craftName, crafts.postData.image, crafts.postData.price, crafts.postData.location, crafts.email, crafts.userData.name, crafts.userData.userImage)}
+                                <button onClick={() => handleAddToCart(crafts._id, crafts.postData.craftName, crafts.postData.image, crafts.postData.price, crafts.postData.location, crafts.email, crafts.userData.name, crafts.userData.userImage, crafts.postData.category)}
                                     className="btn btn-sm rounded-sm border-none text-xs font-semibold text-white uppercase bg-primary">
                                     <HiOutlineShoppingCart className="text-xl" />
                                     Add to cart

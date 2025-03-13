@@ -15,9 +15,9 @@ export const DELETE = async(request: NextRequest, {params}: {params: Params}) =>
 
     try {
 
-        const orderId = new ObjectId(params.id)
+        const productId = new ObjectId(params.id)
 
-        const deleteOrderItem = await ordersCollection.deleteOne({_id: orderId})
+        const deleteOrderItem = await ordersCollection.deleteOne({_id: productId})
 
         if(!deleteOrderItem){
             return NextResponse.json({message: "Not found"}, {status: 404})

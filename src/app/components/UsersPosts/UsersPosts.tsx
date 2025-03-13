@@ -42,7 +42,7 @@ const UsersPosts = ({ userEmail }: { userEmail: string }) => {
         }
     })
 
-    const handleAddToCart = async (orderId: string, craftName: string, craftImage: string, price: string, location: string, sellerEmail: string, sellerName: string, sellerImage: string) => {
+    const handleAddToCart = async (productId: string, craftName: string, craftImage: string, price: string, location: string, sellerEmail: string, sellerName: string, sellerImage: string) => {
         const order = {
             userEmail: session?.user?.email,
             sellerData: {
@@ -51,7 +51,7 @@ const UsersPosts = ({ userEmail }: { userEmail: string }) => {
                 image: sellerImage
             },
             orderData: {
-                orderId: orderId,
+                productId: productId,
                 craftName: craftName,
                 craftImage: craftImage,
                 price: price,

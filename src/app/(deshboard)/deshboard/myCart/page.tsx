@@ -3,6 +3,7 @@ import PostDetails from "@/app/components/PostDetails/PostDetails";
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-img-element */
 import useCartData from "@/app/Hooks/useCartData";
+import useFormatDate from "@/app/Hooks/useFormatDate";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -21,8 +22,9 @@ type CartData = {
         name: string,
     },
     orderData: {
-        orderId: string,
+        productId: string,
         craftName: string,
+        category: string,
         craftImage: string,
         price: string,
         quantity: number,
@@ -36,6 +38,7 @@ const page = () => {
     const { data: session } = useSession()
 
     const [cartData, refetch, isLoading] = useCartData()
+        const { formatDateTime } = useFormatDate()
 
     const { data: userProfile = [] } = useQuery({
         queryKey: ["userProfile"],
@@ -50,7 +53,7 @@ const page = () => {
 
     const handleQuantityAddition = async (_id: string, quantity: number) => {
         console.log(_id, quantity)
-        const res = await axios.patch('http://localhost:3000/deshboard/myCart/api/updateQuantity', { orderId: _id, UpdateQuantity: quantity + 1 })
+        const res = await axios.patch('http://localhost:3000/deshboard/myCart/api/updateQuantity', { productId: _id, UpdateQuantity: quantity + 1 })
         console.log(res.data)
         if (res.data) {
             refetch()
@@ -59,7 +62,7 @@ const page = () => {
 
     const handleQuantitySubtraction = async (_id: string, quantity: number) => {
         console.log(_id, quantity)
-        const res = await axios.patch('http://localhost:3000/deshboard/myCart/api/updateQuantity', { orderId: _id, UpdateQuantity: quantity - 1 })
+        const res = await axios.patch('http://localhost:3000/deshboard/myCart/api/updateQuantity', { productId: _id, UpdateQuantity: quantity - 1 })
         console.log(res.data)
         if (res.data) {
             refetch()
@@ -98,7 +101,7 @@ const page = () => {
     }
 
 
-    const handlePaymentSystem = async (price: string, craftName: string, quantity: number) => {
+    const handlePaymentSystem = async (cartId: string, productId: string, price: string, craftName: string, quantity: number, category: string) => {
         const res = await axios.post('http://localhost:3000/deshboard/myCart/api/createPayment', {
             amount: price,
             cus_name: name,
@@ -106,7 +109,10 @@ const page = () => {
             cus_add: location,
             cus_phone: contactNumber,
             quantity: quantity,
+            cartId: cartId,
+            productId: productId,
             product_name: craftName,
+            category: category
 
         })
         console.log(res.data)
@@ -179,8 +185,7 @@ const page = () => {
                                     <td className="text-gray-600">{cartData.orderData.price} TK</td>
                                     <td>
                                         <div className="flex gap-2 text-nowrap">
-                                            <p className="text-sm text-gray-600 text-nowrap">{cartData.date.split('T')[0]}</p>
-                                            <p className="text-sm text-gray-600 text-nowrap">{cartData.date.split('T')[1].split('.')[0]}</p>
+                                            <p className="text-sm text-gray-600 text-nowrap">{formatDateTime(cartData.date)}</p>
                                         </div>
                                     </td>
                                     <td>
@@ -197,22 +202,22 @@ const page = () => {
                                     <td className="text-wrap">
                                         <button className="btn btn-ghost btn-xs font-sans"
                                             onClick={() => {
-                                                const dialogElement = document.getElementById(`my_modal_my_post_${cartData.orderData.orderId}`) as HTMLDialogElement;
+                                                const dialogElement = document.getElementById(`my_modal_my_post_${cartData.orderData.productId}`) as HTMLDialogElement;
                                                 dialogElement.showModal();
                                             }}>
                                             <span className="text-nowrap">View details</span>
                                         </button>
-                                        <dialog id={`my_modal_my_post_${cartData.orderData.orderId}`} className="modal">
+                                        <dialog id={`my_modal_my_post_${cartData.orderData.productId}`} className="modal">
                                             <div className="modal-box w-full max-w-3xl">
                                                 <form method="dialog">
                                                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-black">✕</button>
                                                 </form>
-                                                <PostDetails id={cartData.orderData.orderId} />
+                                                <PostDetails id={cartData.orderData.productId} />
                                             </div>
                                         </dialog>
                                     </td>
                                     <td>
-                                        <button onClick={() => handlePaymentSystem(cartData.orderData.price, cartData.orderData.craftName, cartData.orderData.quantity)} className="btn btn-xs font-sans text-primary">Payment</button>
+                                        <button onClick={() => handlePaymentSystem (cartData._id, cartData.orderData.productId ,cartData.orderData.price, cartData.orderData.craftName, cartData.orderData.quantity, cartData.orderData.category)} className="btn btn-xs font-sans text-primary">Payment</button>
                                     </td>
                                     <td>
                                         <button className="btn btn-sm btn-ghost">

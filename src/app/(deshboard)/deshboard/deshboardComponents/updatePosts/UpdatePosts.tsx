@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
+import { HiOutlineSelector } from "react-icons/hi";
 import { IoLocationOutline, IoPricetagsOutline } from "react-icons/io5";
 import { LiaCommentSolid } from "react-icons/lia";
 import { TbBrandCraft } from "react-icons/tb";
@@ -29,7 +30,7 @@ const UpdatePosts: React.FC<UpdatePostsProps> = ({ id }) => {
         }
     })
 
-    const { craftName, title, description, price, location, image, date } = postDetails.postData || {}
+    const { craftName, category, title, description, price, location, image, date } = postDetails.postData || {}
     const { userImage } = postDetails.userData || {}
 
     const handleimageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +55,8 @@ const UpdatePosts: React.FC<UpdatePostsProps> = ({ id }) => {
         const price = (form.elements.namedItem("price") as HTMLInputElement).value;
         const img = (form.elements.namedItem("img") as HTMLInputElement)?.files?.[0];
         const location = (form.elements.namedItem("location") as HTMLInputElement).value;
+        const categories = (form.elements.namedItem("categories") as HTMLInputElement).value;
+
         let url = image
         if (img) {
             const uploadResult = await imageUplode(img);
@@ -64,6 +67,7 @@ const UpdatePosts: React.FC<UpdatePostsProps> = ({ id }) => {
             postId: postDetails._id,
             updatedData: {
                 craftName: craftName,
+                category: categories,
                 title: title,
                 description: description,
                 price: parseInt(price),
@@ -154,6 +158,49 @@ const UpdatePosts: React.FC<UpdatePostsProps> = ({ id }) => {
                             />
                         </div>
 
+                        <div className="flex items-center mb-4 w-full">
+                            <span className="pb-2 border-gray-300 border-b-2 ">
+                                <HiOutlineSelector className="text-gray-500 text-xl" />
+                            </span>
+                            <select
+                                name="categories"
+                                className="grow text-black border-b-2 pl-3 bg-white border-gray-300 pb-2 focus:border-blue-500 outline-none rounded-none custom-select">
+                                <option className='text-gray-400' selected value={category}>
+                                    {category}
+                                </option>
+                                <option className='text-black' value="Knitting and Crochet">
+                                    Knitting and Crochet
+                                </option>
+                                <option className='text-black' value="Sewing and Quilting">
+                                    Sewing and Quilting
+                                </option>
+                                <option className='text-black' value="Dyeing and Batik">
+                                    Dyeing and Batik
+                                </option>
+                                <option className='text-black' value="Scrapbooking and Card Making">
+                                    Scrapbooking and Card Making
+                                </option>
+                                <option className='text-black' value="Paper Craft">
+                                    Paper Craft
+                                </option>
+                                <option className='text-black' value="Wood craft">
+                                    Wood craft
+                                </option>
+                                <option className='text-black' value="Hand-Built Pottery">
+                                    Hand-Built Pottery
+                                </option>
+                                <option className='text-black' value="Leatherworking">
+                                    Leatherworking
+                                </option>
+                                <option className='text-black' value="Art">
+                                    Art
+                                </option>
+                                <option className='text-black' value="Blanket">
+                                    Blanket
+                                </option>
+                            </select>
+                        </div>
+
                         {/* title */}
                         <div className="flex items-center mb-4 w-full text-gray-700 ">
                             <span className="pb-2 border-gray-300 border-b-2 ">
@@ -196,7 +243,7 @@ const UpdatePosts: React.FC<UpdatePostsProps> = ({ id }) => {
                         </div>
 
                         <button type='submit' className='btn btn-primary text-white w-full rounded-sm'>
-                        {loading ? <span className="loading loading-spinner text-white"></span> : "Update"}
+                            {loading ? <span className="loading loading-spinner text-white"></span> : "Update"}
                         </button>
 
                     </div>

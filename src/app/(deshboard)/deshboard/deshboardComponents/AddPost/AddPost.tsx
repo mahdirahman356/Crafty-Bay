@@ -9,7 +9,7 @@ import { IoLocationOutline, IoPricetagsOutline } from 'react-icons/io5';
 import { LiaCommentSolid } from 'react-icons/lia';
 import { TbBrandCraft } from 'react-icons/tb';
 import { imageUplode } from '@/app/imageAPI';
-import { HiOutlineSelector } from 'react-icons/hi';
+import { HiArrowSmUp, HiOutlineSelector } from 'react-icons/hi';
 
 interface UserWithRole {
     name?: string | null;
@@ -24,7 +24,8 @@ const AddPost = () => {
     const [selectedImg, setSelectedImg] = useState<string | null>(null)
     const imgRef = useRef<HTMLInputElement | null>(null);
     const [loading, setLoading] = useState(false);
-    const [selectedValue, setSelectedValue] = useState('')
+    const [selectedValue, setSelectedValue] = useState<string>('')
+    const [imageError, setImageError] = useState<string | null>()
 
 
     const { data: userData = [] } = useQuery({
@@ -51,12 +52,20 @@ const AddPost = () => {
         const location = (form.elements.namedItem("location") as HTMLInputElement).value;
         const categories = (form.elements.namedItem("categories") as HTMLInputElement).value;
         let url;
-        if (img) {
-            const uploadResult = await imageUplode(img);
-            url = uploadResult;
-        }
 
         if (userWithRole.role === "seller") {
+
+            if (!img) {
+                setImageError("Please select an image")
+                setLoading(false)
+                return;
+            }
+            else {
+                setImageError(null)
+                const uploadResult = await imageUplode(img);
+                url = uploadResult;
+            }
+
             const post = {
                 email: session?.user?.email,
                 userData: {
@@ -133,6 +142,7 @@ const AddPost = () => {
         const file = fileInput?.files?.[0]
         if (file) {
             setSelectedImg(URL.createObjectURL(file));
+            setImageError(null);
         } else {
             console.error('No file selected');
         }
@@ -146,7 +156,7 @@ const AddPost = () => {
         <div className="text-black">
             <h2 className='text-2xl font-bold text-center text-primary mb-5'>Create new post</h2>
             <form onSubmit={handleAddPost} className="flex flex-col md:flex-row gap-7">
-                <div className={`${userWithRole?.role === "buyer" && "hidden"} md:w-1/2 flex justify-center items-center`}>
+                <div className={`${userWithRole?.role === "buyer" && "hidden"} md:w-1/2 flex flex-col justify-center items-center`}>
                     <label htmlFor="dropzone-file" className="flex flex-col items-center text-center bg-white">
                         <div>
                             <img
@@ -166,6 +176,10 @@ const AddPost = () => {
                             onChange={handleimageChange}
                         />
                     </label>
+                    {imageError
+                        && <p className="text-center text-sm text-red-500 mt-1">{imageError}</p>
+                    }
+
                 </div>
 
 
@@ -188,6 +202,7 @@ const AddPost = () => {
                         cols={50}
                         className="grow resize-none w-full text-[16px]  bg-gray-100 p-3 mb-6 rounded-md text-black border-gray-300 pb-2 focus:border-blue-500 outline-none"
                         placeholder="Write Something About Your Post"
+                        required
                     />
                     {/* Craft Name */}
                     <div className="flex items-center mb-4 w-full text-gray-700 ">
@@ -199,6 +214,7 @@ const AddPost = () => {
                             name="craftName"
                             className="grow border-b-2 bg-white text-black border-gray-300 pb-2 focus:border-blue-500 outline-none rounded-none"
                             placeholder="Craft Name"
+                            required
                         />
                     </div>
 
@@ -210,7 +226,8 @@ const AddPost = () => {
                         <select
                             onChange={handleSelectChange}
                             name="categories"
-                            className={`grow ${selectedValue ? "text-black" : "text-gray-400"} border-b-2 pl-3 bg-white border-gray-300 pb-2 focus:border-blue-500 outline-none rounded-none custom-select`}>
+                            className={`grow ${selectedValue ? "text-black" : "text-gray-400"} border-b-2 pl-3 bg-white border-gray-300 pb-2 focus:border-blue-500 outline-none rounded-none custom-select`}
+                            required>
                             <option className='text-gray-400' disabled selected value=''>
                                 Categories
                             </option>
@@ -226,11 +243,11 @@ const AddPost = () => {
                             <option className='text-black' value="Scrapbooking and Card Making">
                                 Scrapbooking and Card Making
                             </option>
-                            <option className='text-black' value="Paper Flowers">
+                            <option className='text-black' value="Paper Craft">
                                 Paper Craft
                             </option>
-                            <option className='text-black' value="Wood Furniture">
-                                Wood Furniture
+                            <option className='text-black' value="Wood craft">
+                                Wood craft
                             </option>
                             <option className='text-black' value="Hand-Built Pottery">
                                 Hand-Built Pottery
@@ -257,6 +274,7 @@ const AddPost = () => {
                             name="title"
                             className="grow border-b-2 bg-white text-black border-gray-300 pb-2 focus:border-blue-500 outline-none rounded-none"
                             placeholder="Add Title"
+                            required
                         />
                     </div>
 
@@ -270,6 +288,7 @@ const AddPost = () => {
                             name="price"
                             className="grow border-b-2 bg-white text-black border-gray-300 pb-2 focus:border-blue-500 outline-none rounded-none"
                             placeholder="Add Price"
+                            required
                         />
                     </div>
                     {/* location */}
@@ -283,6 +302,7 @@ const AddPost = () => {
                             defaultValue={location}
                             className="grow border-b-2 bg-white text-black border-gray-300 pb-2 focus:border-blue-500 outline-none rounded-none"
                             placeholder="Add Location"
+                            required
                         />
                     </div>
 

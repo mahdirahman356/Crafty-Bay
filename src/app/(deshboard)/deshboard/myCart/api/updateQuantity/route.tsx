@@ -6,9 +6,9 @@ export const PATCH = async (request: NextRequest) => {
       try {
 
         const body = await request.json()
-        const {orderId, UpdateQuantity} = body
+        const {productId, UpdateQuantity} = body
 
-        if(!orderId || !UpdateQuantity){
+        if(!productId || !UpdateQuantity){
             return NextResponse.json({ message: 'Invalid data' }, { status: 400 });
         }
 
@@ -20,7 +20,7 @@ export const PATCH = async (request: NextRequest) => {
         const ordersCollection = db.collection('orders')
 
         const result = await ordersCollection.updateOne(
-            { _id: new ObjectId(orderId) },
+            { _id: new ObjectId(productId) },
             {$set: { 'orderData.quantity': UpdateQuantity }}
         )
 

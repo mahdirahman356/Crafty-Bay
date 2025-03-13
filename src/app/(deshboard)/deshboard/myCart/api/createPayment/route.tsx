@@ -58,13 +58,17 @@ export const POST = async (request: NextRequest) => {
 
         const saveData = {
             paymentId: trxId,
-            amount: paymentInfo.amount * paymentInfo.quantity,
+            amount: paymentInfo.amount,
+            quantity: paymentInfo.quantity,
             status: "panding",
             cus_name: paymentInfo.cus_name,
             cus_email: paymentInfo.cus_email,
             cus_address: paymentInfo.cus_add,
             cus_phone: paymentInfo.cus_phone,
+            cartId: paymentInfo.cartId,
+            productId: paymentInfo.productId,
             product_name: paymentInfo.product_name,
+            category: paymentInfo.category,
             date: new Date()
         }
 
