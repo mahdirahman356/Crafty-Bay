@@ -73,9 +73,11 @@ export const POST = async (request: NextRequest) => {
         }
 
         const paymentsCollection = db.collection("payments")
+        const ordersCollection = db.collection("orders")
         const res = await paymentsCollection.insertOne(saveData)
+        const deleteCartItem = await ordersCollection.deleteOne({ _id: new ObjectId(paymentInfo.cartId) })
 
-        if(res){
+        if (res && deleteCartItem) {
             return Response.json(response.data.GatewayPageURL)
         }
 
