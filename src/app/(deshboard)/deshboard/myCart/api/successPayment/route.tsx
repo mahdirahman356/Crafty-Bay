@@ -1,5 +1,5 @@
 import { connectDB } from "@/app/lib/connectDB";
-import { Db } from "mongodb";
+import { Db, ObjectId } from "mongodb";
 import { NextResponse, NextRequest } from "next/server";
 import qs from 'qs';
 
@@ -21,6 +21,7 @@ export const POST = async (request: NextRequest) => {
               }
 
               const paymentsCollection = db.collection("payments")
+              const ordersCollection = db.collection("orders")
               const update = await paymentsCollection.updateOne(
                      { paymentId: successData.tran_id },
                      {
@@ -33,9 +34,17 @@ export const POST = async (request: NextRequest) => {
                      return NextResponse.json({ message: "payment data not found" })
               }
 
+              const paymentDetails = await paymentsCollection.findOne({ paymentId: successData.tran_id })
+              if (paymentDetails && paymentDetails.cartId) {
+                     const deleteCartItem = await ordersCollection.deleteOne({ _id: new ObjectId(paymentDetails.cartId) })
+                     console.log("Deleted order item:", deleteCartItem)
+              } else {
+                     console.warn("Could not identify order items to delete based on payment data.");
+              }
+
               const redirectUrl = new URL('/deshboard/successPayment', "http://localhost:3000")
               return NextResponse.redirect(redirectUrl.toString(), 302)
-              
+
        } catch (error) {
               console.error("Error processing payment:", error);
               return NextResponse.json({ error: "Internal server error" }, { status: 500 });
