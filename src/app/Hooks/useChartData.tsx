@@ -3,15 +3,16 @@ import axios from "axios";
 
 const useChartData = () => {
     
-    const {data: chartData = []}= useQuery({
+    const {data = []}= useQuery({
         queryKey: [],
         queryFn: async () => {
             const {data} = await axios.get("http://localhost:3000/deshboard/deshboardComponents/Chart/api/orderStats")
             console.log(data)
+            return data
         }
-    })
+    })  
 
-    return [chartData]
+    return [data]
 };
 
 export default useChartData;
