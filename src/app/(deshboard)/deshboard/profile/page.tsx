@@ -5,12 +5,12 @@
 import { useSession } from "next-auth/react";
 import { FiEdit3 } from "react-icons/fi";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
-import { LiaBorderAllSolid } from 'react-icons/lia';
 import useProfile from "@/app/Hooks/useProfile";
 import MyPost from "../deshboardComponents/MyPost/MyPost";
 import UpdateProfile from "../deshboardComponents/UpdateProfile/UpdateProfile";
 import AdminStats from "../deshboardComponents/AdminStats/AdminStats";
 import Chart from "../deshboardComponents/Chart/Chart";
+import SellerStats from "../deshboardComponents/SellerStats/SellerStats";
 
 const profilePage = () => {
     const { data: session } = useSession()
@@ -22,12 +22,11 @@ const profilePage = () => {
     return (
         <div className="w-[98%] md:w-[90%] mx-auto">
             {isLoading
-                ? <div className=" min-h-screen flex justify-center items-center">
+                ? <div className="min-h-screen flex justify-center items-center">
                     <progress className="progress w-56"></progress>
                 </div>
-                : <div className='md:py-12 lg:py-0 lg:my-10 text-gray-800'>
-                    < div className="flex">
-                        <div className="p-8 flex flex-col md:flex-row sm:space-x-6">
+                : <div className="lg:mt-10 text-gray-800">
+                        <div className="px-6 flex flex-col md:flex-row sm:space-x-6 mb-4">
                             <div className="w-28 h-28 md:w-36 md:h-36 mb-3">
                                 <img
                                     src={image || session?.user?.image ? image || session?.user?.image : "/image/user.avif"}
@@ -62,6 +61,9 @@ const profilePage = () => {
                                 </div>
                             </div>
                         </div>
+
+                    <div className="mb-4 px-6">
+                        <SellerStats />
                     </div>
 
                     <div className='border-t-2'>
@@ -71,7 +73,6 @@ const profilePage = () => {
                                 <Chart />
                             </>
                             : <>
-                                <p className='flex justify-center items-center mt-3'><LiaBorderAllSolid className='text-xl' />Posts</p>
                                 <MyPost />
                             </>}
 
