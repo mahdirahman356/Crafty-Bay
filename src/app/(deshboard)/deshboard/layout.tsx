@@ -8,11 +8,11 @@ import { signOut, useSession } from "next-auth/react";
 import { BiMessageRounded } from "react-icons/bi";
 import { PiUsers } from "react-icons/pi";
 import AddPost from "./deshboardComponents/AddPost/AddPost";
-import { MdLogout } from "react-icons/md";
+import { MdLogout, MdOutlineSell } from "react-icons/md";
 import { useRouter } from "next/navigation";
 interface LayoutProps {
     children: React.ReactNode
-  }
+}
 interface UserWithRole {
     name?: string | null;
     email?: string | null;
@@ -52,6 +52,15 @@ const layout = ({ children }: LayoutProps) => {
                                 Profile
                             </Link>
                         </li>
+                        {userWithRole?.role === "Admin"
+                            && <li>
+                                <Link prefetch={true}
+                                    className={`text-xl rounded-3xl font-semibold mb-3`}
+                                    href={"/deshboard/sellers"}>
+                                    <MdOutlineSell className="text-xl" />
+                                    Sellers
+                                </Link>
+                            </li>}
                         <li>
                             <Link prefetch={true}
                                 className={`text-xl rounded-3xl font-semibold mb-3`}

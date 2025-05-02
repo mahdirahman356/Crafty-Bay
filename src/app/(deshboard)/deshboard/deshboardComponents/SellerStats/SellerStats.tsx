@@ -5,7 +5,8 @@ import { PiChartLineUp } from "react-icons/pi";
 
 const SellerStats = () => {
     const [sellerState] = useSellerStats()
-    console.log(sellerState)
+    const {revenue, orders, products} = sellerState || {}
+    console.log(revenue)
     return (
         <div className="flex flex-wrap gap-8">
             <div className="flex items-center gap-4 mb-3">
@@ -13,7 +14,7 @@ const SellerStats = () => {
                   <PiChartLineUp className="text-xl"/>
                 </div>
                 <div>
-                    <p className="text-sm md:text-base font-semibold text-start text-nowrap">{sellerState.revenue} TK</p>
+                    <p className="text-sm md:text-base font-semibold text-start text-nowrap">{revenue} TK</p>
                     <p className="text-sm text-gray-500">Revenue</p>
                 </div>
             </div>
@@ -22,7 +23,7 @@ const SellerStats = () => {
                   <BsBoxSeam className="text-xl"/>
                 </div>
                 <div>
-                    <p className="text-sm md:text-base font-semibold text-start text-nowrap">{sellerState.products}</p>
+                    <p className="text-sm md:text-base font-semibold text-start text-nowrap">{products}</p>
                     <p className="text-sm text-gray-500">Products</p>
                 </div>
             </div>
@@ -31,7 +32,7 @@ const SellerStats = () => {
                   <IoBookmarkOutline className="text-xl"/>
                 </div>
                 <div>
-                    <p className="text-sm md:text-base font-semibold text-start text-nowrap">{sellerState.orders}</p>
+                    <p className="text-sm md:text-base font-semibold text-start text-nowrap">{orders}</p>
                     <p className="text-sm text-gray-500">Orders</p>
                 </div>
             </div>

@@ -3,8 +3,8 @@ import axios from "axios";
 
 const useSellerStats = () => {
      
-    const {data: sellerState} = useQuery({
-        queryKey: ["sellerState"],
+    const {data: sellerStats} = useQuery({
+        queryKey: ["sellerStats"],
         queryFn: async () => {
             const { data} = await axios.get(`http://localhost:3000/deshboard/profile/api/sellerStats`)
             console.log(data)
@@ -12,7 +12,7 @@ const useSellerStats = () => {
         }
     })
 
-    return [sellerState]
+    return [sellerStats]
 };
 
 export default useSellerStats;
