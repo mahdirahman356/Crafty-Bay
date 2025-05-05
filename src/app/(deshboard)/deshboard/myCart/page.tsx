@@ -130,7 +130,7 @@ const page = () => {
     }
 
     return (
-        <div className="text-black">
+        <div className="">
             {cartData.length === 0
                 ? <div className="h-[80vh] md:h-screen text-gray-800 flex flex-col gap-4 justify-center items-center">
                     <MdOutlineShoppingBag className='text-8xl' />
@@ -152,7 +152,7 @@ const page = () => {
                     <div className="overflow-x-auto rounded-t-xl mb-8">
                         <table className="table">
                             {/* head */}
-                            <thead className="bg-primary text-white">
+                            <thead className="bg-gray-200">
                                 <tr className="hidden md:table-row">
                                     <th>Crafts</th>
                                     <th>Price</th>
@@ -166,7 +166,7 @@ const page = () => {
                             <tbody>
                                 {/* row 1 */}
 
-                                {cartData.map((cartData: CartData, index: Key | null | undefined) => <tr key={index} className="text-nowrap">
+                                {cartData.map((cartData: CartData, index: Key | null | undefined) => <tr key={index} className="text-nowrap hover">
                                     <td>
                                         <div className="flex items-center gap-3">
                                             <div className="avatar">

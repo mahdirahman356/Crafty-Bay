@@ -3,7 +3,7 @@ import axios from "axios";
 
 const useAdminStats = () => {
     
-    const { data: adminStats } = useQuery({
+    const { data: adminStats, refetch: adminStatsRefetch, isLoading: adminStatsLoading } = useQuery({
         queryKey: ["adminStats"],
         queryFn: async () => {
             const { data } = await axios.get(`http://localhost:3000/deshboard/profile/api/adminStats`)
@@ -12,7 +12,7 @@ const useAdminStats = () => {
         }
     })
 
-    return [adminStats]
+    return [adminStats, adminStatsRefetch, adminStatsLoading]
 };
 
 export default useAdminStats;
