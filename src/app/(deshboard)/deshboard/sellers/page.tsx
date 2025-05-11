@@ -1,10 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-"use client"
 /* eslint-disable react-hooks/rules-of-hooks */
+"use client"
 import useSellers from '@/app/Hooks/useSellers';
-import React, { Key } from 'react';
-import { FaLocationDot } from 'react-icons/fa6';
-import { MdEmail, MdOutlineSell } from 'react-icons/md';
+import { Key } from 'react';
 
 
 type Sellers = {
@@ -27,32 +25,30 @@ const page = () => {
     const [sellers] = useSellers()
     console.log(sellers)
     return (
-        <div className='w-[95%] mx-auto'>
-            <div className="text-3xl flex justify-center items-center gap-2 font-bold text-center mt-10 lg:mt-24 mb-10">
-                <MdOutlineSell className="text-3xl" />
-                <h3>Sellers</h3>
-            </div>
-            <div className='grid grid-cols-3 gap-5'>
-                {sellers && sellers.map((seller: Sellers, index: Key | null | undefined) =>
-                    <div className='' key={index}>
-                        <div className='container flex gap-4 border px-6 py-6 rounded-xl'>
-                            <div>
-                                <img className='w-16 h-16 object-cover rounded-full border' src={seller.user.image ? seller.user.image : "/image/user.avif"} alt="" />
-                            </div>
-                            <div>
-                                <h4 className='font-semibold mb-1'>{seller.user.name}</h4>
-                                <div className='flex items-center gap-1'>
-                                    <MdEmail className='text-blue-500'/>
-                                    <p className='text-sm text-gray-500'>{seller.user.email}</p>
-                                </div>
-                                <div className='flex items-center gap-1'>
-                                    <FaLocationDot className='text-pink-500'/>
-                                    <p className='text-sm text-gray-500'>{seller.user.location ? seller.user.location : <span className='text-gray-400 text-sm'>Location not added.</span>}</p>
-                                </div>
-                            </div>
+        <div>
+            <div className=''>
+                <div className='flex'>
+                    <div className="w-[33%]">
+
+                    
+
+                        <div className=' h-[100vh]  overflow-x-auto'>
+                            {sellers && sellers.map((seller: Sellers, index: Key | null | undefined) =>
+                                <div key={index} className='flex gap-2 p-4'>
+                                    <div>
+                                        <img className='w-12 h-12 rounded-full object-cover border' src={seller.user.image ? seller.user.image : "/image/user.avif"} alt="" />
+                                    </div>
+                                    <div className=''>
+                                        <h4 className='font-semibold'>{seller.user.name}</h4>
+                                        <p className='text-sm text-gray-500'>{seller.user.email}</p>
+                                    </div>
+                                </div>)}
                         </div>
                     </div>
-                )}
+                    <div className='flex-1 min-w-screen text-center flex justify-center items-center'>
+                        <p>hello world</p>
+                    </div>
+                </div>
             </div>
         </div>
     );
